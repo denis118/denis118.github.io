@@ -189,7 +189,7 @@ stylization
 }
 
 .main-navigation-list-item > .link:active {
-  color: var(--regularBrown);
+  color: var(--basicBlack);
   mix-blend-mode: normal;
   opacity: 0.3;
 }
