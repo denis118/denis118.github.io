@@ -23,7 +23,7 @@
           <li class="main-navigation-list-item left-side info-item"><a class="link" href="blank.html">Информация</a></li>
           <li class="main-navigation-list-item left-side media-item"><a class="link" href="blank.html">Фото и видео</a></li>
           <li class="main-navigation-list-item right-side state-map-item"><a class="link" href="blank.html">Карта штата</a></li>
-          <li class="main-navigation-list-item right-side hotels-item"><a class="link" href="">Гостиницы</a></li>
+          <li class="main-navigation-list-item right-side hotels-item hotels-active-mode"><a class="link" href="">Гостиницы</a></li>
         </ul>
       </nav>
     </header>
@@ -84,8 +84,8 @@
               <div class="bar-shell">
                 <div class="bar-fill"></div>
               </div>
-              <div class="bar-handle initial-cost-bar-handle" tabindex="0" style="left: 0"></div>
-              <div class="bar-handle final-cost-bar-handle" tabindex="0" style="left: 80%"></div>
+              <div class="bar-handle initial-cost-bar-handle" tabindex="0"></div>
+              <div class="bar-handle final-cost-bar-handle" tabindex="0"></div>
             </div>
             <button type="submit" class="filter-search" aria-label="Показать результаты подбора отелей по критериям, указанным в фильтре">Показать</button>
           </fieldset>
@@ -104,7 +104,7 @@
             <div class="sorting-interface-box">
               <p class="text">Сортировка:</p>
               <ul class="list sorting-list">
-                <li class="sorting-list-item by-price"><a class="link text sorting-element" href="#">По цене</a></li>
+                <li class="sorting-list-item by-price sorting-active-mode"><a class="link text sorting-element" href="#">По цене</a></li>
                 <li class="sorting-list-item by-type"><a class="link text sorting-element" href="#">По типу</a></li>
                 <li class="sorting-list-item by-rating"><a class="link text sorting-element" href="#">По рейтингу</a></li>
               </ul>
@@ -115,13 +115,13 @@
             <a class="link button up" href="#">
               <span class="visually-hidden">Кнопка переключения порядка отображения результатов поиска "Снизу вверх"</span>
               <svg class="button-up-svg" width="11" height="10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                <path class="button-up-svg-path" d="M5.5 0L0 10h11L5.5 0z" fill="#CACACA"/>
+                <path class="svg-path button-up-svg-path" d="M5.5 0L0 10h11L5.5 0z" fill="#CACACA"/>
               </svg>
             </a>
-            <a class="link button down" href="#">
+            <a class="link button down direction-active-mode" href="#">
               <span class="visually-hidden">Кнопка переключения порядка отображения результатов поиска "Сверху вниз"</span>
               <svg class="button-down-svg" width="11" height="10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                <path class="button-down-svg-path" d="M5.5 10L11 0H0l5.5 10z" fill="#CACACA"/>
+                <path class="svg-path button-down-svg-path" d="M5.5 10L11 0H0l5.5 10z" fill="#CACACA"/>
               </svg>
             </a>
           </div>
@@ -261,9 +261,7 @@
                 <img class="view-of-proposed-hotel" src="img/content/jpg/hotels_samples/villas_at_poco_diablo.jpg" width="135" height="90" alt="Вилла Эт Поко Диабло">
               </a>
               <div class="info-box">
-                <h3><a class="link caption hotel-name" href="hotels/villas_at_poco_diablo.html">Villas at Poco Diablo</a>
-                <!-- <h3><a class="link caption hotel-name" href="hotels/villas_at_poco_diablo.html"><span class="name-part-one">Vill</span><span class="name-part-two">as at Poco Diablo</span> </a> -->
-                </h3>
+                <h3><a class="link caption hotel-name" href="hotels/villas_at_poco_diablo.html">Villas at Poco Diablo</a></h3>
                 <p class="info-text-content">
                   <span class="text hotel-type">Апартаменты</span><!--
                   --><span class="text day-min-price">От 2000 Р.</span>

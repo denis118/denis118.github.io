@@ -176,9 +176,11 @@ stylization
   line-height: 26px;
 }
 
-/* .main-navigation-list-item > .link:visited {
+.hotels-active-mode > .link {
   color: var(--regularBrown);
-} */
+}
+
+
 
 .main-navigation-list-item > .link:focus {
   color: var(--regularBlue);
@@ -515,7 +517,7 @@ positioning
 
 .sedona-building-photo {
   flex-basis: 800px;
-  align-self: center;
+  align-self: top;
   line-height: 0;
 }
 
@@ -714,7 +716,7 @@ positioning
 
 .devil-bridge-photo {
   flex-basis: 800px;
-  align-self: center;
+  align-self: top;
   line-height: 0;
 }
 
@@ -1182,7 +1184,10 @@ stylization
   line-height: 18px;
 }
 
-
+.sorting-active-mode > .sorting-element {
+  color: var(--regularBlue);
+  border: none;
+}
 
 .sorting-element {
   color: var(--basicBlack);
@@ -1192,11 +1197,9 @@ stylization
   border-bottom: 1px dotted var(--regularBlue);
 }
 
-.sorting-element:focus {
-  color: var(--regularBlue);
-  border: none;
-}
 
+
+.sorting-element:focus,
 .sorting-element:hover {
   color: var(--regularBlue);
 }
@@ -1209,15 +1212,19 @@ stylization
 
 
 
+.direction-active-mode .svg-path {
+  fill: var(--regularBlue);
+}
+
+.button.up:focus .button-up-svg-path,
+.button.down:focus .button-down-svg-path,
 .button.up:hover .button-up-svg-path,
 .button.down:hover .button-down-svg-path {
   fill: var(--basicBlack);
 }
 
 .button.up:active .button-up-svg-path,
-.button.down:active .button-down-svg-path,
-.button.up:focus .button-up-svg-path,
-.button.down:focus .button-down-svg-path {
+.button.down:active .button-down-svg-path {
   fill: var(--regularBlue);
 }
 
@@ -1443,18 +1450,21 @@ positioning
 
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: flex-start;
 }
 
 .link.hotel-photo {
+  margin-top: 6px;
   line-height: 0;
 }
 
 
 
 .info-box {
-  flex-grow: 1;
+  width: 726px;
+  /* flex-grow: 1; */
   margin-left: 29px;
+  margin-right: 29px;
 
   display: grid;
   grid-template-columns: 1fr;
@@ -1524,9 +1534,12 @@ positioning
 
 
 .hotel-rating {
+  flex-basis: 134px;
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: flex-end;
 
   margin-top: 29px;
   margin-right: 73px;
@@ -1556,12 +1569,14 @@ positioning
 
 
 .number-of-points {
+  width: 110px;
+
   margin-top: 47px;
   margin-bottom: 0;
 
   padding-top: 3px;
-  padding-right: 12px;
-  padding-left: 15px;
+  /* padding-right: 12px; */
+  /* padding-left: 15px; */
   padding-bottom: 3px;
 
   display: flex;
@@ -2066,6 +2081,18 @@ hotel search window
 
 
 
+.check-in-out-date-fields:focus {
+  background-color: var(--basicWhite);
+  outline: 2px solid var(--upperStrongLightGray);
+  outline-offset: -2px;
+}
+
+.check-in-out-date-fields:hover {
+  background-color: var(--strongLightGray);
+}
+
+
+
 .calendar-button {
   position: absolute;
   top: 7px;
@@ -2075,18 +2102,16 @@ hotel search window
   cursor: pointer;
 }
 
+.calendar-button:focus .calendar-svg-fill { /* добавил для доступности */
+  fill: var(--basicBlack);
+}
+
 .calendar-button:hover .calendar-svg-fill {
   fill: var(--basicBlack);
 }
 
 .calendar-button:active .calendar-svg-fill {
   fill: var(--regularBlue);
-}
-
-.check-in-out-date-fields:focus {
-  background-color: var(--basicWhite);
-  outline: 2px solid var(--upperStrongLightGray);
-  outline-offset: -2px;
 }
 
 
@@ -2186,12 +2211,20 @@ hotel search window
   vertical-align: middle;
 }
 
+.minus-adult-man:focus  .plus-minus-svg-fill { /* добавил для доступности */
+  fill: var(--basicBlack);
+}
+
 .minus-adult-man:hover  .plus-minus-svg-fill {
   fill: var(--basicBlack);
 }
 
 .minus-adult-man:active  .plus-minus-svg-fill {
   fill: var(--regularBlue);
+}
+
+.plus-adult-man:focus  .plus-minus-svg-fill { /* добавил для доступности */
+  fill: var(--basicBlack);
 }
 
 .plus-adult-man:hover  .plus-minus-svg-fill {
@@ -2202,12 +2235,20 @@ hotel search window
   fill: var(--regularBlue);
 }
 
+.minus-child-man:focus  .plus-minus-svg-fill { /* добавил для доступности */
+  fill: var(--basicBlack);
+}
+
 .minus-child-man:hover  .plus-minus-svg-fill {
   fill: var(--basicBlack);
 }
 
 .minus-child-man:active  .plus-minus-svg-fill {
   fill: var(--regularBlue);
+}
+
+.plus-child-man:focus  .plus-minus-svg-fill { /* добавил для доступности */
+  fill: var(--basicBlack);
 }
 
 .plus-child-man:hover  .plus-minus-svg-fill {
