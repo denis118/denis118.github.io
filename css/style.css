@@ -2142,16 +2142,34 @@ hotel search window
   vertical-align: auto;
 }
 
+
+
+.adults-positioning-wrapper,
+.children-positioning-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.children-positioning-wrapper {
+  justify-content: end;
+}
+
+
+
 .children-count-zone {
   text-align: right;
 }
 
-.adults,
+.amount-interface {
+  display: flex;
+}
+/* .adults,
 .children,
 .amount-interface {
   display: inline-block;
   vertical-align: auto;
-}
+} */
 
 .adults {
   width: 101px;
