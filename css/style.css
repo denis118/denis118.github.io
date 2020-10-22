@@ -1483,7 +1483,7 @@ positioning
 
 .info-box {
   width: 726px;
-  /* flex-grow: 1; */
+
   margin-left: 29px;
   margin-right: 29px;
 
@@ -1506,42 +1506,51 @@ positioning
 
 
 
+.info-text-content {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+
+
 .hotel-type {
-  display: inline-block;
   width: 107px;
+
   margin-top: 7px;
   margin-bottom: 15.5px;
 
   text-align: left;
-  vertical-align: auto;
 }
 
 .day-min-price {
-  display: inline-block;
   width: 96px;
+
   margin-left: 9px;
   margin-top: 7px;
   margin-bottom: 15.5px;
 
   text-align: left;
-  vertical-align: auto;
+}
+
+
+
+.ins-and-booking {
+  display: flex;
+  flex-wrap: wrap;
 }
 
 
 
 .button.ins {
-  display: inline-block;
   width: 110px;
 
   padding-top: 3px;
   padding-bottom: 3px;
 
   text-align: center;
-  vertical-align: auto;
 }
 
 .button.booking {
-  display: inline-block;
   width: 142px;
 
   padding-top: 3px;
@@ -1549,7 +1558,6 @@ positioning
   margin-left: 6px;
 
   text-align: center;
-  vertical-align: auto;
 }
 
 
@@ -1577,14 +1585,11 @@ positioning
 
 .star-item {
   line-height: 0;
-
   margin-left: 5px;
 }
 
 .star-item > .link {
-  display: inline-block;
-
-  vertical-align: auto;
+  display: block;
 }
 
 
@@ -1596,8 +1601,6 @@ positioning
   margin-bottom: 0;
 
   padding-top: 3px;
-  /* padding-right: 12px; */
-  /* padding-left: 15px; */
   padding-bottom: 3px;
 
   display: flex;
@@ -1608,12 +1611,6 @@ positioning
 .number-of-points > .text:first-child {
   margin-right: 4px;
 }
-
-
-
-/* .hotel-name > .name-part-two {
-  margin-left: 1px;
-} */
 
 
 
