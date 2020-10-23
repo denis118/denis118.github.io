@@ -291,11 +291,15 @@ stylization
 
   background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
   background-position: 371.38px 77.35px, 50% 100%, 50% 50%;
+}
 
+
+
+.outstanding-qualities {
   position: relative;
 }
 
-.greeting::after {
+.outstanding-qualities::before {
   content: "";
 
   display: block;
@@ -304,7 +308,7 @@ stylization
 
   position: absolute;
   left: 0;
-  top: 100%;
+  top: 0;
 
   transform: translate(0, -99.999%);
 
