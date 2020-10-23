@@ -1455,6 +1455,7 @@ positioning
 .proposed-hotel {
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-start;
 
   background-image: url('../img/decor/svg/down_line/down_line.svg');
   background-repeat: no-repeat;
@@ -2137,9 +2138,16 @@ hotel search window
 .adults-count-zone,
 .children-count-zone {
   display: inline-block;
-  width: calc(var(--searchFormContentWrapperWidth)/2);
-  height: 38px; /* не смог получить высоту строки только при помощи padding и margin вложенных элементов без явного задания "height": если ставлю значения по макету, то результат больше 38px*/
-  vertical-align: auto;
+  height: 38px;
+  vertical-align: middle;
+}
+
+.adults-count-zone {
+  width: 229px;
+}
+
+.children-count-zone {
+  width: 225.45px;
 }
 
 
@@ -2152,24 +2160,14 @@ hotel search window
 }
 
 .children-positioning-wrapper {
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 
-
-.children-count-zone {
-  text-align: right;
-}
 
 .amount-interface {
   display: flex;
 }
-/* .adults,
-.children,
-.amount-interface {
-  display: inline-block;
-  vertical-align: auto;
-} */
 
 .adults {
   width: 101px;
@@ -2179,7 +2177,6 @@ hotel search window
 .children {
   width: 65px;
   height: 100%;
-  text-align: left;
 }
 
 .amount-interface {
@@ -2247,7 +2244,7 @@ hotel search window
   vertical-align: middle;
 }
 
-.minus-adult-man:focus  .plus-minus-svg-fill { /* добавил для доступности */
+.minus-adult-man:focus  .plus-minus-svg-fill {
   fill: var(--basicBlack);
 }
 
