@@ -591,7 +591,7 @@ positioning
   margin-left: auto;
   margin-bottom: 23px;
 
-  font-family: 'PT Sans';
+  font-family: 'PT Sans', Arial, sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 14px;
@@ -792,7 +792,7 @@ positioning
   margin-left: auto;
   margin-bottom: 23px;
 
-  font-family: PT Sans;
+  font-family: 'PT Sans', Arial, sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 14px;
@@ -818,7 +818,7 @@ positioning
 }
 
 .devil-bridge-sight .text {
-  width: 301px;
+  width: 305px;
 
   padding: 0;
   margin-top: 0;
@@ -848,7 +848,7 @@ positioning
   margin-top: 25px;
   margin-bottom: 23px;
 
-  font-family: PT Sans;
+  font-family: 'PT Sans', Arial, sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 14px;
@@ -900,7 +900,7 @@ positioning
   margin-top: 25px;
   margin-bottom: 23px;
 
-  font-family: PT Sans;
+  font-family: 'PT Sans', Arial, sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 14px;
@@ -952,7 +952,7 @@ positioning
   margin-top: 25px;
   margin-bottom: 23px;
 
-  font-family: PT Sans;
+  font-family: 'PT Sans', Arial, sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 14px;
@@ -1978,7 +1978,7 @@ filter
   color: var(--basicWhite);
   background-color: var(--fullOpacityWhite);
 
-  font-family: inherit;
+  font-family: 'PT Sans', Arial, sans-serif;
   font-weight: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -2025,7 +2025,7 @@ hotel search window
 
   transition: all 0.3s cubic-bezier(.18,.89,.32,1.28);
 
-  font-family: 'PT Sans';
+  font-family: 'PT Sans', Arial, sans-serif;
   font-weight: 700;
   font-size: 14px;
   line-height: 26px;
@@ -2039,7 +2039,7 @@ hotel search window
 }
 
 .input-field {
-  font-family: inherit;
+  font-family: 'PT Sans', Arial, sans-serif;
   font-weight: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -2335,7 +2335,7 @@ hotel search window
   background-color: var(--regularBlue);
   cursor: pointer;
 
-  font-family: 'PT Sans';
+  font-family: 'PT Sans', Arial, sans-serif;
   font-weight: inherit;
   line-height: inherit;
   font-size: 21px;
