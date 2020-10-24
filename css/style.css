@@ -1,9 +1,39 @@
+/*****fonts*****/
+
+
+/* pt-sans-regular - latin_cyrillic */
+
+@font-face {
+  font-family: 'PT Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('PT Sans'), local('PTSans-Regular'),
+       url('../fonts/pt-sans-v11-latin_cyrillic-regular.woff2') format('woff2'),
+       url('../fonts/pt-sans-v11-latin_cyrillic-regular.woff') format('woff');
+
+  font-display: swap;
+}
+
+/* pt-sans-700 - latin_cyrillic */
+
+@font-face {
+  font-family: 'PT Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('PT Sans'), local('PTSans');
+  src: local('PT Sans Bold'), local('PTSans-Bold'),
+       url('../fonts/pt-sans-v11-latin_cyrillic-700.woff2') format('woff2'),
+       url('../fonts/pt-sans-v11-latin_cyrillic-700.woff') format('woff');
+
+  font-display: swap;
+}
+
+
 
 :root {
   --basicWhite: #FFFFFF;
   --basicOpacityWhite: rgba(255, 255, 255, 0.3);
   --fullOpacityWhite: rgba(255, 255, 255, 0);
-  --basicWhite: #FFFFFF;
   --basicBlack: #000000;
   --lightBlack: #231F20;
 
@@ -81,7 +111,7 @@
   margin-left: auto;
 
   background-color: var(--basicWhite);
-  box-shadow: 0 5px 15px rgba(0, 1, 1, 0.2);
+  box-shadow: 0 5px 15px var(--mainContainerShadow);
 }
 
 
