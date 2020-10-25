@@ -8,8 +8,8 @@
   font-style: normal;
   font-weight: 400;
   src: local('PT Sans'), local('PTSans-Regular'),
-       url('../fonts/pt-sans-v11-latin_cyrillic-regular.woff2') format('woff2'),
-       url('../fonts/pt-sans-v11-latin_cyrillic-regular.woff') format('woff');
+       url('../fonts/pt_sans_v11_latin_cyrillic_regular.woff2') format('woff2'),
+       url('../fonts/pt_sans_v11_latin_cyrillic_regular.woff') format('woff');
 
   font-display: swap;
 }
@@ -22,8 +22,8 @@
   font-weight: 700;
   src: local('PT Sans'), local('PTSans');
   src: local('PT Sans Bold'), local('PTSans-Bold'),
-       url('../fonts/pt-sans-v11-latin_cyrillic-700.woff2') format('woff2'),
-       url('../fonts/pt-sans-v11-latin_cyrillic-700.woff') format('woff');
+       url('../fonts/pt_sans_v11_latin_cyrillic_700.woff2') format('woff2'),
+       url('../fonts/pt_sans_v11_latin_cyrillic_700.woff') format('woff');
 
   font-display: swap;
 }
@@ -652,7 +652,7 @@ positioning
   content: '';
   width: 75px;
   height: 72px;
-  background-image: url('../img/decor/svg/true_city_list_item_icons/icon-1_w75px_h72px.svg');
+  background-image: url('../img/decor/svg/true_city_list_item_icons/housing_icon_w75px_h72px.svg');
 
   padding: 0;
   margin-top: 60px;
@@ -692,7 +692,7 @@ positioning
   content: '';
   width: 75px;
   height: 70px;
-  background-image: url('../img/decor/svg/true_city_list_item_icons/icon-3_w75px_h70px.svg');
+  background-image: url('../img/decor/svg/true_city_list_item_icons/food_icon_w75px_h70px.svg');
 
   padding: 0;
   margin-top: 61px;
@@ -732,7 +732,7 @@ positioning
   content: '';
   width: 64px;
   height: 77px;
-  background-image: url('../img/decor/svg/true_city_list_item_icons/icon-2_w64px_h77px.svg');
+  background-image: url('../img/decor/svg/true_city_list_item_icons/souvenirs_icon_w64px_h77px.svg');
 
   padding: 0;
   margin-top: 55px;
