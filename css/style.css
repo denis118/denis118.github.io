@@ -182,7 +182,7 @@ stylization
 }
 
 .first-page-link::before {
-  content: "";
+  content: '';
   width: 138px;
   height: 70px;
 
@@ -330,7 +330,7 @@ stylization
 }
 
 .outstanding-qualities::before {
-  content: "";
+  content: '';
 
   display: block;
   width: 1200px;
@@ -581,7 +581,7 @@ positioning
 }
 
 .small-city-life::before {
-  content: "-№1-";
+  content: '\2014№1\2014';
   width: 51px;
   height: 21px;
 
@@ -782,7 +782,7 @@ positioning
 }
 
 .devil-bridge-sight::before {
-  content: "-№2-";
+  content: '\2014№2\2014';
   width: 51px;
   height: 21px;
 
@@ -840,7 +840,7 @@ positioning
 }
 
 .small-area::before {
-  content: "-№3-";
+  content: '\2014№3\2014';
   width: 51px;
   height: 21px;
 
@@ -892,7 +892,7 @@ positioning
 }
 
 .beautiful-road::before {
-  content: "-№4-";
+  content: '\2014№4\2014';
   width: 51px;
   height: 21px;
 
@@ -944,7 +944,7 @@ positioning
 }
 
 .few-tourists::before {
-  content: "-№5-";
+  content: '\2014№5\2014';
   width: 51px;
   height: 21px;
 
@@ -1774,7 +1774,7 @@ filter
 }
 
 .checkbox-for-filtration + label::before {
-  content: "";
+  content: '';
   position: absolute;
   left: -40px;
   top: 0;
@@ -1785,7 +1785,7 @@ filter
 }
 
 .checkbox-for-filtration + label::after {
-  content: "";
+  content: '';
   position: absolute;
   left: -40px;
   top: 0;
