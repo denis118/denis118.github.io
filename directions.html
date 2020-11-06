@@ -6,13 +6,225 @@
   </head>
   <body class="page-body">
     <header class="inner-header-directions">
-      <a class="link main-logo-link"><svg class="main-logo" role="img" aria-label="Логотип сайта"></svg></a>
+      <a class="link main-logo-link" href="./index.html"><svg class="main-logo" role="img" aria-label="Логотип сайта"></svg></a>
       <a class="link button show-navigation-popup" href="./navigation-popup.html"><span class="visually-hidden">Кнопка открытия окна навигации</span></a>
       <a class="link button authorization" href="#">Авторизация</a>
     </header>
 
     <main class="inner-main-directions">
+      <h1 class="heading level-1 heading-directions">Направления</h1>
 
+      <form class="form basic-information-form" action="#" method="POST">
+        <div class="traveler-level">
+          <div class="level-box">
+            <svg class="svg-container">
+              <circle class="svg-circle" r="60" cx="60" cy="60"></circle>
+            </svg>
+            <div class="level-text-look">
+              <p class="level-number">99</p>
+              <p class="level-text"> level</p>
+            </div>
+          </div>
+        </div>
+
+        <fieldset class="choose-transport-kinds">
+          <legend>Транспорт</legend>
+          <div class="checkbox-wrapper">
+            <input class="visually-hidden" type="checkbox" name="aircraft" id="aircraft">
+            <label for="aircraft"></label>
+            <input class="visually-hidden" type="checkbox" name="bus" id="bus">
+            <label for="bus"></label>
+            <input class="visually-hidden" type="checkbox" name="bycicle" id="bycicle">
+            <label for="bycicle"></label>
+            <input class="visually-hidden" type="checkbox" name="feet" id="feet">
+            <label for="feet"></label>
+          </div>
+        </fieldset>
+
+        <img class="avatar petia-demin-avatar" src="" alt="Фото Пети Демина на фоне заснеженного склона">
+
+        <input type="file" name="change-avatar" id="change-avatar">
+        <label for="change-avatar">Сменить фото</label>
+
+        <textarea name="hashtags" id="hashtags" cols="30" rows="10"></textarea>
+        <label for="hashtags">Тэги</label>
+      </form>
+
+      <section class="my-plans">
+        <h2 class="heading level-2 heading-directions">Мои планы:</h2>
+
+        <ol class="my-plans-list">
+          <li class="plan-item">
+            <p class="countries-to-visit">Франция, Италия</p>
+            <p class="companions-number">3 попутчика</p>
+            <p class="travel-period">26 мар — 29 мар</p>
+            <a class="link button modify-plan" href="#">Изменить</a>
+          </li>
+          <li class="plan-item">
+            <p class="countries-to-visit">Тайланд, Индонезия</p>
+            <p class="companions-number">1 попутчик</p>
+            <p class="travel-period">1 июл — 15 июл</p>
+            <a class="link button modify-plan" href="#">Изменить</a>
+          </li>
+        </ol>
+      </section>
+
+      <form class="travel-planning-form" action="#" method="GET">
+        <h2 class="heading level-2 heading-directions">Добавить план:</h2>
+
+        <fieldset class="fields-box travel-dates" id="step-1">
+          <legend>Шаг 1. Даты пребывания</legend>
+          <div class="container">
+            <p class="filling-instruction">Укажите предпочтительное количество попутчиков, которых вы хотели бы позвать в поездку и ее предполагаемую длительность.</p>
+
+            <label for="fellow-travelers-amount">Ищу попутчиков:</label>
+            <p class="quantity-interface companions-amount">
+              <button class="button button-minus minus-companion" type="button" name="minus-companion" id="decrease-companions" aria-label="Уменьшить количество попутчиков">
+                <svg></svg>
+              </button>
+              <input class="input-field input-companions" type="text" name="companions" value="2" id="fellow-travelers-amount">
+              <button class="button button-plus plus-companion" type="button" name="plus-companion" id="increase-companions" aria-label="Увеличить количество попутчиков">
+                <svg></svg>
+              </button>
+            </p>
+
+            <input class="visually-hidden"  type="checkbox" name="children" id="width-children">
+            <label for="width-children"">Можно с детьми</label>
+
+            <label for="travel-duration">Длительность:</label>
+            <p class="quantity-interface travel-time">
+              <button class="button button-minus minus-day" type="button" name="minus-day" id="decrease-period" aria-label="Уменьшить количество дней">
+                <svg></svg>
+              </button>
+              <input class="input-field input-travel-days" type="text" name="travel-days" value="2" id="travel-duration">
+              <button class="button button-plus plus-day" type="button" name="plus-day" id="increase-period" aria-label="Увеличить количество дней">
+                <svg></svg>
+              </button>
+            </p>
+
+            <div class="calendar-wrapper">
+              <div class="month">
+                <ul>
+                  <li>Март<span>2019</span></li>
+                  <li class="prev">&#10094;</li>
+                  <li class="next">&#10095;</li>
+                </ul>
+              </div>
+
+              <ul class="weekdays">
+                <li>Пн</li>
+                <li>Вт</li>
+                <li>Ср</li>
+                <li>Чт</li>
+                <li>Пт</li>
+                <li>Сб</li>
+                <li>Вс</li>
+              </ul>
+
+              <ul class="days">
+                <li>1</li>
+                <li>2</li>
+                <li>3</li>
+                <li>4</li>
+                <li>5</li>
+                <li>6</li>
+                <li>7</li>
+                <li>8</li>
+                <li>9</li>
+                <li>10</li>
+                <li>11</li>
+                <li>12</li>
+                <li>13</li>
+                <li>14</li>
+                <li>15</li>
+                <li>16</li>
+                <li>17</li>
+                <li>18</li>
+                <li>19</li>
+                <li>20</li>
+                <li>21</li>
+                <li>22</li>
+                <li>23</li>
+                <li>24</li>
+                <li>25</li>
+                <li>26</li>
+                <li>27</li>
+                <li>28</li>
+                <li>29</li>
+                <li>30</li>
+                <li>31</li>
+              </ul>
+            </div>
+          </div>
+
+          <a class="link button to-anchor-2" href="#step-2">Следующий шаг</a>
+        </fieldset>
+
+        <fieldset class="fields-box travel-dates" id="step-2">
+          <legend>Шаг 2. Маршрут</legend>
+          <div class="container">
+            <p class="filling-instruction">Укажите страны, которые вы хотели по посетить. Это может быть одна или сразу несколько.</p>
+
+            <ul class="list choose-countries-list">
+              <li class="country-item">
+                <select class="select-country" name="" id="">
+                  <option value="">Выберите страну</option>
+                  <option value="" selected>Босния и Герцеговина</option>
+                  <option value="">Чехословакия</option>
+                </select>
+
+                <button class="button delete-country-item" type="button"><svg></svg></button>
+              </li>
+
+              <li class="country-item">
+                <select class="select-country" name="" id="">
+                  <option value="">Выберите страну</option>
+                  <option value="">Босния и Герцеговина</option>
+                  <option value="" selected>Чехословакия</option>
+                </select>
+
+                <button class="button delete-country-item" type="button"><svg></svg></button>
+              </li>
+
+              <li class="country-item">
+                <select class="select-country" name="" id="">
+                  <option value="">Выберите страну</option>
+                  <option value="">Босния и Герцеговина</option>
+                  <option value="">Чехословакия</option>
+                </select>
+
+                <button class="button delete-country-item" type="button"><svg></svg></button>
+              </li>
+            </ul>
+
+            <button class="button add-country-item" type="button">Добавить страну</button>
+
+          <a class="link button to-anchor-3" href="#step-3">Следующий шаг</a>
+          <a class="link button to-anchor-1" href="#step-1">На шаг назад</a>
+        </fieldset>
+
+        <fieldset class="fields-box entertainment" id="step-3">
+          <legend>Шаг 3. Развлечения</legend>
+          <div class="container">
+            <p class="filling-instruction">Наконец, расскажите о своих планах времяпровождения. Можно писать в свободной форме и ставить тэги.</p>
+
+            <ul class="list jollity-list">
+              <li class="jollity-item">
+                <p class="country-name">Босния и Герцеговина</p>
+                <textarea class="jollity-variants" name="entertainment-kinds" id="" cols="30" rows="10">План действий</textarea>
+              </li>
+
+              <li class="jollity-item">
+                <p class="country-name">Чехословакия</p>
+                <textarea class="jollity-variants" name="entertainment-kinds" id="" cols="30" rows="10">План действий</textarea>
+              </li>
+            </ul>
+
+            <button class="button submit-plans" type="submit">Отправить</button>
+            <a class="link button to-anchor-1" href="#step-2">На шаг назад</a>
+          </div>
+        </fieldset>
+      </form>
     </main>
 
     <footer class="inner-footer-directions">
