@@ -1,1 +1,252 @@
-<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="preload" href="./fonts/bloggersans.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="./fonts/bloggersans.woff" as="font" type="font/woff" crossorigin><link rel="stylesheet" href="./css/style.min.css"><title>Barberside</title></head><body class="page" id="page-top"><div class="container main-grid"><header class="header"><nav class="header__nav nav"><ul class="nav__list"><li class="nav__item"><a class="nav__link" href="#contacts" aria-label="Ссылка на раздел 'Контакты'">Контакты</a></li><li class="nav__item"><a class="nav__link" href="#location" aria-label="Ссылка на раздел 'На карте'">На карте</a></li></ul></nav><a class="header__phone" href="tel:+79000000000" aria-label="Контактный телефон">+7 (900) 000 00 00</a></header><main class="main"><header class="main__aux-header"><h1 class="main__leading-heading">Barberside <sub>салон&nbsp;красоты</sub></h1><p class="main__leading-paragraph hidden-before-tablet">Парикмахерские услуги высшего качества Вы&nbsp;сможете получить только в&nbsp;нашем салоне красоты. Вам их&nbsp;предоставят лучшие мастера города. Внимание к&nbsp;деталям и&nbsp;индивидуальный подход к&nbsp;каждому клиенту являются самыми важными аспектами нашей деятельности.</p><p class="main__leading-paragraph hidden-before-tablet">Работаем для Вас.</p><p class="main__leading-paragraph hidden-after-mobile">Парикмахерские услуги высшего качества</p><a class="main__book-btn link button" href="#booking" id="main-booking-link">Записаться</a></header><section class="main__booking booking" id="booking"><h2 class="booking__heading">Предварительная запись</h2><form class="booking__form" action="/user" method="post" id="booking__form" autocomplete="off"><fieldset class="booking__fieldset"><legend class="visually-hidden">Ваши данные</legend><div class="booking__box"><label class="booking__label"><span>Имя</span> <input class="booking__input" type="text" name="name" required></label> <label class="booking__label"><span>Фамилия</span> <input class="booking__input" type="text" name="surname"></label></div></fieldset><fieldset class="booking__fieldset"><legend class="visually-hidden">Дата</legend><div class="booking__box"><label class="booking__label booking__label--date" data-example="например, 05/15/2021"><span>Дата</span> <input class="booking__input" type="date" name="date" required></label></div></fieldset><fieldset class="booking__fieldset"><legend class="visually-hidden">Ваши контакты</legend><div class="booking__box"><label class="booking__label"><span>Телефон</span> <input class="booking__input" type="tel" name="telephone" placeholder="+79XXXXXXXXX" pattern="\+7[0-9]{3}[0-9]{3}[0-9]{4}" required></label> <label class="booking__label"><span>Email</span> <input class="booking__input" type="email" name="email" placeholder="some-email@mail.com"></label></div></fieldset><button class="booking__submit button" type="submit">Отправить</button></form></section><section class="main__contacts contacts" id="contacts"><h2 class="contacts__heading">Наши контакты</h2><address class="contacts__address"><p class="contacts__location">г. Тула, проспект Ленина, 66</p><a class="contacts__phone" href="tel:+79000000000">тел: <span class="contacts__span">+7 (900) 000 00 00 </span></a><a class="contacts__mail" href="mailto:barber@mail.com">почта: <span class="contacts__span">barber@mail.com</span></a></address></section><section class="main__map map" id="location"><h2 class="map__heading">Мы на карте</h2><iframe class="map__farme" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2335.014980238995!2d37.60237970715056!3d54.17981053558874!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x41343f8b847d83a5%3A0x33dccbf128e2ba3!2z0L_RgC4g0JvQtdC90LjQvdCwLCA2Niwg0KLRg9C70LAsINCi0YPQu9GM0YHQutCw0Y8g0L7QsdC7LiwgMzAwMDEy!5e0!3m2!1sru!2sru!4v1621103983174!5m2!1sru!2sru" width="991" height="144" style="border:0;" allowfullscreen="" loading="lazy"></iframe></section></main><footer class="footer"><p class="footer__invitation"><span>Добро пожаловать в </span><span>Barberside </span><span>пн - пт с 10.00 до 20.00</span></p><dl class="footer__gratitude"><dt>Шрифт:</dt><dd><a href="http://creativecommons.org/licenses/by-nd/4.0/">© 2014 Sergiy S. Tkachenko / 4th february© 2014</a></dd><dt>Графика:</dt><dd><a href="https://tabbied.com/">Tabbied</a></dd></dl><a class="footer__to-top-btn" href="#page-top"></a></footer></div><!-- Сообщение с ошибкой отправки данных --><template id="error"><section class="error"><div class="error__inner"><h2 class="error__title">Ошибка загрузки данных</h2><button type="button" class="error__button">Oops...</button></div></section></template><!-- Сообщение об успешной отправке данных --><template id="success"><section class="success"><div class="success__inner"><h2 class="success__title">Данные успешно отправленны</h2><button type="button" class="success__button">Ok</button></div></section></template><script type="module" src="./js/index.min.js" defer="defer"></script></body></html>
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+    <link rel="preload"
+      href="./fonts/bloggersans.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin>
+    <link rel="preload"
+      href="./fonts/bloggersans.woff"
+      as="font"
+      type="font/woff"
+      crossorigin>
+    <link rel="stylesheet"
+      href="./css/style.min.css">
+    <title>Barberside</title>
+  </head>
+<body class="page"
+  id="page-top">
+  <div class="container main-grid">
+    <header class="header">
+      <nav class="header__nav nav">
+        <ul class="nav__list">
+          <li class="nav__item">
+            <a class="nav__link"
+              href="#contacts"
+              aria-label="Ссылка на раздел 'Контакты'">
+              Контакты
+            </a>
+          </li>
+          <li class="nav__item">
+            <a class="nav__link"
+              href="#location"
+              aria-label="Ссылка на раздел 'На карте'">
+              На карте
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <a class="header__phone"
+        href="tel:+79000000000"
+        aria-label="Контактный телефон">
+        +7 (900) 000 00 00
+      </a>
+    </header>
+
+    <main class="main">
+      <header class="main__aux-header">
+        <h1 class="main__leading-heading">
+          Barberside <sub>салон&nbsp;красоты</sub>
+        </h1>
+        <p class="main__leading-paragraph hidden-before-tablet">
+          Парикмахерские услуги высшего качества Вы&nbsp;сможете получить только в&nbsp;нашем салоне красоты. Вам их&nbsp;предоставят лучшие мастера города. Внимание к&nbsp;деталям и&nbsp;индивидуальный подход к&nbsp;каждому клиенту являются самыми важными аспектами нашей деятельности.
+        </p>
+        <p class="main__leading-paragraph hidden-before-tablet">
+          Работаем для Вас.
+        </p>
+        <p class="main__leading-paragraph hidden-after-mobile">
+          Парикмахерские услуги высшего качества
+        </p>
+        <a class="main__book-btn link button"
+          href="#booking"
+          id="main-booking-link">
+          Записаться
+        </a>
+      </header>
+
+      <section class="main__booking booking"
+        id="booking">
+        <h2 class="booking__heading">
+          Предварительная запись
+        </h2>
+        <form class="booking__form"
+          action="/user"
+          method="post"
+          id="booking__form"
+          autocomplete="off">
+
+          <fieldset class="booking__fieldset">
+            <legend class="visually-hidden">
+               Ваши данные
+            </legend>
+            <div class="booking__box">
+              <label class="booking__label">
+                <span>Имя</span>
+                <input class="booking__input"
+                type="text"
+                name="name"
+                required>
+              </label>
+
+              <label class="booking__label">
+                <span>Фамилия</span>
+                <input class="booking__input"
+                type="text"
+                name="surname">
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="booking__fieldset">
+            <legend class="visually-hidden">
+               Дата
+            </legend>
+            <div class="booking__box">
+              <label class="booking__label booking__label--date"
+                data-example="например, 05/15/2021">
+                <span>Дата</span>
+                <input class="booking__input"
+                type="date"
+                name="date"
+                required>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="booking__fieldset">
+            <legend class="visually-hidden">
+               Ваши контакты
+            </legend>
+            <div class="booking__box">
+              <label class="booking__label">
+                <span>Телефон</span>
+                <input class="booking__input"
+                type="tel"
+                name="telephone"
+                placeholder="+79XXXXXXXXX"
+                pattern="\+7[0-9]{3}[0-9]{3}[0-9]{4}"
+                required>
+              </label>
+
+              <label class="booking__label">
+                <span>Email</span>
+                <input class="booking__input"
+                type="email"
+                name="email"
+                placeholder="some-email@mail.com">
+              </label>
+            </div>
+          </fieldset>
+
+          <button class="booking__submit button"
+            type="submit">
+            Отправить
+          </button>
+        </form>
+      </section>
+
+      <section class="main__contacts contacts"
+        id="contacts">
+        <h2 class="contacts__heading">
+          Наши контакты
+        </h2>
+        <address class="contacts__address">
+          <p class="contacts__location">
+            г. Тула, проспект Ленина, 66
+          </p>
+          <a class="contacts__phone"
+            href="tel:+79000000000">
+            тел:
+            <span class="contacts__span">
+              +7 (900) 000 00 00
+            </span>
+          </a>
+          <a class="contacts__mail"
+            href="mailto:barber@mail.com">
+            почта:
+            <span class="contacts__span">
+              barber@mail.com
+            </span>
+          </a>
+        </address>
+      </section>
+
+      <section class="main__map map"
+        id="location">
+        <h2 class="map__heading">
+          Мы на карте
+        </h2>
+
+          <iframe class="map__farme"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2335.014980238995!2d37.60237970715056!3d54.17981053558874!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x41343f8b847d83a5%3A0x33dccbf128e2ba3!2z0L_RgC4g0JvQtdC90LjQvdCwLCA2Niwg0KLRg9C70LAsINCi0YPQu9GM0YHQutCw0Y8g0L7QsdC7LiwgMzAwMDEy!5e0!3m2!1sru!2sru!4v1621103983174!5m2!1sru!2sru"
+            width="991"
+            height="144"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"></iframe>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p class="footer__invitation">
+        <span>
+          Добро пожаловать в
+        </span>
+        <span>
+          Barberside
+        </span>
+        <span>
+          пн - пт с 10.00 до 20.00
+        </span>
+      </p>
+      <dl class="footer__gratitude">
+        <dt>
+          Шрифт:
+        </dt>
+        <dd>
+          <a href="http://creativecommons.org/licenses/by-nd/4.0/">
+            © 2014 Sergiy S. Tkachenko / 4th february© 2014
+          </a>
+        </dd>
+
+        <dt>
+          Графика:
+        </dt>
+        <dd>
+          <a href="https://tabbied.com/">
+            Tabbied
+          </a>
+        </dd>
+      </dl>
+      <a class="footer__to-top-btn"
+        href="#page-top"></a>
+    </footer>
+  </div>
+
+    <!-- Сообщение с ошибкой отправки данных -->
+    <template id="error">
+      <section class="error">
+        <div class="error__inner">
+          <h2 class="error__title">Ошибка загрузки данных</h2>
+          <button type="button" class="error__button">Oops...</button>
+        </div>
+      </section>
+    </template>
+
+    <!-- Сообщение об успешной отправке данных -->
+    <template id="success">
+      <section class="success">
+        <div class="success__inner">
+          <h2 class="success__title">Данные успешно отправленны</h2>
+          <button type="button" class="success__button">Ok</button>
+        </div>
+      </section>
+    </template>
+
+  <script type="module" src="./js/index.min.js" defer></script>
+</body>
+</html>
