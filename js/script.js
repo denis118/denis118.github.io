@@ -27,7 +27,11 @@
     return Boolean(item) === true;
   });
 
-  switchOnJsMode();
+  if (isEveryItemExisting && viewPort < DESKTOP_WIDTH) {
+    hideNavigation();
+    toggle.addEventListener('click', onToggleClick);
+  }
+
   var onToggleClick = createHandler();
 
   window.addEventListener('resize', function () {
@@ -43,13 +47,6 @@
       toggle.removeEventListener('click', onToggleClick, false);
     }
   });
-
-  function switchOnJsMode() {
-    if (isEveryItemExisting && viewPort < DESKTOP_WIDTH) {
-      hideNavigation();
-      toggle.addEventListener('click', onToggleClick);
-    }
-  }
 
   function hideNavigation() {
     navigation.classList.add('navigation--js');
