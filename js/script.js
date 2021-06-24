@@ -67,7 +67,7 @@
 
       arrowList.addEventListener('click', function (evt) {
         if (evt.target.matches('.slider__arrow-btn')) {
-          showSlide(it, evt.target.id);
+          showSlide(it, evt.target.dataset.id);
         }
       });
     }
