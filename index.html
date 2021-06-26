@@ -1,23 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="./css/style.min.css">
+  <meta
+    charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
+  <link
+    rel="stylesheet"
+    href="./css/style.min.css">
   <title>Slider</title>
 </head>
 <body>
   <h1>Slider</h1>
 
-  <div class="slider" id="slider1">
-    <ul class="slider__list list" role="region" aria-label="gallery" tabindex="0" aria-describedby="instructions">
-      <li class="slider__item" id="Great canyon">
+  <div
+    class="slider"
+    id="slider1">
+    <ul
+      class="slider__list list"
+      role="region"
+      aria-label="gallery"
+      tabindex="0"
+      aria-describedby="instructions">
+      <li
+        class="slider__item"
+        id="Great canyon">
         <figure>
-          <div class="padded-box">
-            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' /%3E" data-src="./img/1.jpg" width="1000" height="667" alt="Great canyon">
+          <div
+            class="padded-box">
+            <img
+              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' /%3E"
+              data-src="./img/1.jpg"
+              width="1000"
+              height="667"
+              alt="Great canyon">
 
             <noscript>
-              <img src="./img/1.jpg" width="1000" height="667" alt="Great canyon">
+              <img
+                src="./img/1.jpg"
+                width="1000"
+                height="667"
+                alt="Great canyon">
             </noscript>
           </div>
 
@@ -25,13 +49,25 @@
         </figure>
       </li>
 
-      <li class="slider__item" id="Mountains">
+      <li
+        class="slider__item"
+        id="Mountains">
         <figure>
-          <div class="padded-box">
-            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' /%3E" data-src="./img/2.jpg" width="1680" height="1050" alt="Mountains">
+          <div
+            class="padded-box">
+            <img
+              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' /%3E"
+              data-src="./img/2.jpg"
+              width="1680"
+              height="1050"
+              alt="Mountains">
 
             <noscript>
-              <img src="./img/2.jpg" width="1680" height="1050" alt="Mountains">
+              <img
+                src="./img/2.jpg"
+                width="1680"
+                height="1050"
+                alt="Mountains">
             </noscript>
           </div>
 
@@ -39,13 +75,25 @@
         </figure>
       </li>
 
-      <li class="slider__item" id="Road to the sea">
+      <li
+        class="slider__item"
+        id="Road to the sea">
         <figure>
-          <div class="padded-box">
-            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' /%3E" data-src="./img/3.jpg" width="2880" height="1800" alt="Road to the sea">
+          <div
+            class="padded-box">
+            <img
+              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' /%3E"
+              data-src="./img/3.jpg"
+              width="2880"
+              height="1800"
+              alt="Road to the sea">
 
             <noscript>
-              <img src="./img/3.jpg" width="2880" height="1800" alt="Road to the sea">
+              <img
+                src="./img/3.jpg"
+                width="2880"
+                height="1800"
+                alt="Road to the sea">
             </noscript>
           </div>
 
@@ -54,58 +102,97 @@
       </li>
     </ul>
 
-    <ul class="slider__controls slider__dots list" aria-label="slider controls dots">
-      <li class="slider__dot slider__dot--canyon">
-        <button class="slider__dot-btn slider__dot-btn--canyon active" type="button" aria-label="Button for 'Great canyon' image" data-id="Great canyon"></button>
+    <button
+      class="slider__arrow-btn slider__arrow-btn--previous"
+      type="button"
+      data-id="previous"
+      aria-label="previous"></button>
+
+    <button
+      class="slider__arrow-btn slider__arrow-btn--next"
+      type="button"
+      data-id="next"
+      aria-label="next"></button>
+
+    <!-- <ul
+      class="slider__controls slider__arrows list"
+      aria-label="slider controls arrows">
+      <li
+        class="slider__arrow slider__arrow--previous">
+        <button
+          class="slider__arrow-btn slider__arrow-btn--previous"
+          type="button"
+          data-id="previous"
+          aria-label="previous"></button>
       </li>
 
-      <li class="slider__dot slider__dot--mountains">
-        <button class="slider__dot-btn slider__dot-btn--mountains" type="button" aria-label="Button for 'Mountains' image" data-id="Mountains"></button>
+      <li
+        class="slider__arrow slider__arrow--next">
+        <button
+          class="slider__arrow-btn slider__arrow-btn--next"
+          type="button"
+          data-id="next"
+          aria-label="next"></button>
       </li>
+    </ul> -->
 
-      <li class="slider__dot slider__dot--road">
-        <button class="slider__dot-btn slider__dot-btn--road" type="button" aria-label="Button for 'Road to the sea' image" data-id="Road to the sea"></button>
-      </li>
-    </ul>
-
-    <ul class="slider__controls slider__arrows list" aria-label="slider controls arrows">
-      <li class="slider__arrow slider__arrow--previous">
-        <button class="slider__arrow-btn slider__arrow-btn--previous" type="button" data-id="previous" aria-label="previous"></button>
-      </li>
-
-      <li class="slider__arrow slider__arrow--next">
-        <button class="slider__arrow-btn slider__arrow-btn--next" type="button" data-id="next" aria-label="next"></button>
-      </li>
-    </ul>
-
-    <ul class="slider__tips visually-hidden list" id="instructions">
-      <li class="slider__tip slider__tip--touch" aria-label="tip">
+    <ul
+      class="slider__tips visually-hidden list"
+      id="instructions">
+      <li
+        class="slider__tip slider__tip--touch"
+        aria-label="tip">
         swipe for more
       </li>
 
-      <li class="slider__tip slider__tip--focus" aria-label="tip">
+      <li
+        class="slider__tip slider__tip--focus"
+        aria-label="tip">
         use your arrow keys for more
       </li>
 
-      <li class="slider__tip slider__tip--hover" aria-label="tip">
+      <li
+        class="slider__tip slider__tip--hover"
+        aria-label="tip">
         scroll for more
       </li>
 
-      <li class="slider__tip slider__tip--focus-and-hover" aria-label="tip">
+      <li
+        class="slider__tip slider__tip--focus-and-hover"
+        aria-label="tip">
         scroll or use arrow keys for more
       </li>
     </ul>
   </div>
 
-  <div class="slider" id="slider2">
-    <ul class="slider__list list" role="region" aria-label="gallery" tabindex="0" aria-describedby="instructions">
-      <li class="slider__item" id="Great canyon2">
+  <div
+    class="slider"
+    id="slider2">
+    <ul
+      class="slider__list list"
+      role="region"
+      aria-label="gallery"
+      tabindex="0"
+      aria-describedby="instructions">
+      <li
+        class="slider__item"
+        id="Great canyon2">
         <figure>
-          <div class="padded-box">
-            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' /%3E" data-src="./img/1.jpg" width="1000" height="667" alt="Great canyon">
+          <div
+            class="padded-box">
+            <img
+              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' /%3E"
+              data-src="./img/1.jpg"
+              width="1000"
+              height="667"
+              alt="Great canyon">
 
             <noscript>
-              <img src="./img/1.jpg" width="1000" height="667" alt="Great canyon">
+              <img
+                src="./img/1.jpg"
+                width="1000"
+                height="667"
+                alt="Great canyon">
             </noscript>
           </div>
 
@@ -113,13 +200,25 @@
         </figure>
       </li>
 
-      <li class="slider__item" id="Mountains2">
+      <li
+        class="slider__item"
+        id="Mountains2">
         <figure>
-          <div class="padded-box">
-            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' /%3E" data-src="./img/2.jpg" width="1680" height="1050" alt="Mountains">
+          <div
+            class="padded-box">
+            <img
+              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' /%3E"
+              data-src="./img/2.jpg"
+              width="1680"
+              height="1050"
+              alt="Mountains">
 
             <noscript>
-              <img src="./img/2.jpg" width="1680" height="1050" alt="Mountains">
+              <img
+                src="./img/2.jpg"
+                width="1680"
+                height="1050"
+                alt="Mountains">
             </noscript>
           </div>
 
@@ -127,13 +226,25 @@
         </figure>
       </li>
 
-      <li class="slider__item" id="Road to the sea2">
+      <li
+        class="slider__item"
+        id="Road to the sea2">
         <figure>
-          <div class="padded-box">
-            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' /%3E" data-src="./img/3.jpg" width="2880" height="1800" alt="Road to the sea">
+          <div
+            class="padded-box">
+            <img
+              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' /%3E"
+              data-src="./img/3.jpg"
+              width="2880"
+              height="1800"
+              alt="Road to the sea">
 
             <noscript>
-              <img src="./img/3.jpg" width="2880" height="1800" alt="Road to the sea">
+              <img
+                src="./img/3.jpg"
+                width="2880"
+                height="1800"
+                alt="Road to the sea">
             </noscript>
           </div>
 
@@ -142,60 +253,69 @@
       </li>
     </ul>
 
-    <ul class="slider__controls slider__dots list" aria-label="slider controls dots">
-      <li class="slider__dot slider__dot--canyon">
-        <button class="slider__dot-btn slider__dot-btn--canyon active" type="button" aria-label="Button for 'Great canyon' image" data-id="Great canyon2"></button>
+    <button
+      class="slider__arrow-btn slider__arrow-btn--previous"
+      type="button"
+      data-id="previous"
+      aria-label="previous"></button>
+
+    <button
+      class="slider__arrow-btn slider__arrow-btn--next"
+      type="button"
+      data-id="next"
+      aria-label="next"></button>
+
+    <!-- <ul
+      class="slider__controls slider__arrows list"
+      aria-label="slider controls arrows">
+      <li
+        class="slider__arrow slider__arrow--previous">
+        <button
+          class="slider__arrow-btn slider__arrow-btn--previous"
+          type="button"
+          data-id="previous"
+          aria-label="previous"></button>
       </li>
 
-      <li class="slider__dot slider__dot--mountains">
-        <button class="slider__dot-btn slider__dot-btn--mountains" type="button" aria-label="Button for 'Mountains' image" data-id="Mountains2"></button>
+      <li
+        class="slider__arrow slider__arrow--next">
+        <button
+          class="slider__arrow-btn slider__arrow-btn--next"
+          type="button"
+          data-id="next"
+          aria-label="next"></button>
       </li>
+    </ul> -->
 
-      <li class="slider__dot slider__dot--road">
-        <button class="slider__dot-btn slider__dot-btn--road" type="button" aria-label="Button for 'Road to the sea' image" data-id="Road to the sea2"></button>
-      </li>
-    </ul>
-
-    <ul class="slider__controls slider__arrows list" aria-label="slider controls arrows">
-      <li class="slider__arrow slider__arrow--previous">
-        <button class="slider__arrow-btn slider__arrow-btn--previous" type="button" data-id="previous" aria-label="previous"></button>
-      </li>
-
-      <li class="slider__arrow slider__arrow--next">
-        <button class="slider__arrow-btn slider__arrow-btn--next" type="button" data-id="next" aria-label="next"></button>
-      </li>
-    </ul>
-
-    <ul class="slider__tips visually-hidden list" id="instructions">
-      <li class="slider__tip slider__tip--touch" aria-label="tip">
+    <ul
+      class="slider__tips visually-hidden list"
+      id="instructions">
+      <li
+        class="slider__tip slider__tip--touch"
+        aria-label="tip">
         swipe for more
       </li>
 
-      <li class="slider__tip slider__tip--focus" aria-label="tip">
+      <li
+        class="slider__tip slider__tip--focus"
+        aria-label="tip">
         use your arrow keys for more
       </li>
 
-      <li class="slider__tip slider__tip--hover" aria-label="tip">
+      <li
+        class="slider__tip slider__tip--hover"
+        aria-label="tip">
         scroll for more
       </li>
 
-      <li class="slider__tip slider__tip--focus-and-hover" aria-label="tip">
+      <li
+        class="slider__tip slider__tip--focus-and-hover"
+        aria-label="tip">
         scroll or use arrow keys for more
       </li>
     </ul>
   </div>
 
-  <!-- not used -->
-  <svg style="display:none">
-    <symbol id="arrow-left" viewBox="0 0 10 10">
-      <path fill="currentColor" d="m9 4h-4v-2l-4 3 4 3v-2h4z"></path>
-    </symbol>
-
-    <symbol id="arrow-right" viewBox="0 0 10 10">
-      <path fill="currentColor" d="m1 4h4v-2l4 3-4 3v-2h-4z"></path>
-    </symbol>
-  </svg>
-
-  <script src="./js/script.js" defer=""></script>
+  <script src="./js/slider-arrows-infinite.js" defer></script>
 </body>
 </html>

@@ -1,5 +1,19 @@
 'use strict';
 
+// type checking
+(function () {
+  function checkType(value) {
+    var regex = /^\[object (\S+?)\]$/;
+    var matches = Object.prototype.toString.call(value).match(regex) || [];
+
+    return (matches[1] || 'undefined').toLowerCase();
+  }
+
+  window.typeChecking = {
+    checkType: checkType
+  };
+})();
+
 // Lazy loading
 (function () {
   var mediaContents = Array.from(document.querySelectorAll('[data-src]'));
@@ -25,15 +39,11 @@
 
           if (entry.target.closest('.slider') && entry.target.closest('li')) {
             entry.target.closest('li').classList.add('visible');
-
-            var interSection = entry.target;
-            var slider = interSection.closest('.slider');
-            window.slideSwitchingByDots.highlightDot(null, slider, interSection)();
           }
         });
       }
 
-      var mediaObserver = new IntersectionObserver(callback);
+      var mediaObserver = new IntersectionObserver(callback, mediaObserver);
 
       mediaContents.forEach(function (it) {
         mediaObserver.observe(it);
@@ -49,112 +59,66 @@
 // Slide switching by arrows
 (function () {
   var sliders = Array.from(document.querySelectorAll('.slider'));
-  var arrowList = null;
-
-  if (!('IntersectionObserver' in window)) {
-    sliders.forEach(function (it) {
-      if (it.querySelector('.slider__arrows')) {
-        arrowList = it.querySelector('.slider__arrows');
-        arrowList.classList.add('hidden-entity');
-      }
-    });
-    return;
-  }
+  var slideIndex = 0;
 
   sliders.forEach(function (it) {
-    if (it.querySelector('.slider__arrows')) {
-      arrowList = it.querySelector('.slider__arrows');
-
-      arrowList.addEventListener('click', function (evt) {
-        if (evt.target.matches('.slider__arrow-btn')) {
-          showSlide(it, evt.target.dataset.id);
-        }
-      });
-    }
+    var arrows = Array.from(it.querySelectorAll('.slider__arrow-btn'));
+    insertEventListeners(it, arrows);
   });
 
-  function showSlide(slider, direction) {
-    var visibleSlides = slider.querySelectorAll('.visible');
+  function insertEventListeners(slider, operand) {
+    var isOperandArray = window.typeChecking.checkType(operand) === 'array';
 
+    if (isOperandArray) {
+      operand.forEach(function (item) {
+        item.addEventListener('click', function (evt) {
+          showSlide(slider, evt.target.dataset.id);
+        });
+      });
+    }
+  }
+
+  function showSlide(slider, direction) {
     var i = direction === 'previous'
       ? 0
       : 1;
 
-    if (visibleSlides.length > 1) {
-      scrollIt(visibleSlides[i]);
+    if (i === 0) {
+      plusSlide(slider, -1);
     } else {
-      var newSlide = i === 0
-        ? visibleSlides[0].previousElementSibling
-        : visibleSlides[0].nextElementSibling;
-
-      if (newSlide) {
-        scrollIt(newSlide);
-      }
+      plusSlide(slider, +1);
     }
   }
 
-  // Variables for the first variant of 'scrollIt' function:
-  //   var sliderList = slider.querySelector('.slider__list');
-  //   var slides = Array.from(sliderList.querySelectorAll('.slider__item'));
+  function plusSlide(slider, delta) {
+    var sliderList = slider.querySelector('.slider__list');
+    var slides = Array.from(sliderList.querySelectorAll('.slider__item'));
+    var visibleSlides = null;
 
-  function scrollIt(slideToShow) {
-    // Code of the first 'scrollIt' function variant:
-    //   var scrollPos = slides.indexOf(slideToShow) * (sliderList.scrollWidth / slides.length);
-    //   sliderList.scrollLeft = scrollPos;
+    if ('IntersectionObserver' in window) {
+      visibleSlides = Array.from(slider.querySelectorAll('.visible'));
 
-    slideToShow.scrollIntoView({
-      behavior: 'smooth'
-    });
-  }
-})();
-
-// Slide switching by dots or thumbnails
-(function () {
-  var sliders = Array.from(document.querySelectorAll('.slider'));
-  var dotList = null;
-
-  sliders.forEach(function (it) {
-    if (it.querySelector('.slider__dots')) {
-      dotList = it.querySelector('.slider__dots');
-
-      dotList.addEventListener('click', function (evt) {
-        if (evt.target.matches('.slider__dot-btn')) {
-          scrollIt(evt.target.dataset.id);
-          highlightDot(evt, it)();
-        }
-      });
-    }
-  });
-
-  function highlightDot(evt, slider, interSection) {
-    var currentlyActiveDot = slider.querySelector('.slider__dot-btn.active');
-    var nextActiveDot = null;
-
-    return function () {
-      currentlyActiveDot.classList.remove('active');
-
-      if (interSection) {
-        var dots = Array.from(slider.querySelectorAll('.slider__dot-btn'));
-        nextActiveDot = dots.find(function (item) {
-          return item.dataset.id === interSection.closest('li').id;
-        });
-      } else {
-        nextActiveDot = evt.target;
+      if (visibleSlides.length > 1) {
+        return;
       }
 
-      currentlyActiveDot = nextActiveDot;
-      currentlyActiveDot.classList.add('active');
-    };
+      slideIndex = slides.indexOf(visibleSlides[0]);
+    }
+
+    slideIndex += delta;
+    scrollSlide(sliderList, slides, slideIndex);
   }
 
-  function scrollIt(id) {
-    var aim = document.getElementById(id);
-    aim.scrollIntoView({
-      behavior: 'smooth'
-    });
-  }
+  function scrollSlide(sliderList, slides, index) {
+    if (index > slides.length - 1) {
+      slideIndex = 0;
+    }
 
-  window.slideSwitchingByDots = {
-    highlightDot: highlightDot
-  };
+    if (index < 0) {
+      slideIndex = slides.length - 1;
+    }
+
+    var scrollPos = slideIndex * (sliderList.scrollWidth / slides.length);
+    sliderList.scrollLeft = scrollPos;
+  }
 })();
