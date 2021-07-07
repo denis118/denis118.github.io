@@ -1,4 +1,22 @@
 'use strict';
+// maybe
+(function () {
+  function Maybe(operand) {
+    this.operand = operand;
+  }
+
+  Maybe.prototype.map = function (operator) {
+    if (this.operand && operator) {
+      return new Maybe(operator(this.operand));
+    } else {
+      return new Maybe(null);
+    }
+  };
+
+  window.monad = {
+    Maybe: Maybe
+  };
+})();
 
 // type checking
 (function () {
@@ -14,142 +32,358 @@
   };
 })();
 
-// Lazy loading
+// listeners managing
 (function () {
-  var mediaContents = Array.from(document.querySelectorAll('[data-src]'));
+  function manageListeners(elements, settings) {
+    var isElementsArray = Array.isArray(elements);
+    var isSettingsObject = window.typeChecking.checkType(settings) === 'object';
 
-  if ('IntersectionObserver' in window) {
-    document.addEventListener('DOMContentLoaded', function () {
-      function callback(entries) {
-        entries.forEach(function (entry) {
-          if (entry.target.closest('.slider') && entry.target.closest('li')) {
-            entry.target.closest('li').classList.remove('visible');
-          }
+    if (!isElementsArray || !isSettingsObject) {
+      return;
+    }
 
-          if (!entry.isIntersecting) {
-            return;
-          }
+    var handlersArray = Object.entries(settings);
 
-          var lazyContent = entry.target;
+    function callback(entries) {
+      handlersArray.forEach(function (handlers) {
+        var eventName = typeof handlers[0] === 'string'
+          ? handlers[0]
+          : String(handlers[0]);
 
-          if (lazyContent.dataset.src) {
-            lazyContent.src = lazyContent.dataset.src;
-            lazyContent.removeAttribute('data-src');
-          }
+        var eventFunction = typeof handlers[1] === 'function'
+          ? handlers[1]
+          : null;
 
-          if (entry.target.closest('.slider') && entry.target.closest('li')) {
-            entry.target.closest('li').classList.add('visible');
-          }
+        if (!eventName || eventFunction === null) {
+          return;
+        }
+      });
 
-          var currentSlider = entry.target.closest('.slider');
-          var slides = Array.from(currentSlider.querySelectorAll('.slider__item'));
-          var index = slides.indexOf(entry.target.closest('.slider__item'));
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) {
+          handlersArray.forEach(function (handlers) {
+            entry.target.removeEventListener(handlers[0], handlers[1]);
+          });
+          return;
+        }
 
-          window.slideSwitching.setSlideIndex(index);
-          window.slideSwitching.switchArrowVisibility(currentSlider);
+        handlersArray.forEach(function (handlers) {
+          entry.target.addEventListener(handlers[0], handlers[1]);
         });
+      });
+    }
+
+    var observer = new IntersectionObserver(callback);
+    elements.forEach(function (it) {
+      observer.observe(it);
+    });
+  }
+
+  window.listenersManaging = {
+    manageListeners: manageListeners
+  };
+})();
+
+// accordeon
+(function () {
+  var UNITS = 'px';
+  var TABLET_WIDTH = 768;
+
+  var viewPort = document.documentElement.clientWidth;
+  var children;
+  var isChildrenHidden = false;
+  var scrollHeightKeeping = {};
+
+  document.addEventListener('DOMContentLoaded', callback);
+
+  function callback() {
+    viewPort = document.documentElement.clientWidth;
+    hideContent();
+  }
+
+  var onWindowResize = makeHandler();
+  window.addEventListener('resize', onWindowResize);
+
+  function makeHandler() {
+    var flag = false;
+
+    return function () {
+      viewPort = document.documentElement.clientWidth;
+
+      if (
+        (viewPort > TABLET_WIDTH || viewPort === TABLET_WIDTH)
+        && flag
+      ) {
+        flag = false;
       }
 
-      var mediaObserver = new IntersectionObserver(callback);
+      if (
+        viewPort < TABLET_WIDTH
+        && !flag
+      ) {
+        hideContent();
+        flag = true;
+      }
+    };
+  }
 
-      mediaContents.forEach(function (it) {
-        mediaObserver.observe(it);
+  var Maybe = window.monad.Maybe;
+  var accordeon = new Maybe(document.querySelector('.accordeon'));
+  var buttons = accordeon.map(function (element) {
+    return Array.from(element.querySelectorAll('.accordeon__btn'));
+  });
+  var contents = accordeon.map(function (element) {
+    return Array.from(element.querySelectorAll('.accordeon__content'));
+  });
+
+  if (buttons.operand.length && contents.operand.length) {
+    accordeon = accordeon.operand;
+    buttons = buttons.operand;
+    contents = contents.operand;
+
+    buttons.forEach(function (it) {
+      it.classList.add('accordeon__btn--js');
+    });
+
+    contents.forEach(function (it) {
+      if (viewPort < TABLET_WIDTH) {
+        it.style.maxHeight = null;
+      }
+    });
+
+    if ('IntersectionObserver' in window) {
+      window.listenersManaging.manageListeners([accordeon], {'click': onAccordeonClick});
+    } else {
+      accordeon.addEventListener('click', onAccordeonClick);
+    }
+  }
+
+  function hideContent() {
+    contents.forEach(function (it) {
+      if (viewPort < TABLET_WIDTH) {
+        scrollHeightKeeping[it.id] = {
+          scrollHeight: it.scrollHeight
+        };
+
+        it.classList.add('accordeon__content--js');
+
+        children = Array.from(it.children);
+        hideChildren(children);
+        isChildrenHidden = true;
+      }
+    });
+  }
+
+  function hideChildren(array) {
+    array.forEach(function (it) {
+      it.classList.add('hidden-entity');
+    });
+  }
+
+  function showChildren(array) {
+    array.forEach(function (it) {
+      it.classList.remove('hidden-entity');
+    });
+  }
+
+  function onAccordeonClick(evt) {
+    if (evt.target.matches('.accordeon__btn')) {
+      contents.forEach(function (it) {
+        if (it === evt.target.nextElementSibling) {
+          if (it.style.maxHeight) {
+            it.style.maxHeight = null;
+          } else {
+            if (isChildrenHidden) {
+              children = Array.from(it.children);
+              showChildren(children);
+            }
+
+            it.style.maxHeight = scrollHeightKeeping[it.id].scrollHeight + UNITS;
+            it.classList.add('opened');
+          }
+
+          var openedContents = accordeon.querySelectorAll('.opened')
+            ? Array.from(accordeon.querySelectorAll('.opened'))
+            : null;
+
+          if (openedContents.length > 1) {
+            openedContents.forEach(function (element) {
+              if (!Object.is(element, it)) {
+                element.style.maxHeight = null;
+
+                var button = element.previousElementSibling
+                  ? element.previousElementSibling
+                  : null;
+
+                if (button) {
+                  if (button.classList.contains('accordeon__btn--active')) {
+                    button.classList.remove('accordeon__btn--active');
+                  }
+                }
+              }
+            });
+          }
+        }
       });
-    });
-  } else {
-    mediaContents.forEach(function (it) {
-      it.setAttribute('src', it.getAttribute('data-src'));
-    });
+
+      evt.target.classList.toggle('accordeon__btn--active');
+    }
   }
 })();
 
-// Slide switching by arrows
+// Скролл
 (function () {
-  var sliders = Array.from(document.querySelectorAll('.slider'));
-  var slideIndex;
+  var Maybe = window.monad.Maybe;
+  var consultationAnchor = new Maybe(document.querySelector('a[href="#consultation"]'));
+  var advantagesAnchor = new Maybe(document.querySelector('a[href="#advantages"]'));
 
-  setSlideIndex();
-
-  function setSlideIndex(value) {
-    slideIndex = value || 0;
+  if (consultationAnchor.operand) {
+    consultationAnchor = consultationAnchor.operand;
+    consultationAnchor.addEventListener('click', onAnchorClick);
   }
 
-  sliders.forEach(function (it) {
-    var arrows = Array.from(it.querySelectorAll('.slider__arrow-btn'));
-    var arrowNext = it.querySelector('.slider__arrow-btn[data-id="next"]');
-    arrowNext.classList.remove('hidden-entity');
-    insertEventListeners(it, arrows);
-  });
+  if (advantagesAnchor.operand) {
+    advantagesAnchor = advantagesAnchor.operand;
+    advantagesAnchor.addEventListener('click', onAnchorClick);
+  }
 
-  function insertEventListeners(slider, operand) {
-    var isOperandArray = window.typeChecking.checkType(operand) === 'array';
+  function onAnchorClick(evt) {
+    evt.preventDefault();
+    letItScroll(evt);
+  }
 
-    if (isOperandArray) {
-      operand.forEach(function (item) {
-        item.addEventListener('click', function (evt) {
-          showSlide(slider, evt.target.dataset.id);
-        });
+  function letItScroll(evt) {
+    var aimId = evt.target.getAttribute('href');
+    var aim = document.querySelector(aimId);
+
+    if (aim) {
+      aim.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  }
+})();
+
+(function () {
+  var START_VALUE = '+7(';
+
+  if (window.localStorage) {
+    var elements = document.querySelectorAll('[name]')
+      ? Array.from(document.querySelectorAll('[name]'))
+      : null;
+
+    if (elements.length) {
+      elements.forEach(function (element) {
+        var name = element.getAttribute('name');
+        element.value = localStorage.getItem(name) || element.value;
+        element.onkeyup = function () {
+          localStorage.setItem(name, element.value);
+        };
       });
     }
   }
 
-  function showSlide(slider, direction) {
-    var i = direction === 'previous'
-      ? 0
-      : 1;
+  var phones = document.querySelectorAll('input[type="tel"]')
+    ? Array.from(document.querySelectorAll('input[type="tel"]'))
+    : null;
 
-    if (i === 0) {
-      plusSlide(slider, -1);
-    } else {
-      plusSlide(slider, +1);
-    }
+  if (phones.length) {
+    phones.forEach(function (it) {
+      it.addEventListener('focus', onPhoneFocus);
+      it.addEventListener('input', onPhoneInput);
+    });
   }
 
-  function plusSlide(slider, delta) {
-    var sliderList = slider.querySelector('.slider__list');
-    var slides = Array.from(sliderList.querySelectorAll('.slider__item'));
+  function onPhoneFocus(evt) {
+    if (evt.target.matches('input[type="tel"]')) {
+      var input = evt.target;
+      var value = typeof input.value === 'string'
+        ? input.value
+        : String(input.value);
 
-    if ('IntersectionObserver' in window) {
-      var visibleSlides = Array.from(slider.querySelectorAll('.visible'));
-
-      if (visibleSlides.length > 1) {
-        return;
+      if (value === '') {
+        input.value = START_VALUE;
       }
-
-      slideIndex = slides.indexOf(visibleSlides[0]);
     }
 
-    slideIndex += delta;
-    scrollSlide(slider, sliderList, slides);
+    return;
   }
 
-  function scrollSlide(slider, sliderList, slides) {
-    switchArrowVisibility(slider);
+  function onPhoneInput(evt) {
+    var prevLength = evt.target.value.length;
+    var selectionStart = evt.target.selectionStart;
 
-    var scrollPos = slideIndex * (sliderList.scrollWidth / slides.length);
-    sliderList.scrollLeft = scrollPos;
+    var numbers = evt.target.value
+        .replace('+7', '')
+        .replace(/\D/g, '')
+        .slice(0, 11);
+
+    var x = numbers.match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+
+    var firstPart = x[1] ? '7(' + x[1] : '';
+    var secondPart = x[2] ? ')' + x[2] : '';
+    var thirdPart = x[3] ? '-' + x[3] : '';
+
+    var res = firstPart + secondPart + thirdPart;
+
+    evt.target.value = res ? '+' + res : '';
+
+    evt.target.selectionEnd = selectionStart + evt.target.value.length - prevLength;
+  }
+})();
+
+
+// modal
+(function () {
+  var Maybe = window.monad.Maybe;
+  var trigger = new Maybe(document.querySelector('a[id="ring-trigger"]'));
+  var modal = new Maybe(document.querySelector('div[id="modal"]'));
+  var cross = new Maybe(document.querySelector('button[id="cross"]'));
+
+  if (trigger.operand && modal.operand && cross.operand) {
+    trigger = trigger.operand;
+    modal = modal.operand;
+    cross = cross.operand;
+
+    trigger.addEventListener('click', onTriggerClick);
   }
 
-  function switchArrowVisibility(slider) {
-    var slides = Array.from(slider.querySelectorAll('.slider__item'));
-    var arrowPrevious = slider.querySelector('.slider__arrow-btn[data-id="previous"]');
-    var arrowNext = slider.querySelector('.slider__arrow-btn[data-id="next"]');
+  function onTriggerClick(evt) {
+    evt.preventDefault();
+    modal.classList.remove('hidden-entity');
+    document.body.classList.add('modal-open');
 
-    if (slideIndex === slides.length - 1 || slideIndex > slides.length - 1) {
-      arrowNext.classList.add('hidden-entity');
-    } else {
-      arrowNext.classList.remove('hidden-entity');
+    modal.addEventListener('click', onModalClick);
+    document.addEventListener('keydown', onDocumentKeydown);
+    cross.addEventListener('click', onCrossClick);
+  }
+
+  function onModalClick(evt) {
+    if (!Object.is(evt.target, modal)) {
+      return;
     }
 
-    if (slideIndex === 0 || slideIndex < 0) {
-      arrowPrevious.classList.add('hidden-entity');
-    } else {
-      arrowPrevious.classList.remove('hidden-entity');
+    onCrossClick(evt);
+  }
+
+  function onDocumentKeydown(evt) {
+    if (isEscEvent(evt)) {
+      onCrossClick(evt);
     }
   }
 
-  window.slideSwitching = {
-    setSlideIndex: setSlideIndex,
-    switchArrowVisibility: switchArrowVisibility
-  };
+  function onCrossClick(evt) {
+    evt.preventDefault();
+    modal.classList.add('hidden-entity');
+    document.body.classList.remove('modal-open');
+
+    modal.removeEventListener('click', onModalClick);
+    document.removeEventListener('keydown', onDocumentKeydown);
+    cross.removeEventListener('click', onCrossClick);
+  }
+
+  function isEscEvent(evt) {
+    return evt.key === ('Escape' || 'Esc');
+  }
 })();
