@@ -117,6 +117,8 @@
         (viewPort > TABLET_WIDTH || viewPort === TABLET_WIDTH)
         && flag
       ) {
+        accordeon.removeEventListener('click', onAccordeonClick);
+
         var activeButtons = Array.from(accordeon.querySelectorAll('.accordeon__btn--active'));
 
         if (activeButtons.length) {
@@ -153,6 +155,7 @@
         viewPort < TABLET_WIDTH
         && !flag
       ) {
+        accordeon.addEventListener('click', onAccordeonClick);
         hideContent();
         flag = true;
       }
@@ -183,11 +186,13 @@
       }
     });
 
-    if ('IntersectionObserver' in window) {
-      window.listenersManaging.manageListeners([accordeon], {'click': onAccordeonClick});
-    } else {
-      accordeon.addEventListener('click', onAccordeonClick);
-    }
+    // if ('IntersectionObserver' in window) {
+    //   window.listenersManaging.manageListeners([accordeon], {'click': onAccordeonClick});
+    // } else {
+    //   accordeon.addEventListener('click', onAccordeonClick);
+    // }
+
+    accordeon.addEventListener('click', onAccordeonClick);
   }
 
   function hideContent() {
