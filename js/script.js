@@ -126,7 +126,7 @@
         item.classList.remove('accordeon__btn--active');
       });
 
-      accordeon.querySelectorAll('.accordeon__content').forEach(function (item) {
+      Array.from(accordeon.querySelectorAll('.accordeon__content')).forEach(function (item) {
         hideContent(item);
       });
 
