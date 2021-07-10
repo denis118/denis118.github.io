@@ -162,6 +162,10 @@
       it.classList.remove('hidden-entity');
     });
 
+    if (!cb) {
+      return;
+    }
+
     cb(parent);
   }
 
@@ -186,7 +190,7 @@
         item.classList.remove('accordeon__btn--active');
       });
 
-      Array.from(accordeon.querySelectorAll('.accordeon__content')).forEach(function (item) {
+      accordeon.querySelectorAll('.accordeon__content').forEach(function (item) {
         hideContent(item);
       });
 
@@ -219,6 +223,17 @@
 
     return function () {
       if (!isPreTabletWidth()) {
+        if (!accordeons) {
+          return;
+        }
+
+        accordeons.forEach(function (accordeon) {
+          Array.from(accordeon.querySelectorAll('.accordeon__content')).forEach(function (item) {
+            var children = Array.from(item.children);
+            showChildren(item, children);
+          });
+        });
+
         eraseEventListeners();
         isWorkedOnPreTabletWidth = false;
         return;
