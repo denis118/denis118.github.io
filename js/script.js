@@ -87,7 +87,7 @@
 })();
 
 
-// // accordeon
+// accordeon
 (function () {
   var UNITS = 'px';
   var TABLET_WIDTH = 768;
@@ -97,7 +97,8 @@
   var isChildrenHidden = false;
   var scrollHeightKeeping = {};
 
-  document.addEventListener('DOMContentLoaded', callback);
+  // document.addEventListener('DOMContentLoaded', callback);
+  window.addEventListener('load', callback);
 
   function callback() {
     viewPort = document.documentElement.clientWidth;
@@ -186,13 +187,11 @@
       }
     });
 
-    // if ('IntersectionObserver' in window) {
-    //   window.listenersManaging.manageListeners([accordeon], {'click': onAccordeonClick});
-    // } else {
-    //   accordeon.addEventListener('click', onAccordeonClick);
-    // }
-
-    accordeon.addEventListener('click', onAccordeonClick);
+    if ('IntersectionObserver' in window) {
+      window.listenersManaging.manageListeners([accordeon], {'click': onAccordeonClick});
+    } else {
+      accordeon.addEventListener('click', onAccordeonClick);
+    }
   }
 
   function hideContent() {
