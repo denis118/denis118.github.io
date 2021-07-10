@@ -92,180 +92,297 @@
   var UNITS = 'px';
   var TABLET_WIDTH = 768;
 
-  var viewPort = document.documentElement.clientWidth;
-  var children;
-  var isChildrenHidden = false;
+  var accordeons;
   var scrollHeightKeeping = {};
 
-  // document.addEventListener('DOMContentLoaded', callback);
-  window.addEventListener('load', callback);
+  window.addEventListener('load', function () {
+    findAccordeons();
 
-  function callback() {
-    viewPort = document.documentElement.clientWidth;
-    hideContent();
-  }
-
-  var onWindowResize = makeHandler();
-  window.addEventListener('resize', onWindowResize);
-
-  function makeHandler() {
-    var flag = false;
-
-    return function () {
-      viewPort = document.documentElement.clientWidth;
-
-      if (
-        (viewPort > TABLET_WIDTH || viewPort === TABLET_WIDTH)
-        && flag
-      ) {
-        accordeon.removeEventListener('click', onAccordeonClick);
-
-        var activeButtons = Array.from(accordeon.querySelectorAll('.accordeon__btn--active'));
-
-        if (activeButtons.length) {
-          activeButtons.forEach(function (it) {
-            it.classList.remove('accordeon__btn--active');
-          });
-        }
-
-        var hiddenContents = Array.from(accordeon.querySelectorAll('.accordeon__content'))
-            .filter(function (it) {
-              return !it.classList.contains('.opened');
-            });
-
-        if (hiddenContents.length) {
-          hiddenContents.forEach(function (it) {
-            showChildren(Array.from(it.children));
-          });
-        }
-
-        var openedContents = Array.from(accordeon.querySelectorAll('.accordeon__content.opened'));
-
-        if (openedContents.length) {
-          openedContents.forEach(function (it) {
-            it.classList.remove('opened');
-            it.removeAttribute('style');
-          });
-        }
-
-        isChildrenHidden = false;
-        flag = false;
-      }
-
-      if (
-        viewPort < TABLET_WIDTH
-        && !flag
-      ) {
-        accordeon.addEventListener('click', onAccordeonClick);
-        hideContent();
-        flag = true;
-      }
-    };
-  }
-
-  var Maybe = window.monad.Maybe;
-  var accordeon = new Maybe(document.querySelector('.accordeon'));
-  var buttons = accordeon.map(function (element) {
-    return Array.from(element.querySelectorAll('.accordeon__btn'));
-  });
-  var contents = accordeon.map(function (element) {
-    return Array.from(element.querySelectorAll('.accordeon__content'));
-  });
-
-  if (buttons.operand.length && contents.operand.length) {
-    accordeon = accordeon.operand;
-    buttons = buttons.operand;
-    contents = contents.operand;
-
-    buttons.forEach(function (it) {
-      it.classList.add('accordeon__btn--js');
-    });
-
-    contents.forEach(function (it) {
-      if (viewPort < TABLET_WIDTH) {
-        it.style.maxHeight = null;
-      }
-    });
-
-    if ('IntersectionObserver' in window) {
-      window.listenersManaging.manageListeners([accordeon], {'click': onAccordeonClick});
-    } else {
-      accordeon.addEventListener('click', onAccordeonClick);
+    if (isPreTabletWidth() && accordeons.length) {
+      storeContentScrollHeight();
+      addJsStyles();
+      setEventListeners();
     }
+  });
+
+  function isPreTabletWidth() {
+    return document.documentElement.clientWidth < TABLET_WIDTH;
   }
 
-  function hideContent() {
-    contents.forEach(function (it) {
-      if (viewPort < TABLET_WIDTH) {
-        scrollHeightKeeping[it.id] = {
-          scrollHeight: it.scrollHeight
+  function findAccordeons() {
+    var Maybe = window.monad.Maybe;
+    accordeons = new Maybe(document.querySelectorAll('.accordeon'));
+    accordeons = accordeons.operand.length
+      ? Array.from(accordeons.operand)
+      : null;
+  }
+
+  function storeContentScrollHeight() {
+    accordeons.forEach(function (it) {
+      Array.from(it.querySelectorAll('.accordeon__content')).forEach(function (item) {
+        scrollHeightKeeping[item.id] = {
+          scrollHeight: item.scrollHeight
         };
-
-        it.classList.add('accordeon__content--js');
-
-        children = Array.from(it.children);
-        hideChildren(children);
-        isChildrenHidden = true;
-      }
+      });
     });
   }
 
-  function hideChildren(array) {
-    array.forEach(function (it) {
+  function addJsStyles() {
+    accordeons.forEach(function (it) {
+      Array.from(it.querySelectorAll('.accordeon__btn')).forEach(function (item) {
+        item.classList.add('accordeon__btn--js');
+      });
+
+      Array.from(it.querySelectorAll('.accordeon__content')).forEach(function (item) {
+        hideContent(item);
+      });
+    });
+  }
+
+  function hideContent(item) {
+    var children = Array.from(item.children);
+    var callback = function (it) {
+      it.classList.add('accordeon__content--js');
+      it.style.maxHeight = null;
+    };
+
+    hideChildren(item, children, callback);
+  }
+
+  function hideChildren(parent, children, cb) {
+    children.forEach(function (it) {
       it.classList.add('hidden-entity');
     });
+
+    cb(parent);
   }
 
-  function showChildren(array) {
-    array.forEach(function (it) {
+  function showChildren(parent, children, cb) {
+    children.forEach(function (it) {
       it.classList.remove('hidden-entity');
+    });
+
+    cb(parent);
+  }
+
+  function setEventListeners() {
+    accordeons.forEach(function (it) {
+      it.addEventListener('click', onAccordeonClick);
+    });
+  }
+
+  function eraseEventListeners() {
+    accordeons.forEach(function (it) {
+      it.removeEventListener('click', onAccordeonClick);
     });
   }
 
   function onAccordeonClick(evt) {
     if (evt.target.matches('.accordeon__btn')) {
-      contents.forEach(function (it) {
-        if (it === evt.target.nextElementSibling) {
-          if (it.style.maxHeight) {
-            it.style.maxHeight = null;
-          } else {
-            if (isChildrenHidden) {
-              children = Array.from(it.children);
-              showChildren(children);
-            }
+      var isButtonInactive = !evt.target.classList.contains('accordeon__btn--active');
+      var accordeon = evt.target.closest('.accordeon');
 
-            it.style.maxHeight = scrollHeightKeeping[it.id].scrollHeight + UNITS;
-            it.classList.add('opened');
-          }
-
-          var openedContents = accordeon.querySelectorAll('.opened')
-            ? Array.from(accordeon.querySelectorAll('.opened'))
-            : null;
-
-          if (openedContents.length > 1) {
-            openedContents.forEach(function (element) {
-              if (!Object.is(element, it)) {
-                element.style.maxHeight = null;
-
-                var button = element.previousElementSibling
-                  ? element.previousElementSibling
-                  : null;
-
-                if (button) {
-                  if (button.classList.contains('accordeon__btn--active')) {
-                    button.classList.remove('accordeon__btn--active');
-                  }
-                }
-              }
-            });
-          }
-        }
+      Array.from(accordeon.querySelectorAll('.accordeon__btn')).forEach(function (item) {
+        item.classList.remove('accordeon__btn--active');
       });
 
-      evt.target.classList.toggle('accordeon__btn--active');
+      Array.from(accordeon.querySelectorAll('.accordeon__content')).forEach(function (item) {
+        hideContent(item);
+      });
+
+      if (isButtonInactive) {
+        evt.target.classList.toggle('accordeon__btn--active');
+
+        var hasButtonNextElementSibling = evt.target.nextElementSibling
+          ? true
+          : false;
+
+        var isButtonNextElementSiblingContent = evt.target.nextElementSibling.matches('.accordeon__content')
+          ? true
+          : false;
+
+        if (hasButtonNextElementSibling && isButtonNextElementSiblingContent) {
+          var parent = evt.target.nextElementSibling;
+          var children = Array.from(parent.children);
+          var callback = function (element) {
+            element.style.maxHeight = scrollHeightKeeping[element.id].scrollHeight + UNITS;
+          };
+
+          showChildren(parent, children, callback);
+        }
+      }
     }
   }
+
+  var onWindowResize = (function () {
+    var isWorkedOnPreTabletWidth = false;
+
+    return function () {
+      if (!isPreTabletWidth()) {
+        eraseEventListeners();
+        isWorkedOnPreTabletWidth = false;
+        return;
+      }
+
+      if (isPreTabletWidth() && !isWorkedOnPreTabletWidth) {
+        setEventListeners();
+        isWorkedOnPreTabletWidth = true;
+      }
+    };
+  })();
+
+  window.addEventListener('resize', onWindowResize);
 })();
+
+
+//
+
+
+// (function () {
+//   var UNITS = 'px';
+//   var TABLET_WIDTH = 768;
+
+//   var viewPort = document.documentElement.clientWidth;
+//   var children;
+//   var isChildrenHidden = false;
+//   var scrollHeightKeeping = {};
+
+//   document.addEventListener('DOMContentLoaded', callback);
+
+//   function callback() {
+//     viewPort = document.documentElement.clientWidth;
+//     hideContent();
+//   }
+
+//   // var onWindowResize = makeHandler();
+//   // window.addEventListener('resize', onWindowResize);
+
+//   // function makeHandler() {
+//   //   var flag = false;
+
+//   //   return function () {
+//   //     viewPort = document.documentElement.clientWidth;
+
+//   //     if (
+//   //       (viewPort > TABLET_WIDTH || viewPort === TABLET_WIDTH)
+//   //       && flag
+//   //     ) {
+//   //       flag = false;
+//   //     }
+
+//   //     if (
+//   //       viewPort < TABLET_WIDTH
+//   //       && !flag
+//   //     ) {
+//   //       hideContent();
+//   //       flag = true;
+//   //     }
+//   //   };
+//   // }
+
+//   var Maybe = window.monad.Maybe;
+//   var accordeon = new Maybe(document.querySelector('.accordeon'));
+//   var buttons = accordeon.map(function (element) {
+//     return Array.from(element.querySelectorAll('.accordeon__btn'));
+//   });
+//   var contents = accordeon.map(function (element) {
+//     return Array.from(element.querySelectorAll('.accordeon__content'));
+//   });
+
+//   if (buttons.operand.length && contents.operand.length) {
+//     accordeon = accordeon.operand;
+//     buttons = buttons.operand;
+//     contents = contents.operand;
+
+//     buttons.forEach(function (it) {
+//       it.classList.add('accordeon__btn--js');
+//     });
+
+//     contents.forEach(function (it) {
+//       if (viewPort < TABLET_WIDTH) {
+//         it.style.maxHeight = null;
+//       }
+//     });
+
+//     if ('IntersectionObserver' in window) {
+//       window.listenersManaging.manageListeners([accordeon], {'click': onAccordeonClick});
+//     } else {
+//       accordeon.addEventListener('click', onAccordeonClick);
+//     }
+//   }
+
+//   function hideContent() {
+//     contents.forEach(function (it) {
+//       if (viewPort < TABLET_WIDTH) {
+//         scrollHeightKeeping[it.id] = {
+//           scrollHeight: it.scrollHeight
+//         };
+
+//         it.classList.add('accordeon__content--js');
+
+//         children = Array.from(it.children);
+//         hideChildren(children);
+//         isChildrenHidden = true;
+//       }
+//     });
+//   }
+
+//   function hideChildren(array) {
+//     array.forEach(function (it) {
+//       it.classList.add('hidden-entity');
+//     });
+//   }
+
+//   function showChildren(array) {
+//     array.forEach(function (it) {
+//       it.classList.remove('hidden-entity');
+//     });
+//   }
+
+//   function onAccordeonClick(evt) {
+//     if (evt.target.matches('.accordeon__btn')) {
+//       contents.forEach(function (it) {
+//         if (it === evt.target.nextElementSibling) {
+//           if (it.style.maxHeight) {
+//             it.style.maxHeight = null;
+//           } else {
+//             if (isChildrenHidden) {
+//               children = Array.from(it.children);
+//               showChildren(children);
+//             }
+
+//             it.style.maxHeight = scrollHeightKeeping[it.id].scrollHeight + UNITS;
+//             it.classList.add('opened');
+//           }
+
+//           var openedContents = accordeon.querySelectorAll('.opened')
+//             ? Array.from(accordeon.querySelectorAll('.opened'))
+//             : null;
+
+//           if (openedContents.length > 1) {
+//             openedContents.forEach(function (element) {
+//               if (!Object.is(element, it)) {
+//                 element.style.maxHeight = null;
+
+//                 var button = element.previousElementSibling
+//                   ? element.previousElementSibling
+//                   : null;
+
+//                 if (button) {
+//                   if (button.classList.contains('accordeon__btn--active')) {
+//                     button.classList.remove('accordeon__btn--active');
+//                   }
+//                 }
+//               }
+//             });
+//           }
+//         }
+//       });
+
+//       evt.target.classList.toggle('accordeon__btn--active');
+//     }
+//   }
+// })();
 
 
 // scroll
