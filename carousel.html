@@ -7,7 +7,7 @@
   <title>Carousel</title>
 </head>
 <body>
-  <div class="carousel" id="carousel1" role="region" aria-label="carousel" tabindex="0" aria-describedby="instructions">
+  <div class="carousel" id="carousel1" aria-label="Слайдер" tabindex="0">
     <div class="carousel__inner">
       <ul class="carousel__list list">
         <li class="carousel__item active" data-name="Great canyon">
@@ -62,7 +62,7 @@
     </div>
   </div>
 
-  <div class="carousel" id="carousel2" role="region" aria-label="carousel" tabindex="0" aria-describedby="instructions">
+  <div class="carousel" id="carousel2" aria-label="Слайдер" tabindex="0">
     <div class="carousel__inner">
       <ul class="carousel__list list">
         <li class="carousel__item active" data-name="Great canyon">
@@ -122,19 +122,6 @@
     <button class="carousel__arrow-btn carousel__arrow-btn--previous" type="button" data-id="previous" aria-label="Кнопка переключения к предыдущему слайду"></button>
 
     <button class="carousel__arrow-btn carousel__arrow-btn--next" type="button" data-id="next" aria-label="Кнопка переключения к следующему слайду"></button>
-  </template>
-
-  <!-- Шаблон списка советов по управлению слайдами карусели  -->
-  <template id="carousel-tips">
-    <ul class="carousel__tips visually-hidden list" id="instructions">
-      <li class="carousel__tip carousel__tip--touch" aria-label="tip">swipe for more</li>
-
-      <li class="carousel__tip carousel__tip--focus" aria-label="tip">use your arrow keys for more</li>
-
-      <li class="carousel__tip carousel__tip--hover" aria-label="tip">scroll for more</li>
-
-      <li class="carousel__tip carousel__tip--focus-and-hover" aria-label="tip">scroll or use arrow keys for more</li>
-    </ul>
   </template>
 
   <!-- Шаблон для отображения порядкового номера слайда карусели -->
