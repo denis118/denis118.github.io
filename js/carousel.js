@@ -81,19 +81,23 @@
     };
 
     that.hideImage = function (slide) {
-      slide.querySelectorAll('img[src]').forEach(function (it) {
-        it.setAttribute('data-src', it.getAttribute('src'));
-        it.removeAttribute('src');
-      });
+      var workOn = function (array) {
+        var selector = array[0];
+        var attribute = array[1];
+        var dataAttribute = array[2];
 
-      slide.querySelectorAll('img[srcset]').forEach(function (it) {
-        it.setAttribute('data-srcset', it.getAttribute('srcset'));
-        it.removeAttribute('srcset');
-      });
+        slide.querySelectorAll(selector).forEach(function (it) {
+          it.setAttribute(dataAttribute, it.getAttribute(attribute));
+          it.removeAttribute(attribute);
+        });
+      };
 
-      slide.querySelectorAll('source[srcset]').forEach(function (it) {
-        it.setAttribute('data-srcset', it.getAttribute('srcset'));
-        it.removeAttribute('srcset');
+      [
+        ['img[src]', 'src', 'data-src'],
+        ['img[srcset]', 'srcset', 'data-srcset'],
+        ['source[srcset]', 'srcset', 'data-srcset']
+      ].forEach(function (array) {
+        workOn(array);
       });
     };
 
@@ -194,45 +198,10 @@
       }]);
     };
 
-    // that.showSlide = function (direction) {
-    //   var _ = this;
-
-    //   var visibleSlides = _.root.querySelectorAll('.carousel__item.active');
-
-    //   var i = direction === 'previous'
-    //     ? 0
-    //     : 1;
-
-    //   if (visibleSlides.length > 1) {
-    //     _.scrollIt(visibleSlides[i]);
-    //   } else {
-    //     var newSlide = i === 0
-    //       ? visibleSlides[0].previousElementSibling
-    //       : visibleSlides[0].nextElementSibling;
-
-    //     if (newSlide) {
-    //       _.scrollIt(newSlide);
-    //     }
-    //   }
-    // };
-
-    that.scrollIt = function (slideToShow) {
-      var _ = this;
-
+    that.scrollIt = function (_, slideToShow) {
       var scrollPos = _.slides.indexOf(slideToShow) * (_.carouselList.scrollWidth / _.slides.length);
       _.carouselList.scrollLeft = scrollPos;
     };
-
-    // that.onArrowClick = function (evt) {
-    //   if (!evt.target.matches('.carousel__arrow-btn')) {
-    //     return;
-    //   }
-
-    //   var _ = that;
-
-    //   var direction = evt.target.dataset.id;
-    //   _.showSlide(direction);
-    // };
 
     that.onButtonPreviousClick = function (evt) {
       if (!evt.target.matches('.carousel__arrow-btn')) {
@@ -248,7 +217,7 @@
         : null;
 
       if (previousSlide) {
-        _.scrollIt(previousSlide);
+        _.scrollIt(_, previousSlide);
 
         activeSlide.classList.remove('active');
         previousSlide.classList.add('active');
@@ -269,7 +238,7 @@
         : null;
 
       if (nextSlide) {
-        _.scrollIt(nextSlide);
+        _.scrollIt(_, nextSlide);
 
         activeSlide.classList.remove('active');
         nextSlide.classList.add('active');
@@ -286,7 +255,7 @@
       var dataIndex = evt.target.getAttribute('data-index');
       var slideToShow = _.root.querySelector('.carousel__item[data-index="' + dataIndex + '"]');
 
-      _.scrollIt(slideToShow);
+      _.scrollIt(_, slideToShow);
     };
 
     that.setEventListeners = function () {
@@ -310,30 +279,6 @@
       _.buttonPrevious.removeEventListener('click', _.onButtonPreviousClick);
       _.buttonNext.removeEventListener('click', _.onButtonNextClick);
     };
-
-    // that.setEventListeners = function () {
-    //   var _ = this;
-
-    //   _.root
-    //       .querySelector('.carousel__dots')
-    //       .addEventListener('click', _.onDotsClick);
-
-    //   [_.buttonPrevious, _.buttonNext].forEach(function (button) {
-    //     button.addEventListener('click', _.onArrowClick);
-    //   });
-    // };
-
-    // that.eraseEventListeners = function () {
-    //   var _ = this;
-
-    //   _.root
-    //       .querySelector('.carousel__dots')
-    //       .removeEventListener('click', _.onDotsClick);
-
-    //   [_.buttonPrevious, _.buttonNext].forEach(function (button) {
-    //     button.removeEventListener('click', _.onArrowClick);
-    //   });
-    // };
 
     return that;
   };
