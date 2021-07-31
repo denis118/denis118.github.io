@@ -60,6 +60,7 @@
       });
 
       _.hideScrollbar();
+      _.insertNumbers();
       _.insertArrows(_);
       _.insertDots(_);
 
@@ -155,6 +156,35 @@
 
       fragment.appendChild(block);
       _.root.appendChild(fragment);
+    };
+
+    that.insertNumbers = function () {
+      var _ = this;
+
+      var fragment = document.createDocumentFragment();
+
+      var numbers = document
+          .querySelector('#carousel-numbers')
+          .content
+          .cloneNode(true);
+
+      fragment.appendChild(numbers);
+      _.root.appendChild(fragment);
+
+      _.root
+          .querySelector('.carousel__slides-quantity')
+          .innerText = _.slides.length;
+
+      _.activeSlideNumber = _.root.querySelector('.carousel__current-number');
+    };
+
+    that.manageNumbers = function () {
+      var _ = this;
+
+      var activeSlides = _.root.querySelectorAll('.carousel__item.active');
+      var activeSlide = activeSlides[0];
+
+      _.activeSlideNumber.innerText = _.slides.indexOf(activeSlide) + 1;
     };
 
     that.manageArrowsVisibility = function () {
@@ -354,8 +384,9 @@
             entry.target.closest('li').classList.add('active');
 
             var id = entry.target.closest('.carousel').getAttribute('id');
-            window.carousel[id].highlightDot();
             window.carousel[id].manageArrowsVisibility();
+            window.carousel[id].manageNumbers();
+            window.carousel[id].highlightDot();
           }
         });
       };

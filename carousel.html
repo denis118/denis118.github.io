@@ -119,9 +119,9 @@
 
   <!-- Шаблон кнопок переключения следующего и предыдущего слайдов карусели -->
   <template id="carousel-arrows">
-    <button class="carousel__arrow-btn carousel__arrow-btn--previous" type="button" data-id="previous" aria-label="previous"></button>
+    <button class="carousel__arrow-btn carousel__arrow-btn--previous" type="button" data-id="previous" aria-label="Кнопка переключения к предыдущему слайду"></button>
 
-    <button class="carousel__arrow-btn carousel__arrow-btn--next" type="button" data-id="next" aria-label="next"></button>
+    <button class="carousel__arrow-btn carousel__arrow-btn--next" type="button" data-id="next" aria-label="Кнопка переключения к следующему слайду"></button>
   </template>
 
   <!-- Шаблон списка советов по управлению слайдами карусели  -->
@@ -135,6 +135,14 @@
 
       <li class="carousel__tip carousel__tip--focus-and-hover" aria-label="tip">scroll or use arrow keys for more</li>
     </ul>
+  </template>
+
+  <!-- Шаблон для отображения порядкового номера слайда карусели -->
+  <template id="carousel-numbers">
+    <div class="carousel__numbers">
+      <span class="carousel__current-number"></span>
+      <span class="carousel__slides-quantity"></span>
+    </div>
   </template>
 
   <script src="./js/carousel.js" defer=""></script>
