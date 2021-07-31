@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./css/style.min.css">
+  <title>Carousel</title>
+</head>
+<body>
+  <div class="carousel" id="carousel1" role="region" aria-label="carousel" tabindex="0" aria-describedby="instructions">
+    <div class="carousel__inner">
+      <ul class="carousel__list list">
+        <li class="carousel__item active" data-name="Great canyon">
+          <figure>
+            <div class="carousel__padded-box">
+              <picture>
+                <source type="image/webp" srcset="
+                    ./img/1.webp    1x
+                  ">
+                <img src="./img/1.jpg" width="1000" height="667" alt="Great canyon" srcset="
+                    ./img/1@2x.jpg 2x
+                  ">
+              </picture>
+            </div>
+
+            <figcaption>Great canyon</figcaption>
+          </figure>
+        </li>
+
+        <li class="carousel__item" data-name="Mountains">
+          <figure>
+            <div class="carousel__padded-box">
+              <picture>
+                <source type="image/webp" srcset="
+                    ./img/2.webp    1x
+                  ">
+                <img src="./img/2.jpg" width="1680" height="1050" alt="Mountains" srcset="
+                    ./img/2@2x.jpg 2x
+                  ">
+              </picture>
+            </div>
+
+            <figcaption>Mountains</figcaption>
+          </figure>
+        </li>
+
+        <li class="carousel__item" data-name="Road to the sea">
+          <figure>
+            <div class="carousel__padded-box">
+              <picture>
+                <source type="image/webp" srcset="
+                    ./img/3.webp    1x
+                  ">
+                <img src="./img/3.jpg" width="2880" height="1800" alt="Road to the sea">
+              </picture>
+            </div>
+
+            <figcaption>Road to the sea</figcaption>
+          </figure>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="carousel" id="carousel2" role="region" aria-label="carousel" tabindex="0" aria-describedby="instructions">
+    <div class="carousel__inner">
+      <ul class="carousel__list list">
+        <li class="carousel__item active" data-name="Great canyon">
+          <figure>
+            <div class="carousel__padded-box">
+              <picture>
+                <source type="image/webp" srcset="
+                    ./img/1.webp    1x
+                  ">
+                <img src="./img/1.jpg" width="1000" height="667" alt="Great canyon" srcset="
+                    ./img/1@2x.jpg 2x
+                  ">
+              </picture>
+            </div>
+
+            <figcaption>Great canyon</figcaption>
+          </figure>
+        </li>
+
+        <li class="carousel__item" data-name="Mountains">
+          <figure>
+            <div class="carousel__padded-box">
+              <picture>
+                <source type="image/webp" srcset="
+                    ./img/2.webp    1x
+                  ">
+                <img src="./img/2.jpg" width="1680" height="1050" alt="Mountains" srcset="
+                    ./img/2@2x.jpg 2x
+                  ">
+              </picture>
+            </div>
+
+            <figcaption>Mountains</figcaption>
+          </figure>
+        </li>
+
+        <li class="carousel__item" data-name="Road to the sea">
+          <figure>
+            <div class="carousel__padded-box">
+              <picture>
+                <source type="image/webp" srcset="
+                    ./img/3.webp    1x
+                  ">
+                <img src="./img/3.jpg" width="2880" height="1800" alt="Road to the sea">
+              </picture>
+            </div>
+
+            <figcaption>Road to the sea</figcaption>
+          </figure>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Шаблон кнопок переключения следующего и предыдущего слайдов карусели -->
+  <template id="carousel-arrows">
+    <button class="carousel__arrow-btn carousel__arrow-btn--previous" type="button" data-id="previous" aria-label="previous"></button>
+
+    <button class="carousel__arrow-btn carousel__arrow-btn--next" type="button" data-id="next" aria-label="next"></button>
+  </template>
+
+  <!-- Шаблон списка советов по управлению слайдами карусели  -->
+  <template id="carousel-tips">
+    <ul class="carousel__tips visually-hidden list" id="instructions">
+      <li class="carousel__tip carousel__tip--touch" aria-label="tip">swipe for more</li>
+
+      <li class="carousel__tip carousel__tip--focus" aria-label="tip">use your arrow keys for more</li>
+
+      <li class="carousel__tip carousel__tip--hover" aria-label="tip">scroll for more</li>
+
+      <li class="carousel__tip carousel__tip--focus-and-hover" aria-label="tip">scroll or use arrow keys for more</li>
+    </ul>
+  </template>
+
+  <script src="./js/carousel.js" defer=""></script>
+</body>
+</html>
