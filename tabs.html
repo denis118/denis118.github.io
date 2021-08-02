@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./css/style.min.css">
+  <title>Tabs</title>
+</head>
+<body>
+  <div class="tabs" id="tabs1" aria-label="Блок табов для навигации по секциям контента" tabindex="0">
+    <div class="tabs__inner">
+      <ul class="tabs__controls list">
+        <li class="tabs__control">
+          <a class="tabs__anchor-link link button" href="#content1" aria-label="Таб секции Content 1"><span>Content 1</span></a>
+        </li>
+
+        <li class="tabs__control">
+          <a class="tabs__anchor-link link button" href="#content2" aria-label="Таб секции Content 2"><span>Content 2</span></a>
+        </li>
+
+        <li class="tabs__control">
+          <a class="tabs__anchor-link link button" href="#content3" aria-label="Таб секции Content 3"><span>Content 3</span></a>
+        </li>
+
+        <li class="tabs__control">
+          <a class="tabs__anchor-link link button" href="#content4" aria-label="Таб секции Content 4"><span>Content 4</span></a>
+        </li>
+
+        <li class="tabs__control">
+          <a class="tabs__anchor-link link button" href="#content5" aria-label="Таб секции Content 5"><span>Content 5</span></a>
+        </li>
+
+        <li class="tabs__control">
+          <a class="tabs__anchor-link link button" href="#content6" aria-label="Таб секции Content 6"><span>Content 6</span></a>
+        </li>
+
+        <li class="tabs__control">
+          <a class="tabs__anchor-link link button" href="#content7" aria-label="Таб секции Content 7"><span>Content 7</span></a>
+        </li>
+      </ul>
+
+      <ul class="tabs__contents list container">
+        <li class="tabs__content active" id="content1">
+          <noscript>
+            <div class="tabs__arrow-box">
+              <a class="tabs__arrow tabs__arrow--down link tooltip" href="#content2" aria-label="Ссылка на следующую секцию контента">
+                <svg class="tabs__arrow-svg tabs__arrow-svg--down" width="63" height="63" xmlns="http://www.w3.org/2000/svg">
+                  <use xlink:href="#icon-arrow-down"></use>
+                </svg>
+
+                <span class="tooltiptext" aria-hidden="true">Следующуя секция</span>
+              </a>
+            </div>
+          </noscript>
+
+          <section class="tabs__section block-name">
+            <h3 class="block-name__headding">Section 1</h3>
+
+            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Autem odio nostrum perspiciatis quis vel voluptas? Tempora aliquid laborum odio quibusdam adipisci! Hic aperiam dignissimos distinctio consequatur inventore neque fugiat provident molestiae error, praesentium fugit accusamus adipisci blanditiis dolor suscipit eveniet expedita repellendus aliquam consequuntur assumenda tempora recusandae molestias soluta. Veniam odio, minima quaerat cum dignissimos accusantium fugiat sunt unde ipsum maxime! Repellendus, ut quo, blanditiis eius nesciunt reiciendis, numquam sunt consequuntur voluptatibus consequatur in tempora vel architecto. Itaque dignissimos magnam nobis iusto voluptates nesciunt blanditiis laborum vero corporis nam. Aliquam asperiores error et? Dignissimos eos saepe neque soluta ipsum doloremque voluptas debitis cumque aperiam maxime cum officiis eaque voluptatum asperiores, similique consequatur? Architecto laboriosam officiis nam labore quas quam, omnis libero autem error iste quibusdam aperiam eaque accusamus, soluta sint asperiores perferendis magnam assumenda, magni numquam ad est fugit? Illum distinctio corporis dolore dicta, odit accusantium eligendi nostrum vel, exercitationem dolor non officiis commodi, minima ab nemo architecto unde! Nisi dignissimos culpa repellat ipsa consequuntur veniam optio praesentium unde cumque dolorem facilis architecto suscipit vero, illo accusantium dolore exercitationem officiis aliquid tempore velit reiciendis doloribus quo non ratione! Quis est, hic quidem explicabo maiores atque mollitia sapiente, maxime dolorem tempore soluta quasi cupiditate voluptate at harum! Architecto dicta explicabo commodi tenetur doloremque harum tempore nemo, aperiam eveniet repellat cum. Quidem corrupti eius necessitatibus aliquid officiis animi earum natus voluptas quas, eos distinctio vel. Minus atque omnis molestiae dicta reprehenderit quo quas qui, quae necessitatibus consequuntur deleniti voluptatum quam dolores amet ab aperiam repudiandae debitis reiciendis quasi repellat rerum eligendi? Cumque eius minus excepturi iusto perspiciatis repellendus voluptas quis itaque tempore nulla voluptates illum commodi est mollitia sapiente dolore, molestias similique, iste corrupti nam dolores voluptate tempora quasi laborum. Dicta rerum molestiae doloribus ipsa ipsum pariatur cumque sint corporis, laboriosam saepe?</p>
+          </section>
+        </li>
+
+        <li class="tabs__content" id="content2">
+          <noscript>
+            <div class="tabs__arrow-box">
+              <a class="tabs__arrow tabs__arrow--up link tooltip" href="#content1" aria-label="Ссылка на предыдущую секцию контента">
+                <svg class="tabs__arrow-svg tabs__arrow-svg--up" width="63" height="63" xmlns="http://www.w3.org/2000/svg">
+                  <use xlink:href="#icon-arrow-up"></use>
+                </svg>
+
+                <span class="tooltiptext" aria-hidden="true">Предыдущая секция</span>
+              </a>
+
+              <a class="tabs__arrow tabs__arrow--down link tooltip" href="#content3" aria-label="Ссылка на следующую секцию контента">
+                <svg class="tabs__arrow-svg tabs__arrow-svg--down" width="63" height="63" xmlns="http://www.w3.org/2000/svg">
+                  <use xlink:href="#icon-arrow-down"></use>
+                </svg>
+
+                <span class="tooltiptext" aria-hidden="true">Следующуя секция</span>
+              </a>
+            </div>
+          </noscript>
+
+          <section class="tabs__section block-name">
+            <h3 class="block-name__headding">Section 2</h3>
+
+            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Minus fugiat error libero animi soluta porro corrupti, repellendus sint magnam aperiam expedita! Debitis quod soluta quis? Non recusandae quia quisquam in incidunt suscipit labore eveniet nihil repellat perspiciatis, numquam rerum totam provident voluptas dignissimos velit consectetur corporis sapiente asperiores? Repellat dolorum numquam nobis, earum voluptates commodi voluptate ea ratione! Sapiente ipsa quia ipsam esse voluptatum expedita fugit cum possimus, ipsum, error, voluptas nostrum amet nulla neque rem animi fugiat. Hic mollitia id quisquam in perspiciatis qui facilis rerum architecto enim recusandae odit nisi, suscipit natus officia quos debitis dolores ut necessitatibus corporis quam minima reiciendis quis. Quisquam corporis quidem tenetur dolores voluptatum aut aliquam laborum, autem placeat nam voluptate rerum deleniti cupiditate fuga similique, porro veniam omnis? Sed illo ducimus laborum sunt repellendus veniam odit, adipisci praesentium quaerat sapiente provident ad nobis quis deserunt, mollitia commodi qui molestiae hic. Illo vitae voluptatem minima. Sit, corporis voluptas! Culpa, distinctio? Inventore consequuntur cupiditate sapiente alias nihil iure ab eligendi suscipit quis, quisquam dicta rerum. Enim esse doloribus eum eos quidem temporibus ipsam, illo consequuntur porro minima est blanditiis unde? Ullam minima consequatur quidem, accusantium aliquid eaque voluptatibus laborum amet iste laboriosam quam doloribus in aliquam, quisquam eius non ratione! Iure eveniet, perspiciatis placeat architecto a veniam, consequatur eaque sint tempore quam natus totam minima dignissimos molestias impedit aut in? Quasi architecto ducimus officia repellendus quam ratione repudiandae obcaecati est nihil velit nostrum, doloremque praesentium fuga eaque alias. Officia quis labore dolores iusto cumque porro. Blanditiis, dignissimos quaerat! Eius impedit deserunt cupiditate tempore iste, ducimus quasi! Ipsum neque provident, odio eos accusamus nostrum fuga at dicta, pariatur, eius doloribus quae architecto ducimus error laudantium tempora ad blanditiis optio quasi esse temporibus praesentium. Sed labore voluptatum ea nihil ex delectus provident, doloremque vel nisi asperiores?</p>
+          </section>
+        </li>
+
+        <li class="tabs__content" id="content3">
+          <noscript>
+            <div class="tabs__arrow-box">
+              <a class="tabs__arrow tabs__arrow--up link tooltip" href="#content2" aria-label="Ссылка на предыдущую секцию контента">
+                <svg class="tabs__arrow-svg tabs__arrow-svg--up" width="63" height="63" xmlns="http://www.w3.org/2000/svg">
+                  <use xlink:href="#icon-arrow-up"></use>
+                </svg>
+
+                <span class="tooltiptext" aria-hidden="true">Предыдущая секция</span>
+              </a>
+
+              <a class="tabs__arrow tabs__arrow--down link tooltip" href="#content4" aria-label="Ссылка на следующую секцию контента">
+                <svg class="tabs__arrow-svg tabs__arrow-svg--down" width="63" height="63" xmlns="http://www.w3.org/2000/svg">
+                  <use xlink:href="#icon-arrow-down"></use>
+                </svg>
+
+                <span class="tooltiptext" aria-hidden="true">Следующуя секция</span>
+              </a>
+            </div>
+          </noscript>
+
+          <section class="tabs__section block-name">
+            <h3 class="block-name__headding">Section 3</h3>
+
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel sit facilis incidunt hic veritatis id autem non, eius corporis reprehenderit recusandae veniam odit laudantium repellendus magni mollitia velit! Illum laudantium sed unde quam cumque minus temporibus ab, dolores quis a facere libero, tempore officia quas iusto nisi odit repellendus totam culpa accusamus omnis. Reprehenderit ipsam nesciunt neque vero tempora repudiandae debitis culpa aspernatur iure? Est, voluptatum aspernatur id non odio quod natus, distinctio rerum cum reprehenderit soluta voluptas quia voluptates, consectetur repellat? Eligendi dolore corporis quam dignissimos dolorem? Officia, sed voluptates omnis minima non obcaecati tempora voluptas et labore reiciendis neque, quos nesciunt. Vitae ab assumenda sint ducimus excepturi vel ut dolor quos labore iusto necessitatibus optio ex, quae eveniet ipsam provident. At ducimus, consectetur repudiandae consequuntur earum accusantium explicabo nam vitae corrupti ea. Eligendi saepe blanditiis, voluptas velit repudiandae nostrum iure, veniam, eos odit maiores asperiores dolorem! Aliquam harum iusto perspiciatis cum vel deserunt, nostrum cumque quidem in quam enim, debitis rerum ea doloribus. Facere inventore assumenda iure nobis asperiores at exercitationem tempore distinctio voluptas mollitia quis dolorem, deserunt sequi quia error voluptatum quaerat, rerum debitis ipsam, sed saepe ipsum fugit fuga officiis? Ipsum voluptatibus iure modi quaerat nobis suscipit eligendi? Consectetur minima omnis accusantium deleniti minus rerum tempora ab harum corporis vitae! Placeat accusamus temporibus quae id quaerat, similique reprehenderit numquam unde? Voluptatibus, consequatur soluta maiores veniam illo ad repudiandae possimus facilis saepe beatae adipisci cumque dolor, recusandae tempora incidunt. Placeat inventore fuga adipisci iste vitae pariatur tenetur quaerat? Nisi, omnis distinctio soluta, labore velit incidunt laboriosam, ipsum illum nulla optio asperiores repudiandae aperiam corrupti iusto odit assumenda magnam deserunt sed harum unde veritatis. Aliquid explicabo hic dicta sapiente perferendis incidunt iure molestiae voluptates illum! Repellendus nobis praesentium veritatis eveniet modi, minus necessitatibus esse harum assumenda id neque?.</p>
+          </section>
+        </li>
+
+        <li class="tabs__content" id="content4">
+          <noscript>
+            <div class="tabs__arrow-box">
+              <a class="tabs__arrow tabs__arrow--up link tooltip" href="#content3" aria-label="Ссылка на предыдущую секцию контента">
+                <svg class="tabs__arrow-svg tabs__arrow-svg--up" width="63" height="63" xmlns="http://www.w3.org/2000/svg">
+                  <use xlink:href="#icon-arrow-up"></use>
+                </svg>
+
+                <span class="tooltiptext" aria-hidden="true">Предыдущая секция</span>
+              </a>
+
+              <a class="tabs__arrow tabs__arrow--down link tooltip" href="#content5" aria-label="Ссылка на следующую секцию контента">
+                <svg class="tabs__arrow-svg tabs__arrow-svg--down" width="63" height="63" xmlns="http://www.w3.org/2000/svg">
+                  <use xlink:href="#icon-arrow-down"></use>
+                </svg>
+
+                <span class="tooltiptext" aria-hidden="true">Следующуя секция</span>
+              </a>
+            </div>
+          </noscript>
+
+          <section class="tabs__section block-name">
+            <h3 class="block-name__headding">Section 4</h3>
+
+            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Odit voluptates eveniet quidem pariatur, fuga voluptas excepturi recusandae dicta! Repudiandae, qui nisi. Magni obcaecati exercitationem culpa eius saepe blanditiis ipsa recusandae veritatis distinctio! Vero rem perferendis molestias a quia non beatae vitae ducimus aut consectetur asperiores fugit laborum in saepe nisi officia, odit earum iusto aperiam tempore quisquam ipsam magnam laudantium quam. Iste, nemo dolorem eligendi enim tenetur porro repudiandae? Necessitatibus ducimus voluptas soluta harum asperiores nihil odio fuga rerum laudantium alias quo eius, deleniti quae sunt corporis saepe nam? Saepe eum unde sed quos? Consequuntur, aut soluta. Sequi minima, velit beatae officiis dignissimos doloremque cupiditate totam animi ipsum commodi obcaecati quas, optio voluptas nesciunt sint. Culpa earum laborum magnam quae assumenda dolorum dolores commodi asperiores illum ex iure cum explicabo cumque minima error aperiam quod, in ut, veritatis ipsum. Facilis hic natus quo totam corrupti aliquid vitae libero rerum error ea nulla reprehenderit suscipit animi enim cumque at voluptas, exercitationem dignissimos magni dolorem reiciendis iure velit, ratione excepturi! Dolore voluptatum provident eveniet cum! Quisquam, enim tempore aspernatur odio, molestias, molestiae numquam quis nihil aut possimus quasi saepe corrupti laudantium deserunt ullam distinctio. Tempora molestias sunt doloremque voluptas obcaecati quis modi consectetur voluptatum itaque! Sed illum, corporis excepturi error quas expedita voluptatibus dolor neque molestias sit cumque provident pariatur atque, assumenda quos? Cumque magnam fugiat odio iusto! Nihil quaerat unde maiores earum delectus aliquam neque nulla nostrum totam est harum eveniet tenetur accusantium, nisi in quisquam labore magnam aperiam saepe, vero vel esse eum. Quos sequi earum a dignissimos maiores atque modi, sunt repellendus minus voluptates, architecto consequuntur deserunt iste excepturi nesciunt distinctio repudiandae perspiciatis vel, consectetur nam! Tempora culpa nihil et unde labore architecto, at obcaecati maiores voluptates laborum consectetur numquam suscipit. Maiores autem labore quidem ipsam accusantium in vel?</p>
+          </section>
+        </li>
+
+        <li class="tabs__content" id="content5">
+          <noscript>
+            <div class="tabs__arrow-box">
+              <a class="tabs__arrow tabs__arrow--up link tooltip" href="#content4" aria-label="Ссылка на предыдущую секцию контента">
+                <svg class="tabs__arrow-svg tabs__arrow-svg--up" width="63" height="63" xmlns="http://www.w3.org/2000/svg">
+                  <use xlink:href="#icon-arrow-up"></use>
+                </svg>
+
+                <span class="tooltiptext" aria-hidden="true">Предыдущая секция</span>
+              </a>
+
+              <a class="tabs__arrow tabs__arrow--down link tooltip" href="#content6" aria-label="Ссылка на следующую секцию контента">
+                <svg class="tabs__arrow-svg tabs__arrow-svg--down" width="63" height="63" xmlns="http://www.w3.org/2000/svg">
+                  <use xlink:href="#icon-arrow-down"></use>
+                </svg>
+
+                <span class="tooltiptext" aria-hidden="true">Следующуя секция</span>
+              </a>
+            </div>
+          </noscript>
+
+          <section class="tabs__section block-name">
+            <h3 class="block-name__headding">Section 5</h3>
+
+            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corporis ipsa sequi sunt nostrum! Vel cum voluptates, quasi culpa illo at blanditiis excepturi illum dolor, dolorum iusto aspernatur amet praesentium aliquid optio soluta possimus adipisci totam. Vero, tenetur nobis. Laborum, iusto! Hic maxime suscipit quas maiores explicabo, ullam est iure doloremque provident porro veniam cumque vel! Repellendus, nostrum numquam? Nisi eveniet aliquam, itaque, perferendis molestiae fuga suscipit ratione error amet quae, dolore esse quos soluta eius repellat quibusdam est recusandae iste deleniti? Unde perferendis ipsam at id, eos reprehenderit laudantium molestiae fugit hic sunt consequuntur perspiciatis incidunt maxime beatae quidem impedit autem dicta placeat doloremque assumenda quibusdam veritatis ullam similique! Ex debitis reprehenderit magnam quo cumque consectetur tenetur reiciendis sit, quaerat perferendis voluptate maiores repellendus necessitatibus voluptates esse voluptatem quisquam aliquam quam dolore natus, expedita incidunt! Architecto eum voluptates debitis qui quam laborum iusto cum. Rem iure obcaecati cupiditate, cumque impedit veniam pariatur ipsam distinctio provident ullam aperiam quae non delectus tenetur corporis dicta dolorum neque amet in ratione doloremque! Modi reprehenderit officiis mollitia, repellat magni illum perspiciatis iure rem itaque error recusandae, ea iste. Officiis quo dolorum unde accusamus quia perferendis officia, sunt inventore explicabo rem, error, culpa assumenda ipsum cupiditate animi eum fugiat odio. Dolorum ullam quis odit exercitationem doloremque minima unde, aliquam nisi iste odio, officia quas dolorem tempora officiis repudiandae eum ex quibusdam provident saepe distinctio libero explicabo corporis? Fuga hic nesciunt necessitatibus asperiores dolores similique. Inventore aliquam error ipsam. Commodi soluta unde earum corporis id, cupiditate possimus officiis harum nostrum? Harum eligendi soluta nostrum possimus cumque fuga iure amet nam. Officiis sunt quibusdam, quidem porro vitae ut aspernatur tenetur nulla suscipit assumenda perferendis eum soluta molestiae ipsa veritatis, possimus repellendus. Deleniti ad cumque, sunt quos eaque eum, asperiores velit dolore, libero voluptates reiciendis odio sint! Magni.</p>
+          </section>
+        </li>
+
+        <li class="tabs__content" id="content6">
+          <noscript>
+            <div class="tabs__arrow-box">
+              <a class="tabs__arrow tabs__arrow--up link tooltip" href="#content5" aria-label="Ссылка на предыдущую секцию контента">
+                <svg class="tabs__arrow-svg tabs__arrow-svg--up" width="63" height="63" xmlns="http://www.w3.org/2000/svg">
+                  <use xlink:href="#icon-arrow-up"></use>
+                </svg>
+
+                <span class="tooltiptext" aria-hidden="true">Предыдущая секция</span>
+              </a>
+
+              <a class="tabs__arrow tabs__arrow--down link tooltip" href="#content7" aria-label="Ссылка на следующую секцию контента">
+                <svg class="tabs__arrow-svg tabs__arrow-svg--down" width="63" height="63" xmlns="http://www.w3.org/2000/svg">
+                  <use xlink:href="#icon-arrow-down"></use>
+                </svg>
+
+                <span class="tooltiptext" aria-hidden="true">Следующуя секция</span>
+              </a>
+            </div>
+          </noscript>
+
+          <section class="tabs__section block-name">
+            <h3 class="block-name__headding">Section 6</h3>
+
+            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Laudantium numquam asperiores odio voluptas necessitatibus? Cumque nobis aperiam deserunt, quibusdam atque quis. Ipsam sed eos cum explicabo sint hic sequi maiores, non temporibus nobis blanditiis velit nisi numquam voluptatum nostrum iure illum quisquam. Aliquam minus non, quisquam sapiente totam sequi. Distinctio voluptate natus nihil aspernatur voluptas consequuntur, asperiores aliquid, odit delectus eveniet excepturi repellendus. Maxime illum odio enim praesentium molestiae vero doloribus id vitae dolores vel. Tempore, commodi quia animi voluptates illum nam sunt ratione repellendus! Numquam reiciendis est perferendis itaque? Tenetur repellendus quidem voluptate molestiae nulla consectetur suscipit temporibus totam fugiat sequi! Nihil quasi accusamus consectetur perferendis neque. Harum non, error doloremque impedit maiores eveniet culpa similique eaque facilis cum quidem ab quia sit explicabo corporis eos accusamus tempore ipsa, ducimus cumque eius recusandae. Dolores, consequatur vitae. Eligendi deleniti libero est ad ratione sunt maxime? Natus unde tempore aliquam quam, ipsam, illo voluptates velit eveniet quod mollitia veniam repellat iste quisquam? In voluptatibus expedita ipsum aspernatur ut fuga, quo dolores praesentium? Cum non nisi quod. Voluptate dicta in possimus quos illo vitae expedita libero dolores quidem quod beatae, quae nobis, atque porro ut rem aut hic molestias iure non? Ipsa quae qui blanditiis. Quam, ea quas sit et nam eligendi error cupiditate doloribus deserunt ipsa aliquid debitis labore numquam id vero magnam sed ducimus, reiciendis suscipit. Aliquid ullam quisquam, dolorem soluta veritatis vel alias modi repellat blanditiis praesentium labore. Magnam quod doloremque alias, inventore recusandae fuga! Omnis maiores quos deserunt dicta autem pariatur quas inventore porro sequi odit. Perspiciatis id corporis quibusdam, saepe consequuntur a consectetur ipsam assumenda enim nulla consequatur alias earum aperiam iusto fugiat ab fugit veritatis sequi at? Minima, maxime optio, nulla assumenda obcaecati totam aperiam eaque possimus unde dolor distinctio? Nam voluptates fugit sunt illum nobis!</p>
+          </section>
+        </li>
+
+        <li class="tabs__content" id="content7">
+          <noscript>
+            <div class="tabs__arrow-box">
+              <a class="tabs__arrow tabs__arrow--up link tooltip" href="#content5" aria-label="Ссылка на предыдущую секцию контента">
+                <svg class="tabs__arrow-svg tabs__arrow-svg--up" width="63" height="63" xmlns="http://www.w3.org/2000/svg">
+                  <use xlink:href="#icon-arrow-up"></use>
+                </svg>
+
+                <span class="tooltiptext" aria-hidden="true">Предыдущая секция</span>
+              </a>
+
+              <a class="tabs__arrow tabs__arrow--tostart link" href="#content1"><span>К началу</span></a>
+            </div>
+          </noscript>
+
+          <section class="tabs__section block-name">
+            <h3 class="block-name__headding">Section 7</h3>
+
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Et totam tempore porro reiciendis illum earum! Sunt voluptatum provident obcaecati nam qui at ducimus explicabo officia blanditiis delectus quod incidunt, facere iure quibusdam voluptas, inventore, voluptatem doloremque dolorem placeat corporis alias quae fuga. Eveniet tempore inventore, accusantium nisi facilis reiciendis veniam iusto mollitia consectetur voluptatibus, voluptates dolores autem reprehenderit at fugit culpa quas sed possimus impedit cumque aliquid magni dignissimos quaerat! Blanditiis quaerat qui animi quas eligendi temporibus voluptates. Quae blanditiis molestias, officiis quam maxime nisi tempore voluptas totam porro vero. Molestias repellat unde mollitia ipsam quo eius soluta possimus, voluptatibus consequatur, deserunt dolore! Harum, pariatur quo magnam eligendi, voluptates totam, facilis cumque dolorem sed fuga tempora neque placeat error perspiciatis repellat itaque. Modi facere porro sunt quos commodi. Debitis quis laboriosam consectetur, similique repudiandae aliquid eius ad maxime quam ratione, praesentium commodi quibusdam repellat sed tempore recusandae quae vitae error! Labore dicta ab tenetur saepe, eum, sed asperiores non libero harum nam enim possimus eos, explicabo inventore minus repudiandae molestias omnis a aperiam dolorum magni facere placeat doloribus. Ad, animi sunt? Animi magnam molestias nulla rem illo iste voluptatum dolore quod temporibus saepe soluta, earum beatae quas repellendus. Ullam perferendis quos, architecto id consequuntur iure unde consectetur ab assumenda ea enim fugit eum nulla est quis sint reprehenderit placeat corrupti fuga fugiat magni at. Nemo, sequi pariatur sit veritatis facilis sint eveniet repellendus quasi incidunt cum eligendi et molestiae animi non? Soluta tempora ex voluptate beatae quo iste voluptatibus illo quis obcaecati distinctio dignissimos vitae, incidunt rem, sint at? Quia quaerat corporis ratione dignissimos placeat vitae tempora eos ut illum sunt architecto recusandae pariatur nobis fuga maiores similique, ducimus eligendi cupiditate suscipit ad eum animi obcaecati. Optio eligendi nemo vero debitis obcaecati exercitationem veniam explicabo tempora! Excepturi asperiores eveniet ad?</p>
+         </section>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="display: none">
+
+    <symbol id="icon-arrow-down" viewBox="0 0 63 63">
+      <rect class="background" width="63" height="63" fill="var(--arrow-bg)"></rect>
+      <line class="stroke" x1="26" y1="32" x2="30" y2="36" stroke="var(--arrow-stroke)" stroke-width="2" stroke-linejoin="round"></line>
+      <line class="stroke" x1="30" y1="36" x2="34" y2="32" stroke="var(--arrow-stroke)" stroke-width="2" stroke-linejoin="round"></line>
+    </symbol>
+
+    <symbol id="icon-arrow-up" viewBox="0 0 63 63">
+      <rect class="background" width="63" height="63" fill="var(--arrow-bg)"></rect>
+      <line class="stroke" x1="26" y1="36" x2="30" y2="32" stroke="var(--arrow-stroke)" stroke-width="2" stroke-linejoin="round"></line>
+      <line class="stroke" x1="30" y1="32" x2="34" y2="36" stroke="var(--arrow-stroke)" stroke-width="2" stroke-linejoin="round"></line>
+    </symbol>
+  </svg>
+
+  <script src="./js/tabs.js" defer=""></script>
+</body>
+</html>
