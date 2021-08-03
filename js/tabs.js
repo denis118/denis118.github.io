@@ -84,9 +84,6 @@
         return;
       }
 
-      // visibleContent.classList.remove('active');
-      // targetContent.classList.add('active');
-
       visibleContent.setAttribute('class', 'tabs__content hidden-entity');
       targetContent.setAttribute('class', 'tabs__content active');
     };
