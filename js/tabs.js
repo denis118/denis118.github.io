@@ -42,6 +42,18 @@
   findTabs();
 
   if (tabs.length) {
+    var hideContent = function (element) {
+      element
+          .querySelectorAll('.tabs__content')
+          .forEach(function (item) {
+            if (item.classList.contains('active')) {
+              return;
+            }
+
+            item.classList.add('hidden-entity');
+          });
+    };
+
     var onControlsClick = function (evt) {
       if (!(evt.target.matches('.tabs__anchor-link')
           || evt.target.parentElement.matches('.tabs__anchor-link'))) {
@@ -72,8 +84,11 @@
         return;
       }
 
-      visibleContent.classList.remove('active');
-      targetContent.classList.add('active');
+      // visibleContent.classList.remove('active');
+      // targetContent.classList.add('active');
+
+      visibleContent.setAttribute('class', 'tabs__content hidden-entity');
+      targetContent.setAttribute('class', 'tabs__content active');
     };
 
     var setEventListeners = function (element) {
@@ -88,9 +103,12 @@
           .removeEventListener('click', onControlsClick);
     };
 
-    tabs.forEach(function (it) {
-      setEventListeners(it);
-    });
+    var onDocumentDOMContentLoaded = function () {
+      tabs.forEach(function (it) {
+        hideContent(it);
+        setEventListeners(it);
+      });
+    };
 
     var onWindowBeforeunload = function () {
       tabs.forEach(function (it) {
@@ -98,6 +116,7 @@
       });
     };
 
+    document.addEventListener('DOMContentLoaded', onDocumentDOMContentLoaded);
     window.addEventListener('beforeunload', onWindowBeforeunload);
   }
 })();
