@@ -105,7 +105,7 @@
 
 (function () {
   var Maybe = window.monad.Maybe;
-  var accordeon = new Maybe(document.querySelector('.accordeon-1'));
+  var accordeon = new Maybe(document.querySelector('.accordeon-inv'));
   var contents = accordeon.map(function (element) {
     return Array.from(element.querySelectorAll('.accordeon__content'));
   });

@@ -7,26 +7,50 @@
   <title>Main features</title>
 </head>
 <body>
-  <ul class="list">
-    <li class="list__item">
-      <a class="list__link" href="accordeon.html">accordeon</a>
-    </li>
+  <nav class="navigation">
+    <ul class="navigation__list list">
+      <li class="navigation__item dropdown" aria-label="Раздел 'Аккордеоны'">
+        <button class="dropdown__trigger button" aria-label="Триггер" aria-describedby="trigger-description">Accordeons</button>
+        <ul class="dropdown__list list">
+          <li class="dropdown__item">
+            <a class="dropdown__link link" href="accordeon.html" aria-label="Ссылка на аккордеон">accordeon</a>
+          </li>
 
-    <li class="list__item">
-      <a class="list__link" href="accordeon-1.html">accordeon-1</a>
-    </li>
+          <li class="dropdown__item">
+            <a class="dropdown__link link" href="accordeon(inv).html" aria-label="Ссылка на невалидный аккордеон">accordeon (inv)</a>
+          </li>
+        </ul>
+      </li>
 
-    <li class="list__item">
-      <a class="list__link" href="slider(invalid).html">slider (invalid)</a>
-    </li>
+      <li class="navigation__item dropdown" aria-label="Раздел 'Слайдеры'">
+        <button class="dropdown__trigger button" aria-label="Триггер" aria-describedby="trigger-description">Sliders</button>
+        <ul class="dropdown__list list">
+          <li class="dropdown__item">
+            <a class="dropdown__link link" href="carousel.html" aria-label="Ссылка на карусель">carousel</a>
+          </li>
 
-    <li class="list__item">
-      <a class="list__link" href="carousel.html">carousel</a>
-    </li>
+          <li class="dropdown__item">
+            <a class="dropdown__link link" href="slider(inv).html" aria-label="Ссылка на слайдер">slider (inv)</a>
+          </li>
+        </ul>
+      </li>
 
-    <li class="list__item">
-      <a class="list__link" href="tabs.html">tabs (with tooltips)</a>
-    </li>
-  </ul>
+      <li class="navigation__item dropdown" aria-label="Раздел 'Табы'">
+        <button class="dropdown__trigger button" aria-label="Триггер" aria-describedby="trigger-description">Tabs</button>
+        <ul class="dropdown__list list">
+          <li class="dropdown__item">
+            <a class="dropdown__link link" href="tabs.html" aria-label="Ссылка на табы">tabs (with tooltips)</a>
+          </li>
+
+          <li class="dropdown__item">
+            <a class="dropdown__link link" href="#" aria-label="test">test</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+    <p class="visually-hidden" id="trigger-description">Данная кнопка в фокусе или при наведении курсора активирует список пунктов раздела</p>
+  </nav>
+
 </body>
 </html>
