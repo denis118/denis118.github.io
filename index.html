@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
-<head class="page">
+<html class="page" lang="en">
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./css/style.min.css">
@@ -41,16 +41,33 @@
           <li class="dropdown__item">
             <a class="dropdown__link link" href="tabs.html" aria-label="Ссылка на табы">tabs (with tooltips)</a>
           </li>
-
-          <li class="dropdown__item">
-            <a class="dropdown__link link" href="#" aria-label="test">test</a>
-          </li>
         </ul>
       </li>
     </ul>
 
     <p class="visually-hidden" id="trigger-description">Данная кнопка в фокусе или при наведении курсора активирует список пунктов раздела</p>
+
+    <template id="toggle-with-span">
+      <button class="toggle button hidden-on-desktop" type="button">
+        <span class="toggle__description toggle__description--burger">Кнопка открытия меню</span>
+        <span class="toggle__description toggle__description--cross hidden-entity">Кнопка закрытия меню</span>
+        <span class="toggle__line"></span>
+      </button>
+    </template>
+
+    <template id="toggle-with-svg">
+      <button class="toggle button" type="button">
+        <span class="toggle__description toggle__description--burger">Кнопка открытия меню</span>
+        <span class="toggle__description toggle__description--cross hidden-entity">Кнопка закрытия меню</span>
+        <svg class="toggle__svg" width="32" height="32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" id="toggle-svg" viewBox="0 0 32 32">
+          <path class="toggle__line toggle__line--top" d="M0 2 L32 2" stroke="var(--toggle-line)" stroke-width="4"></path>
+          <path class="toggle__line toggle__line--middle" d="M0 16 L32 16" stroke="var(--toggle-line)" stroke-width="4"></path>
+          <path class="toggle__line toggle__line--bottom" d="M0 30 L32 30" stroke="var(--toggle-line)" stroke-width="4"></path>
+        </svg>
+      </button>
+    </template>
   </nav>
 
+  <script src="./js/index.js" defer=""></script>
 </body>
 </html>
