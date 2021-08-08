@@ -97,34 +97,3 @@
     manageListeners: manageListeners
   };
 })();
-
-
-// navigation
-(function () {
-  var page = document.querySelector('.page');
-  var navigation = document.querySelector('.navigation');
-  var navList = document.querySelector('.navigation__list');
-
-  navigation.classList.add('navigation--js');
-  navList.classList.add('hidden-before-desktop');
-
-  var fragment = document.createDocumentFragment();
-  var button = document
-      .querySelector('#toggle-with-span')
-      .content
-      .cloneNode(true);
-
-  fragment.appendChild(button);
-  navigation.prepend(fragment);
-
-  var toggle = document.querySelector('.toggle');
-  var burgerDescription = toggle.querySelector('.toggle__description--burger');
-  var crossDescription = toggle.querySelector('.toggle__description--cross');
-
-  toggle.addEventListener('click', function () {
-    page.classList.toggle('navigation-open');
-    navList.classList.toggle('hidden-before-desktop');
-    burgerDescription.classList.toggle('hidden-entity');
-    crossDescription.classList.toggle('hidden-entity');
-  });
-})();
