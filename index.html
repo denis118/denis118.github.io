@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="page" lang="en">
+<html class="page" lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,8 +8,9 @@
 </head>
 <body>
   <nav class="navigation">
-    <ul class="navigation__list list">
-      <li class="navigation__item dropdown" aria-label="Раздел 'Аккордеоны'">
+    <ul class="navigation__list list hidden-before-desktop">
+      <li class="navigation__item dropdown" aria-labelledby="accordeons">
+        <span class="visually-hidden" id="accordeons">Раздел "Аккордеоны"</span>
         <button class="dropdown__trigger button" aria-label="Триггер" aria-describedby="trigger-description">Accordeons</button>
         <ul class="dropdown__list list">
           <li class="dropdown__item">
@@ -22,7 +23,8 @@
         </ul>
       </li>
 
-      <li class="navigation__item dropdown" aria-label="Раздел 'Слайдеры'">
+      <li class="navigation__item dropdown" aria-labelledby="sliders">
+        <span class="visually-hidden" id="sliders">Раздел "Слайдеры"</span>
         <button class="dropdown__trigger button" aria-label="Триггер" aria-describedby="trigger-description">Sliders</button>
         <ul class="dropdown__list list">
           <li class="dropdown__item">
@@ -35,7 +37,8 @@
         </ul>
       </li>
 
-      <li class="navigation__item dropdown" aria-label="Раздел 'Табы'">
+      <li class="navigation__item dropdown" aria-labelledby="tabs">
+        <span class="visually-hidden" id="tabs">Раздел "Табы"</span>
         <button class="dropdown__trigger button" aria-label="Триггер" aria-describedby="trigger-description">Tabs</button>
         <ul class="dropdown__list list">
           <li class="dropdown__item">
