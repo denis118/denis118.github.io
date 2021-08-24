@@ -22,11 +22,12 @@
 
 
 //
-// primitive slider
+// slider
 //
 
 (function () {
   var START_INDEX = 0;
+  var UNITS = 'px';
 
   var sliders = null;
   var listenersKeeping = {};
@@ -38,6 +39,50 @@
     sliders = sliders.operand.length
       ? Array.from(sliders.operand)
       : null;
+  };
+
+  var activate = function () {
+    sliders.forEach(function (it) {
+      if (!it.classList.contains('.slider--js')) {
+        it.classList.add('slider--js');
+      }
+    });
+  };
+
+  var insertArrows = function () {
+    sliders.forEach(function (it) {
+      var fragment = document.createDocumentFragment();
+
+      var arrows = document
+          .querySelector('#slider-arrows')
+          .content
+          .cloneNode(true);
+
+      fragment.appendChild(arrows);
+      it.appendChild(fragment);
+    });
+  };
+
+  var hideScrollbar = function () {
+    var inner = null;
+
+    sliders.forEach(function (it) {
+      inner = it.querySelector('.slider__inner')
+        ? it.querySelector('.slider__inner')
+        : null;
+
+      if (!inner) {
+        return;
+      }
+
+      if (!inner.classList.contains('.slider__inner--js')) {
+        inner.classList.add('slider__inner--js');
+      }
+
+      inner.style.height = it
+          .querySelector('.slider__item')
+          .scrollHeight + UNITS;
+    });
   };
 
   var sliderNext = function (prev, slider, index) {
@@ -155,7 +200,10 @@
   var onDocumentDOMContentLoaded = function () {
     findSliders();
 
-    if (sliders) {
+    if (sliders.length) {
+      activate();
+      insertArrows();
+      hideScrollbar();
       setEventListeners();
     }
   };

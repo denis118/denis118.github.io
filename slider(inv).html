@@ -21,31 +21,48 @@
     </li>
   </ul>
 
-  <div class="slider slider--invalid" id="1">
+  <div class="slider" id="1" aria-label="Слайдер">
+    <div class="slider__inner">
+      <ul class="slider__list list">
+        <li class="slider__item active">1</li>
 
-    <ul class="slider__list list">
-      <li class="slider__item active">1</li>
-      <li class="slider__item">2</li>
-      <li class="slider__item">3</li>
-      <li class="slider__item">4</li>
-    </ul>
+        <li class="slider__item">2</li>
 
-    <button class="slider__arrow slider__arrow--previous button">&lt;</button>
-    <button class="slider__arrow slider__arrow--next button">&gt;</button>
+        <li class="slider__item">3</li>
+
+        <li class="slider__item">4</li>
+      </ul>
+    </div>
   </div>
 
-  <div class="slider slider--invalid" id="2">
+  <div class="slider" id="2" aria-label="Слайдер">
+    <div class="slider__inner">
+      <ul class="slider__list list">
+        <li class="slider__item active">1</li>
 
-    <ul class="slider__list list">
-      <li class="slider__item active">1</li>
-      <li class="slider__item">2</li>
-      <li class="slider__item">3</li>
-      <li class="slider__item">4</li>
-    </ul>
+        <li class="slider__item">2</li>
 
-    <button class="slider__arrow slider__arrow--previous button">&lt;</button>
-    <button class="slider__arrow slider__arrow--next button">&gt;</button>
+        <li class="slider__item">3</li>
+
+        <li class="slider__item">4</li>
+      </ul>
+    </div>
   </div>
+
+  <!-- Шаблон кнопок переключения следующего и предыдущего слайдов -->
+  <template id="slider-arrows">
+    <button class="slider__arrow slider__arrow--previous button" type="button" data-id="previous" aria-label="Кнопка переключения к предыдущему слайду">&lt;</button>
+
+    <button class="slider__arrow slider__arrow--next button" type="button" data-id="next" aria-label="Кнопка переключения к следующему слайду">&gt;</button>
+  </template>
+
+  <!-- Шаблон для отображения порядкового номера слайда -->
+  <template id="slider-numbers">
+    <div class="slider__numbers">
+      <span class="slider__current-number"></span>
+      <span class="slider__slides-quantity"></span>
+    </div>
+  </template>
 
   <script src="./js/slider-inv.js" defer=""></script>
 </body>
