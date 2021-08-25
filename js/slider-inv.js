@@ -1,11 +1,21 @@
 'use strict';
 
+//
+// utility
+//
 
-// maybe
 (function () {
-  function Maybe(operand) {
+  // random integer
+  var getRandomIntInclusive = function (min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
+
+  // monade
+  var Maybe = function (operand) {
     this.operand = operand;
-  }
+  };
 
   Maybe.prototype.map = function (operator) {
     if (this.operand && operator) {
@@ -15,42 +25,79 @@
     }
   };
 
-  window.monad = {
+  // export
+  window.utility = {
+    getRandomIntInclusive: getRandomIntInclusive,
     Maybe: Maybe
   };
 })();
-
 
 //
 // slider
 //
 
 (function () {
-  var START_INDEX = 0;
+  var MIN = 0;
+  var MAX = 999999;
   var UNITS = 'px';
+  var START_INDEX = 0;
 
-  var sliders = null;
-  var listenersKeeping = {};
-  var cursorPosition = {};
+  var initSlider = function (rootElement) {
+    var that = {};
 
-  var findSliders = function () {
-    var Maybe = window.monad.Maybe;
-    sliders = new Maybe(document.querySelectorAll('.slider'));
-    sliders = sliders.operand.length
-      ? Array.from(sliders.operand)
-      : null;
-  };
+    that.activate = function () {
+      var _ = that;
 
-  var activate = function () {
-    sliders.forEach(function (it) {
-      if (!it.classList.contains('.slider--js')) {
-        it.classList.add('slider--js');
+      _.root = rootElement;
+      _.inner = _.root.querySelector('.slider__inner');
+      _.sliderList = _.root.querySelector('.slider__list');
+      _.slides = Array.from(_.root.querySelectorAll('.slider__item'));
+      _.slideIndex = START_INDEX;
+      _.cursorPosition = {};
+
+      if (!_.root.classList.contains('.slider--js')) {
+        _.root.classList.add('slider--js');
       }
-    });
-  };
 
-  var insertArrows = function () {
-    sliders.forEach(function (it) {
+      _.slides.forEach(function (slide) {
+        _.indexSlide(slide);
+      });
+
+      _.hideScrollbar();
+      _.insertNumbers();
+      _.insertArrows(_);
+      _.insertDots(_);
+
+      return _;
+    };
+
+    that.execute = function (selector, functions) {
+      var _ = that;
+
+      _.root.querySelectorAll(selector).forEach(function (it) {
+        functions.forEach(function (func) {
+          func(it);
+        });
+      });
+    };
+
+    that.indexSlide = function (slide) {
+      slide.setAttribute('data-index', window.utility.getRandomIntInclusive(MIN, MAX));
+    };
+
+    that.hideScrollbar = function () {
+      var _ = that;
+
+      if (!_.inner.classList.contains('.slider__inner--js')) {
+        _.inner.classList.add('slider__inner--js');
+      }
+
+      _.inner.style.height = _.root
+          .querySelector('.slider__item')
+          .scrollHeight + UNITS;
+    };
+
+    that.insertArrows = function (_) {
       var fragment = document.createDocumentFragment();
 
       var arrows = document
@@ -59,158 +106,248 @@
           .cloneNode(true);
 
       fragment.appendChild(arrows);
-      it.appendChild(fragment);
-    });
-  };
+      _.root.appendChild(fragment);
 
-  var hideScrollbar = function () {
-    var inner = null;
+      _.buttonPrevious = _.root.querySelector('.slider__arrow--previous');
+      _.buttonNext = _.root.querySelector('.slider__arrow--next');
+    };
 
-    sliders.forEach(function (it) {
-      inner = it.querySelector('.slider__inner')
-        ? it.querySelector('.slider__inner')
-        : null;
+    that.insertDots = function (_) {
+      var fragment = document.createDocumentFragment();
 
-      if (!inner) {
+      var block = document.createElement('div');
+      block.setAttribute('class', 'slider__dots');
+
+      _.slides.forEach(function (slide) {
+        var slideIndex = slide.getAttribute('data-index');
+        var slideName = slide.getAttribute('data-name');
+
+        var dotButton = document.createElement('button');
+        var attributes = {
+          'class': 'slider__dot-btn',
+          'type': 'button',
+          'data-index': slideIndex,
+          'aria-label': 'Кнопка для перехода к слайду ' + slideName
+        };
+
+        Object.keys(attributes).forEach(function (key) {
+          dotButton.setAttribute(key, attributes[key]);
+        });
+
+        block.appendChild(dotButton);
+      });
+
+      fragment.appendChild(block);
+      _.root.appendChild(fragment);
+
+      _.highlightDot();
+    };
+
+    that.insertNumbers = function () {
+      var _ = that;
+
+      var fragment = document.createDocumentFragment();
+
+      var numbers = document
+          .querySelector('#slider-numbers')
+          .content
+          .cloneNode(true);
+
+      fragment.appendChild(numbers);
+      _.root.appendChild(fragment);
+
+      _.root
+          .querySelector('.slider__slides-quantity')
+          .innerText = _.slides.length;
+
+      _.activeSlideNumber = _.root.querySelector('.slider__current-number');
+
+      _.manageNumbers();
+    };
+
+    that.manageNumbers = function () {
+      var _ = that;
+
+      var activeSlides = _.root.querySelectorAll('.slider__item.active');
+      var activeSlide = activeSlides[0];
+
+      _.activeSlideNumber.innerText = _.slides.indexOf(activeSlide) + 1;
+    };
+
+    that.highlightDot = function () {
+      var _ = that;
+
+      var activeSlide = _.root.querySelector('.slider__item.active');
+      var activeIndex = activeSlide.getAttribute('data-index');
+
+      _.execute('.slider__dot-btn', [function (dot) {
+        dot.classList.remove('active');
+
+        var dotIndex = dot.getAttribute('data-index');
+        if (dotIndex === activeIndex) {
+          dot.classList.add('active');
+        }
+      }]);
+    };
+
+    that.showNextSlide = function (previous) {
+      var _ = that;
+
+      _.slides[_.slideIndex].setAttribute('class', 'slider__item');
+
+      if (previous) {
+        _.slideIndex = (--_.slideIndex) % _.slides.length;
+
+        if (_.slideIndex < 0) {
+          _.slideIndex += _.slides.length;
+        }
+      } else {
+        _.slideIndex = (++_.slideIndex) % _.slides.length;
+      }
+
+      _.slides[_.slideIndex].setAttribute('class', 'slider__item active');
+
+      _.highlightDot();
+      _.manageNumbers();
+    };
+
+    that.onArrowClick = function (evt) {
+      if (!evt.target.matches('.slider__arrow')) {
         return;
       }
 
-      if (!inner.classList.contains('.slider__inner--js')) {
-        inner.classList.add('slider__inner--js');
+      var _ = that;
+
+      if (evt.target.matches('.slider__arrow--previous')) {
+        _.showNextSlide(true);
       }
 
-      inner.style.height = it
-          .querySelector('.slider__item')
-          .scrollHeight + UNITS;
-    });
-  };
-
-  var sliderNext = function (prev, slider, index) {
-    var slides = slider.querySelectorAll('.slider__item');
-    slides[index].setAttribute('class', 'slider__item');
-
-    if (prev) {
-      index = (--index) % slides.length;
-
-      if (index < 0) {
-        index += slides.length;
+      if (evt.target.matches('.slider__arrow--next')) {
+        _.showNextSlide();
       }
-    } else {
-      index = (++index) % slides.length;
-    }
+    };
 
-    slides[index].setAttribute('class', 'slider__item active');
+    that.onSliderTouchstart = function (evt) {
+      evt.preventDefault();
+      that.cursorPosition.clientX1 = evt.touches[0].clientX;
+    };
 
-    return index;
+    that.onSliderTouchend = function (evt) {
+      var _ = that;
+
+      evt.preventDefault();
+      _.cursorPosition.clientX2 = evt.changedTouches[0].clientX;
+
+      var clientX1 = _.cursorPosition.clientX1;
+      var clientX2 = _.cursorPosition.clientX2;
+
+      if (clientX1 - clientX2 === 0) {
+        return;
+      }
+
+      if (clientX1 - clientX2 < 0) {
+        _.showNextSlide(true);
+      }
+
+      if (clientX1 - clientX2 > 0) {
+        _.showNextSlide();
+      }
+    };
+
+    that.onDotsClick = function (evt) {
+      if (!evt.target.matches('.slider__dot-btn')) {
+        return;
+      }
+
+      var _ = that;
+
+      var dataIndex = evt.target.getAttribute('data-index');
+      var slideToShow = _.root.querySelector('.slider__item[data-index="' + dataIndex + '"]');
+      var activeSlide = _.root.querySelector('.slider__item.active');
+
+      activeSlide.classList.remove('active');
+      slideToShow.classList.add('active');
+
+      _.slideIndex = _.slides.indexOf(slideToShow);
+
+      _.highlightDot();
+      _.manageNumbers();
+    };
+
+    that.processMouse = function (evt) {
+      if (evt.target.matches('.slider__arrow')) {
+        that.onArrowClick(evt);
+      } else if (evt.target.matches('.slider__dot-btn')) {
+        that.onDotsClick(evt);
+      }
+    };
+
+    that.onSliderPointerup = function (evt) {
+      switch (evt.pointerType) {
+        case 'mouse':
+        case 'touch':
+          that.processMouse(evt);
+          break;
+        default:
+          return;
+      }
+    };
+
+    that.setEventListeners = function () {
+      var _ = that;
+
+      _.root.addEventListener('pointerup', _.onSliderPointerup);
+      _.root.addEventListener('touchstart', _.onSliderTouchstart);
+      _.root.addEventListener('touchend', _.onSliderTouchend);
+    };
+
+    that.eraseEventListeners = function () {
+      var _ = that;
+
+      _.root.removeEventListener('pointerup', _.onSliderPointerup);
+      _.root.removeEventListener('touchstart', _.onSliderTouchstart);
+      _.root.removeEventListener('touchend', _.onSliderTouchend);
+    };
+
+    return that;
   };
 
-  var findClosestSlider = function (evt) {
-    return evt.target.closest('.slider')
-      ? evt.target.closest('.slider')
+  var sliders = null;
+  window.slider = {};
+
+  var findSliders = function () {
+    var Maybe = window.utility.Maybe;
+    sliders = new Maybe(document.querySelectorAll('.slider'));
+    sliders = sliders.operand.length
+      ? Array.from(sliders.operand)
       : null;
   };
 
-  var setEventListeners = function () {
+  findSliders();
+
+  if (sliders.length) {
     sliders.forEach(function (it) {
-      var buildHandlerSet = (function () {
-        var index = START_INDEX;
-
-        return [
-          // onSliderClick
-          function (evt) {
-            if (!evt.target.matches('.slider__arrow')) {
-              return;
-            }
-
-            var slider = findClosestSlider(evt);
-            if (!slider) {
-              return;
-            }
-
-            if (evt.target.matches('.slider__arrow--previous')) {
-              index = sliderNext(true, slider, index);
-            }
-
-            if (evt.target.matches('.slider__arrow--next')) {
-              index = sliderNext(null, slider, index);
-            }
-          },
-          // onSliderTouchstart
-          function (evt) {
-            evt.preventDefault();
-            cursorPosition[it.id].clientX1 = evt.touches[0].clientX;
-          },
-          // onSliderTouchend
-          function (evt) {
-            evt.preventDefault();
-
-            var slider = findClosestSlider(evt);
-            if (!slider) {
-              return;
-            }
-
-            cursorPosition[it.id].clientX2 = evt.changedTouches[0].clientX;
-
-            var clientX1 = cursorPosition[it.id].clientX1;
-            var clientX2 = cursorPosition[it.id].clientX2;
-
-            if (clientX1 - clientX2 === 0) {
-              return;
-            }
-
-            if (clientX1 - clientX2 < 0) {
-              index = sliderNext(true, slider, index);
-            }
-
-            if (clientX1 - clientX2 > 0) {
-              index = sliderNext(null, slider, index);
-            }
-          }
-        ];
-      })();
-
-      var onSliderClick = buildHandlerSet[0];
-      var onSliderTouchstart = buildHandlerSet[1];
-      var onSliderTouchend = buildHandlerSet[2];
-
-      var content = it.querySelector('.slider__list');
-      content.addEventListener('touchstart', onSliderTouchstart);
-      content.addEventListener('touchend', onSliderTouchend);
-      it.addEventListener('click', onSliderClick);
-
-      cursorPosition[it.id] = {};
-      listenersKeeping[it.id] = {};
-      listenersKeeping[it.id].onSliderClick = onSliderClick;
-      listenersKeeping[it.id].onSliderTouchstart = onSliderTouchstart;
-      listenersKeeping[it.id].onSliderTouchend = onSliderTouchend;
-    });
-  };
-
-  var onWindowBeforeunload = function () {
-    sliders.forEach(function (it) {
-      it.removeEventListener('click', listenersKeeping[it.id].onSliderClick);
-      it.removeEventListener('touchstart', listenersKeeping[it.id].onSliderTouchstart);
-      it.removeEventListener('touchend', listenersKeeping[it.id].onSliderTouchend);
+      var slider = initSlider(it);
+      slider.activate().setEventListeners();
+      window.slider[slider.root.id] = slider;
     });
 
-    document.removeEventListener('DOMContentLoaded', onDocumentDOMContentLoaded);
-    window.removeEventListener('beforeunload', onWindowBeforeunload);
-  };
+    var createWindowEventsHandler = function (method) {
+      return function () {
+        Object.keys(window.slider).forEach(function (key) {
+          window.slider[key][method]();
+        });
+      };
+    };
 
-  var onDocumentDOMContentLoaded = function () {
-    findSliders();
+    var onWindowResize = createWindowEventsHandler('hideScrollbar');
+    var onWindowBeforeunload = createWindowEventsHandler('eraseEventListeners');
 
-    if (sliders.length) {
-      activate();
-      insertArrows();
-      hideScrollbar();
-      setEventListeners();
-    }
-  };
-
-  document.addEventListener('DOMContentLoaded', onDocumentDOMContentLoaded);
-  window.addEventListener('beforeunload', onWindowBeforeunload);
+    window.addEventListener('resize', onWindowResize);
+    window.addEventListener('beforeunload', onWindowBeforeunload);
+  }
 })();
+
 
 // (function () {
 //   var START_INDEX = 0;

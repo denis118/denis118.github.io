@@ -21,39 +21,121 @@
     </li>
   </ul>
 
-  <div class="slider" id="1" aria-label="Слайдер">
+  <div class="slider" id="slider1" aria-label="Слайдер">
     <div class="slider__inner">
       <ul class="slider__list list">
-        <li class="slider__item active">1</li>
+        <li class="slider__item active" data-name="Great canyon">
+          <figure>
+            <div class="slider__padded-box">
+              <picture>
+                <source type="image/webp" srcset="
+                    ./img/1.webp    1x
+                  ">
+                <img src="./img/1.jpg" width="1000" height="667" alt="Great canyon" srcset="
+                    ./img/1@2x.jpg 2x
+                  ">
+              </picture>
+            </div>
 
-        <li class="slider__item">2</li>
+            <figcaption>Great canyon</figcaption>
+          </figure>
+        </li>
 
-        <li class="slider__item">3</li>
+        <li class="slider__item" data-name="Mountains">
+          <figure>
+            <div class="slider__padded-box">
+              <picture>
+                <source type="image/webp" srcset="
+                    ./img/2.webp    1x
+                  ">
+                <img src="./img/2.jpg" width="1680" height="1050" alt="Mountains" srcset="
+                    ./img/2@2x.jpg 2x
+                  ">
+              </picture>
+            </div>
 
-        <li class="slider__item">4</li>
+            <figcaption>Mountains</figcaption>
+          </figure>
+        </li>
+
+        <li class="slider__item" data-name="Road to the sea">
+          <figure>
+            <div class="slider__padded-box">
+              <picture>
+                <source type="image/webp" srcset="
+                    ./img/3.webp    1x
+                  ">
+                <img src="./img/3.jpg" width="2880" height="1800" alt="Road to the sea">
+              </picture>
+            </div>
+
+            <figcaption>Road to the sea</figcaption>
+          </figure>
+        </li>
       </ul>
     </div>
   </div>
 
-  <div class="slider" id="2" aria-label="Слайдер">
+  <div class="slider" id="slider2" aria-label="Слайдер">
     <div class="slider__inner">
       <ul class="slider__list list">
-        <li class="slider__item active">1</li>
+        <li class="slider__item active" data-name="Great canyon">
+          <figure>
+            <div class="slider__padded-box">
+              <picture>
+                <source type="image/webp" srcset="
+                    ./img/1.webp    1x
+                  ">
+                <img src="./img/1.jpg" width="1000" height="667" alt="Great canyon" srcset="
+                    ./img/1@2x.jpg 2x
+                  ">
+              </picture>
+            </div>
 
-        <li class="slider__item">2</li>
+            <figcaption>Great canyon</figcaption>
+          </figure>
+        </li>
 
-        <li class="slider__item">3</li>
+        <li class="slider__item" data-name="Mountains">
+          <figure>
+            <div class="slider__padded-box">
+              <picture>
+                <source type="image/webp" srcset="
+                    ./img/2.webp    1x
+                  ">
+                <img src="./img/2.jpg" width="1680" height="1050" alt="Mountains" srcset="
+                    ./img/2@2x.jpg 2x
+                  ">
+              </picture>
+            </div>
 
-        <li class="slider__item">4</li>
+            <figcaption>Mountains</figcaption>
+          </figure>
+        </li>
+
+        <li class="slider__item" data-name="Road to the sea">
+          <figure>
+            <div class="slider__padded-box">
+              <picture>
+                <source type="image/webp" srcset="
+                    ./img/3.webp    1x
+                  ">
+                <img src="./img/3.jpg" width="2880" height="1800" alt="Road to the sea">
+              </picture>
+            </div>
+
+            <figcaption>Road to the sea</figcaption>
+          </figure>
+        </li>
       </ul>
     </div>
   </div>
 
   <!-- Шаблон кнопок переключения следующего и предыдущего слайдов -->
   <template id="slider-arrows">
-    <button class="slider__arrow slider__arrow--previous button" type="button" data-id="previous" aria-label="Кнопка переключения к предыдущему слайду">&lt;</button>
+    <button class="slider__arrow slider__arrow--previous button" type="button" data-id="previous" aria-label="Кнопка переключения к предыдущему слайду"></button>
 
-    <button class="slider__arrow slider__arrow--next button" type="button" data-id="next" aria-label="Кнопка переключения к следующему слайду">&gt;</button>
+    <button class="slider__arrow slider__arrow--next button" type="button" data-id="next" aria-label="Кнопка переключения к следующему слайду"></button>
   </template>
 
   <!-- Шаблон для отображения порядкового номера слайда -->
