@@ -597,8 +597,8 @@
         <a class="blog__link main-page__link link" href="#">Read All</a>
 
         <div class="blog__wrapper">
-          <article class="blog__article article">
-            <div class="article__image-box article__padded-box">
+          <article class="blog__article blog__article--care article">
+            <div class="article__image-box">
               <picture>
                 <source type="image/webp" media="(max-width: 767px)" srcset="
                     ./img/content/main/blog/mobile/jess-harper-sunday.webp    1x,
@@ -629,16 +629,16 @@
             <div class="article__presentation">
               <time class="article__datetime" datetime="2019-09-30">September 30, 2019</time>
 
-              <div class="article__title-box">
+              <div class="article__title-box article__title-box--care">
                 <p>How to care for your jewellery</p>
               </div>
 
-              <a class="article__link link" href="#">Read Article</a>
+              <a class="main-page__link article__link link" href="#">Read Article</a>
             </div>
           </article>
 
-          <article class="blog__article article">
-            <div class="article__image-box article__padded-box">
+          <article class="blog__article blog__article--power article">
+            <div class="article__image-box">
               <picture>
                 <source type="image/webp" media="(max-width: 767px)" srcset="
                     ./img/content/main/blog/mobile/alex-holyoake.webp    1x,
@@ -666,19 +666,19 @@
               </picture>
             </div>
 
-            <div class="article__presentation">
+            <div class="article__presentation article__presentation--power">
               <time class="article__datetime" datetime="2019-09-23">September 23, 2019</time>
 
               <div class="article__title-box">
                 <p>Power of crystals</p>
               </div>
 
-              <a class="article__link link" href="#">Read Article</a>
+              <a class="main-page__link article__link link" href="#">Read Article</a>
             </div>
           </article>
 
-          <article class="blog__article article" hidden="">
-            <div class="article__image-box article__padded-box">
+          <article class="blog__article blog__article--trends article article--trends">
+            <div class="article__image-box article__image-box--trends">
               <picture>
                 <source type="image/webp" media="(max-width: 767px)" srcset="
                     ./img/content/main/blog/mobile/alve-odonnell.webp    1x,
@@ -706,14 +706,14 @@
               </picture>
             </div>
 
-            <div class="article__presentation">
+            <div class="article__presentation article__presentation--trends">
               <time class="article__datetime" datetime="2019-09-16">September 16, 2019</time>
 
               <div class="article__title-box">
                 <p>AW 19 trends</p>
               </div>
 
-              <a class="article__link link" href="#">Read Article</a>
+              <a class="main-page__link article__link link" href="#">Read Article</a>
             </div>
           </article>
         </div>
@@ -722,11 +722,17 @@
 
     <section class="main-page__section faq">
       <div class="faq__container container">
-        <h2 class="faq__heading main-page__heading">Frequently asked questions</h2>
+        <h2 class="faq__heading main-page__heading main-page__heading--faq">Frequently asked questions</h2>
 
-        <div class="faq__accordeon accordeon">
+        <div class="faq__accordeon accordeon" id="accordeon1">
           <div class="accordeon__item">
-            <button class="accordeon__btn button" type="button" aria-label="Toggle content visibility">What materials are the jewellery made of?</button>
+            <button class="accordeon__button accordeon__button--material button" type="button" aria-label="Toggle content visibility">
+              What materials are the jewellery made of?
+
+              <svg class="accordeon__button-svg" width="17" height="10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <use xlink:href="#icon-angle"></use>
+              </svg>
+            </button>
 
             <div class="accordeon__content">
               <p>Our jewellerry is made of solid gold, silver or leather.  Also, some jewellery contains precious and semiprecious stones and crystals.</p>
@@ -734,7 +740,13 @@
           </div>
 
           <div class="accordeon__item">
-            <button class="accordeon__btn button" type="button" aria-label="Toggle content visibility">Which countries do you deliver to?</button>
+            <button class="accordeon__button accordeon__button--countries button" type="button" aria-label="Toggle content visibility">
+              Which countries do you deliver to?
+
+              <svg class="accordeon__button-svg" width="17" height="10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <use xlink:href="#icon-angle"></use>
+              </svg>
+            </button>
 
             <div class="accordeon__content">
               <p>Our jewellerry is made of solid gold, silver or leather.  Also, some jewellery contains precious and semiprecious stones and crystals.</p>
@@ -742,7 +754,13 @@
           </div>
 
           <div class="accordeon__item">
-            <button class="accordeon__btn button" type="button" aria-label="Toggle content visibility">What are the payment methods?</button>
+            <button class="accordeon__button accordeon__button--payment button" type="button" aria-label="Toggle content visibility">
+              What are the payment methods?
+
+              <svg class="accordeon__button-svg" width="17" height="10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <use xlink:href="#icon-angle"></use>
+              </svg>
+            </button>
 
             <div class="accordeon__content">
               <p>Our jewellerry is made of solid gold, silver or leather.  Also, some jewellery contains precious and semiprecious stones and crystals.</p>
@@ -750,7 +768,13 @@
           </div>
 
           <div class="accordeon__item">
-            <button class="accordeon__btn button" type="button" aria-label="Toggle content visibility">Can I return the jewellery if it didn’t fit me?</button>
+            <button class="accordeon__button accordeon__button--return button" type="button" aria-label="Toggle content visibility">
+              Can I return the<span class="hidden-after-mobile"><br></span>jewellery if it didn’t fit me?
+
+              <svg class="accordeon__button-svg" width="17" height="10" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <use xlink:href="#icon-angle"></use>
+              </svg>
+            </button>
 
             <div class="accordeon__content">
               <p>Our jewellerry is made of solid gold, silver or leather.  Also, some jewellery contains precious and semiprecious stones and crystals.</p>

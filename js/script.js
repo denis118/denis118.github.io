@@ -71,6 +71,15 @@
     return 'mobile';
   };
 
+  // useMethod
+  var useMethod = function (objectName, method) {
+    return function () {
+      Object.keys(window[objectName]).forEach(function (key) {
+        window[objectName][key][method]();
+      });
+    };
+  };
+
   // export
   window.utility = {
     Maybe: Maybe,
@@ -79,7 +88,8 @@
     focusableSelectors: focusableSelectors,
     isPreDesktopWidth: isPreDesktopWidth,
     isPreTabletWidth: isPreTabletWidth,
-    getCurrentMode: getCurrentMode
+    getCurrentMode: getCurrentMode,
+    useMethod: useMethod
   };
 })();
 
@@ -374,8 +384,6 @@
       _.slideSetIndex = START_INDEX;
       _.activeSetIndex = START_INDEX;
 
-      // console.log(_.slideSets);
-
       _.normalizeClass();
       _.buildSlideSets();
 
@@ -386,8 +394,6 @@
       _.slideSets[_.activeSetIndex].forEach(function (slide) {
         slide.classList.remove('hidden-entity');
       });
-
-      // console.log(_.slideSets);
 
       _.slideSetIndex = _.activeSetIndex;
 
@@ -705,6 +711,7 @@
   var isPreDesktopWidth = window.utility.isPreDesktopWidth;
   var isPreTabletWidth = window.utility.isPreTabletWidth;
   var getCurrentMode = window.utility.getCurrentMode;
+  var useMethod = window.utility.useMethod;
   var mode = getCurrentMode();
   window.slider = {};
 
@@ -725,16 +732,8 @@
       window.slider[slider.root.id] = slider;
     });
 
-    var useMethod = function (method) {
-      return function () {
-        Object.keys(window.slider).forEach(function (key) {
-          window.slider[key][method]();
-        });
-      };
-    };
-
-    var rebuild = useMethod('rebuild');
-    var manageNumbers = useMethod('manageNumbers');
+    var rebuild = useMethod('slider', 'rebuild');
+    var manageNumbers = useMethod('slider', 'manageNumbers');
 
     var onWindowResize = (function () {
       var isWorkedOnPreDesktopWidth = false;
@@ -767,11 +766,97 @@
       };
     })();
 
-    var onWindowBeforeunload = useMethod('eraseEventListeners');
+    var onWindowBeforeunload = useMethod('slider', 'eraseEventListeners');
 
     window.addEventListener('resize', onWindowResize);
     window.addEventListener('beforeunload', onWindowBeforeunload);
 
     firstLoading = true;
+  }
+})();
+
+//
+// accordeon
+//
+
+(function () {
+  var initAccordeon = function (rootElement) {
+    var that = {};
+
+    that.activate = function () {
+      var _ = that;
+
+      _.root = rootElement;
+      _.buttons = Array.from(_.root.querySelectorAll('.accordeon__button'));
+      _.contents = Array.from(_.root.querySelectorAll('.accordeon__content'));
+
+      _.addContentJsStyles();
+
+      return _;
+    };
+
+    that.addContentJsStyles = function () {
+      that.contents.forEach(function (item) {
+        that.hideContent(item);
+      });
+    };
+
+    that.hideContent = function (item) {
+      item.classList.add('accordeon__content--js');
+    };
+
+    that.onAccordeonClick = function (evt) {
+      if (!evt.target.closest('.accordeon__button')) {
+        return;
+      }
+
+      var _ = that;
+
+      var target = evt.target.closest('.accordeon__button');
+      var isButtonInactive = !target.classList.contains('accordeon__button--active');
+
+      _.buttons.forEach(function (item) {
+        item.classList.remove('accordeon__button--active');
+      });
+
+      if (isButtonInactive) {
+        target.classList.toggle('accordeon__button--active');
+      }
+    };
+
+    that.setEventListener = function () {
+      that.root.addEventListener('click', that.onAccordeonClick);
+    };
+
+    that.eraseEventListener = function () {
+      that.root.removeEventListener('click', that.onAccordeonClick);
+    };
+
+    return that;
+  };
+
+  var accordeons = null;
+  var useMethod = window.utility.useMethod;
+  window.accordeon = {};
+
+  var findAccordeons = function () {
+    var Maybe = window.utility.Maybe;
+    accordeons = new Maybe(document.querySelectorAll('.accordeon'));
+    accordeons = accordeons.operand.length
+      ? Array.from(accordeons.operand)
+      : null;
+  };
+
+  findAccordeons();
+
+  if (accordeons.length) {
+    accordeons.forEach(function (it) {
+      var accordeon = initAccordeon(it);
+      accordeon.activate().setEventListener();
+      window.accordeon[accordeon.root.id] = accordeon;
+    });
+
+    var onWindowBeforeunload = useMethod('accordeon', 'eraseEventListener');
+    window.addEventListener('beforeunload', onWindowBeforeunload);
   }
 })();
