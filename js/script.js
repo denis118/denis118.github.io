@@ -21,6 +21,16 @@
     }
   };
 
+  // isPreDesktopWidth
+  var isPreDesktopWidth = function () {
+    return document.documentElement.clientWidth < DESKTOP_WIDTH;
+  };
+
+  // isPreTabletWidth
+  var isPreTabletWidth = function () {
+    return document.documentElement.clientWidth < TABLET_WIDTH;
+  };
+
   // ESC event
   var isEscEvent = function (evt) {
     return evt.key === ('Escape' || 'Esc');
@@ -29,6 +39,24 @@
   // TAB event
   var isTabEvent = function (evt) {
     return evt.key === 'Tab';
+  };
+
+  // setAttributes
+  var setAttributes = function (element, attributeSet) {
+    for (var attribute in attributeSet) {
+      if (attributeSet.hasOwnProperty(attribute)) {
+        element.setAttribute(attribute, attributeSet[attribute]);
+      }
+    }
+  };
+
+  // resetAttributes
+  var resetAttributes = function (element, attributeSet) {
+    for (var attribute in attributeSet) {
+      if (attributeSet.hasOwnProperty(attribute)) {
+        element.removeAttribute(attribute);
+      }
+    }
   };
 
   // focusable elements' selectors
@@ -47,16 +75,59 @@
     '[tabindex]:not([tabindex^="-"])',
   ];
 
-  // isPreDesktopWidth
-  var isPreDesktopWidth = function () {
-    return document.documentElement.clientWidth < DESKTOP_WIDTH;
+  // isVisible
+  var isVisible = function (element) {
+    return element.offsetWidth
+      || element.offsetHeight
+      || element.getClientRects().length
+      ? true
+      : false;
   };
 
-  // isPreTabletWidth
-  var isPreTabletWidth = function () {
-    return document.documentElement.clientWidth < TABLET_WIDTH;
+  // getFocusableChildren
+  var getFocusableChildren = function (element) {
+    return Array.from(
+        element
+            .querySelectorAll(focusableSelectors.join(','))
+    ).filter(isVisible);
   };
 
+  // moveFocusIn
+  var moveFocusIn = function (element) {
+    var target = element.querySelector('[autofocus]')
+      || getFocusableChildren(element)[0];
+
+    if (target) {
+      target.focus();
+    }
+  };
+
+  // trapTabKey
+  var trapTabKey = function (element, evt) {
+    var focusableChildren = getFocusableChildren(element);
+    var focusedItemIndex = focusableChildren.indexOf(document.activeElement);
+    var lastIndex = focusableChildren.length - 1;
+    var withShift = evt.shiftKey;
+
+    if (withShift && focusedItemIndex === 0) {
+      focusableChildren[lastIndex].focus();
+      evt.preventDefault();
+    } else if (!withShift && focusedItemIndex === lastIndex) {
+      focusableChildren[0].focus();
+      evt.preventDefault();
+    }
+  };
+
+  // onBodyFocus
+  var onBodyFocus = function (evt, element) {
+    var isInDialog = evt.target.closest('[aria-modal="true"]');
+
+    if (!isInDialog) {
+      moveFocusIn(element);
+    }
+  };
+
+  // getCurrentMode
   var getCurrentMode = function () {
     var width = document.documentElement.clientWidth;
 
@@ -83,11 +154,15 @@
   // export
   window.utility = {
     Maybe: Maybe,
-    isEscEvent: isEscEvent,
-    isTabEvent: isTabEvent,
-    focusableSelectors: focusableSelectors,
     isPreDesktopWidth: isPreDesktopWidth,
     isPreTabletWidth: isPreTabletWidth,
+    isEscEvent: isEscEvent,
+    isTabEvent: isTabEvent,
+    setAttributes: setAttributes,
+    resetAttributes: resetAttributes,
+    trapTabKey: trapTabKey,
+    moveFocusIn: moveFocusIn,
+    onBodyFocus: onBodyFocus,
     getCurrentMode: getCurrentMode,
     useMethod: useMethod
   };
@@ -120,7 +195,7 @@
         this.header = header;
         this.burger = this.header.querySelector('.header__burger');
         this.lowerContainer = this.header.querySelector('.header__container--lower');
-        this.body = document.querySelector('body') || document.body;
+        this.body = document.body;
 
         this.header.classList.add('header--js');
         this.attributeSet = {
@@ -131,7 +206,6 @@
         this.isShown = false;
         this.toggleMargin();
         this.burger.addEventListener('click', this.onBurgerClick);
-
         return this;
       };
 
@@ -167,12 +241,7 @@
 
       that.setAttributes = function () {
         if (isPreDesktopWidth()) {
-          for (var attribute in this.attributeSet) {
-            if (this.attributeSet.hasOwnProperty(attribute)) {
-              this.header.setAttribute(attribute, this.attributeSet[attribute]);
-            }
-          }
-
+          setAttributes(this.header, this.attributeSet);
           this.lowerContainer.setAttribute('tabindex', '-1');
         }
 
@@ -181,12 +250,7 @@
 
       that.resetAttributes = function () {
         if (!isPreDesktopWidth()) {
-          for (var attribute in this.attributeSet) {
-            if (this.attributeSet.hasOwnProperty(attribute)) {
-              this.header.removeAttribute(attribute);
-            }
-          }
-
+          resetAttributes(this.header, this.attributeSet);
           this.lowerContainer.removeAttribute('tabindex');
         }
       };
@@ -198,8 +262,8 @@
         this.body.classList.add('scroll-stop');
         this.header.classList.add('menu-open');
 
-        this.moveFocusIn();
         this.setEventListeners();
+        moveFocusIn(this.header);
       };
 
       that.hide = function () {
@@ -214,45 +278,6 @@
         this.eraseEventListeners();
       };
 
-      that.moveFocusIn = function () {
-        var target = this.header.querySelector('[autofocus]')
-          || this.getFocusableChildren()[0];
-
-        if (target) {
-          target.focus();
-        }
-      };
-
-      that.trapTabKey = function (node, evt) {
-        var focusableChildren = this.getFocusableChildren(node);
-        var focusedItemIndex = focusableChildren.indexOf(document.activeElement);
-        var lastIndex = focusableChildren.length - 1;
-        var withShift = evt.shiftKey;
-
-        if (withShift && focusedItemIndex === 0) {
-          focusableChildren[lastIndex].focus();
-          evt.preventDefault();
-        } else if (!withShift && focusedItemIndex === lastIndex) {
-          focusableChildren[0].focus();
-          evt.preventDefault();
-        }
-      };
-
-      that.isVisible = function (node) {
-        return node.offsetWidth
-          || node.offsetHeight
-          || node.getClientRects().length
-          ? true
-          : false;
-      };
-
-      that.getFocusableChildren = function () {
-        return Array.from(
-            this.header
-                .querySelectorAll(window.utility.focusableSelectors.join(','))
-        ).filter(this.isVisible);
-      };
-
       that.onBurgerClick = function () {
         if (!that.isShown) {
           that.show();
@@ -262,16 +287,12 @@
       };
 
       that.onBodyFocus = function (evt) {
-        var isInDialog = evt.target.closest('[aria-modal="true"]');
-
-        if (!isInDialog) {
-          that.moveFocusIn();
-        }
+        onBodyFocus(evt, that.header);
       };
 
       that.onDocumentKeyDown = function (evt) {
         if (isTabEvent(evt)) {
-          that.trapTabKey(that.header, evt);
+          trapTabKey(that.header, evt);
         }
       };
 
@@ -296,6 +317,11 @@
 
     var isPreDesktopWidth = window.utility.isPreDesktopWidth;
     var isTabEvent = window.utility.isTabEvent;
+    var setAttributes = window.utility.setAttributes;
+    var resetAttributes = window.utility.resetAttributes;
+    var moveFocusIn = window.utility.moveFocusIn;
+    var trapTabKey = window.utility.trapTabKey;
+    var onBodyFocus = window.utility.onBodyFocus;
 
     var headerManager = manageHeader();
     headerManager
@@ -344,7 +370,7 @@
   var START_INDEX = 0;
   var DESKTOP_SLIDES_AMOUNT = 4;
   var PREDESKTOP_SLIDES_AMOUNT = 2;
-  var IGNORED_SWIPE_DISTANCE = 20;
+  var IGNORED_SWIPE_DISTANCE = 30;
 
   var initSlider = function (rootElement) {
     var that = {};
@@ -717,7 +743,7 @@
 
   var findSliders = function () {
     var Maybe = window.utility.Maybe;
-    sliders = new Maybe(document.querySelectorAll('.slider'));
+    sliders = new Maybe(document.querySelectorAll('#slider-main'));
     sliders = sliders.operand.length
       ? Array.from(sliders.operand)
       : null;
@@ -725,7 +751,7 @@
 
   findSliders();
 
-  if (sliders.length) {
+  if (sliders && sliders.length) {
     sliders.forEach(function (it) {
       var slider = initSlider(it);
       slider.activate().setEventListeners();
@@ -784,15 +810,12 @@
     var that = {};
 
     that.activate = function () {
-      var _ = that;
+      this.root = rootElement;
+      this.buttons = Array.from(this.root.querySelectorAll('.accordeon__button'));
+      this.contents = Array.from(this.root.querySelectorAll('.accordeon__content'));
 
-      _.root = rootElement;
-      _.buttons = Array.from(_.root.querySelectorAll('.accordeon__button'));
-      _.contents = Array.from(_.root.querySelectorAll('.accordeon__content'));
-
-      _.addContentJsStyles();
-
-      return _;
+      this.addContentJsStyles();
+      return this;
     };
 
     that.addContentJsStyles = function () {
@@ -803,33 +826,55 @@
 
     that.hideContent = function (item) {
       item.classList.add('accordeon__content--js');
+
+      switch (true) {
+        case item.matches('.faq__first-answer'):
+        case item.matches('.accordeon__content--products'):
+        case item.matches('.accordeon__content--price'):
+          item
+              .previousElementSibling
+              .classList
+              .add('accordeon__button--active');
+          break;
+
+        default:
+          break;
+      }
     };
+
+    // that.onAccordeonClick = function (evt) {
+    //   if (!evt.target.closest('.accordeon__button')) {
+    //     return;
+    //   }
+
+    //   var target = evt.target.closest('.accordeon__button');
+    //   var isButtonInactive = !target.classList.contains('accordeon__button--active');
+
+    //   that.buttons.forEach(function (item) {
+    //     item.classList.remove('accordeon__button--active');
+    //   });
+
+    //   if (isButtonInactive) {
+    //     target.classList.toggle('accordeon__button--active');
+    //   }
+    // };
 
     that.onAccordeonClick = function (evt) {
       if (!evt.target.closest('.accordeon__button')) {
         return;
       }
 
-      var _ = that;
-
-      var target = evt.target.closest('.accordeon__button');
-      var isButtonInactive = !target.classList.contains('accordeon__button--active');
-
-      _.buttons.forEach(function (item) {
-        item.classList.remove('accordeon__button--active');
-      });
-
-      if (isButtonInactive) {
-        target.classList.toggle('accordeon__button--active');
-      }
+      evt.target
+          .closest('.accordeon__button')
+          .classList.toggle('accordeon__button--active');
     };
 
     that.setEventListener = function () {
-      that.root.addEventListener('click', that.onAccordeonClick);
+      this.root.addEventListener('click', this.onAccordeonClick);
     };
 
     that.eraseEventListener = function () {
-      that.root.removeEventListener('click', that.onAccordeonClick);
+      this.root.removeEventListener('click', this.onAccordeonClick);
     };
 
     return that;
@@ -849,7 +894,7 @@
 
   findAccordeons();
 
-  if (accordeons.length) {
+  if (accordeons && accordeons.length) {
     accordeons.forEach(function (it) {
       var accordeon = initAccordeon(it);
       accordeon.activate().setEventListener();
@@ -859,4 +904,226 @@
     var onWindowBeforeunload = useMethod('accordeon', 'eraseEventListener');
     window.addEventListener('beforeunload', onWindowBeforeunload);
   }
+})();
+
+//
+// filter
+//
+
+(function () {
+  var filter = null;
+
+  var findFilter = function () {
+    var Maybe = window.utility.Maybe;
+    filter = new Maybe(document.querySelector('.filter'));
+    filter = filter.operand
+      ? filter.operand
+      : null;
+  };
+
+  findFilter();
+
+  if (filter) {
+    var manageFilter = function () {
+      var that = {};
+
+      that.activate = function () {
+        this.filter = filter;
+        this.inner = this.filter.querySelector('.filter__inner');
+        this.formBox = this.filter.querySelector('.filter__form-box');
+        this.starter = this.filter.querySelector('.filter__starter');
+        this.cross = this.filter.querySelector('.filter__cross');
+        this.body = document.body;
+        this.isShown = false;
+        this.attributeSet = {
+          'role': 'dialog',
+          'aria-modal': true
+        };
+
+        this.starter.addEventListener('click', this.onStarterClick);
+        this.cross.addEventListener('click', this.onCrossClick);
+        return this;
+      };
+
+      that.setAttributes = function () {
+        if (isPreDesktopWidth()) {
+          setAttributes(this.filter, this.attributeSet);
+        }
+
+        return this;
+      };
+
+      that.resetAttributes = function () {
+        if (!isPreDesktopWidth()) {
+          resetAttributes(this.filter, this.attributeSet);
+        }
+
+        return this;
+      };
+
+      that.show = function () {
+        this.isShown = true;
+        this.previouslyFocused = document.activeElement;
+
+        this.body.classList.add('scroll-stop');
+        this.inner.classList.add('overlay');
+        this.filter.classList.add('filter--js');
+        this.starter.setAttribute('tabindex', '-1');
+
+        this.setEventListeners();
+        moveFocusIn(this.filter);
+      };
+
+      that.hide = function () {
+        if (this.previouslyFocused && this.previouslyFocused.focus) {
+          this.previouslyFocused.focus();
+        }
+
+        this.isShown = false;
+        this.body.classList.remove('scroll-stop');
+        this.inner.classList.remove('overlay');
+        this.filter.classList.remove('filter--js');
+        this.starter.removeAttribute('tabindex');
+
+        this.eraseEventListeners();
+      };
+
+      that.onStarterClick = function () {
+        if (!that.isShown) {
+          that.show();
+        }
+      };
+
+      that.onCrossClick = function () {
+        if (that.isShown) {
+          that.hide();
+        }
+      };
+
+      that.onInnerClick = function (evt) {
+        if (!Object.is(evt.target, that.inner)) {
+          return;
+        }
+
+        that.hide();
+      };
+
+      that.onBodyFocus = function (evt) {
+        onBodyFocus(evt, that.filter);
+      };
+
+      that.onDocumentKeyDown = function (evt) {
+        if (isTabEvent(evt)) {
+          trapTabKey(that.filter, evt);
+        }
+
+        if (isEscEvent(evt)) {
+          that.hide();
+        }
+      };
+
+      that.setEventListeners = function () {
+        this.inner.addEventListener('click', this.onInnerClick);
+        this.body.addEventListener('focus', this.onBodyFocus, true);
+        document.addEventListener('keydown', this.onDocumentKeyDown);
+      };
+
+      that.eraseEventListeners = function () {
+        this.inner.removeEventListener('click', this.onInnerClick);
+        this.body.removeEventListener('focus', this.onBodyFocus, true);
+        document.removeEventListener('keydown', this.onDocumentKeyDown);
+      };
+
+      that.destroy = function () {
+        this.starter.removeEventListener('click', this.onStarterClick);
+        this.cross.removeEventListener('click', this.onCrossClick);
+        this.eraseEventListeners();
+      };
+
+      return that;
+    };
+
+    var isPreDesktopWidth = window.utility.isPreDesktopWidth;
+    var isTabEvent = window.utility.isTabEvent;
+    var isEscEvent = window.utility.isEscEvent;
+    var setAttributes = window.utility.setAttributes;
+    var resetAttributes = window.utility.resetAttributes;
+    var moveFocusIn = window.utility.moveFocusIn;
+    var trapTabKey = window.utility.trapTabKey;
+    var onBodyFocus = window.utility.onBodyFocus;
+
+    var filterManager = manageFilter();
+    filterManager
+        .activate()
+        .setAttributes()
+        .setEventListeners();
+
+    var onWindowResize = (function () {
+      var isWorkedOnPreDesktopWidth = false;
+      var isWorkedOnDesktopWidth = false;
+
+      return function () {
+        if (!isPreDesktopWidth() && !isWorkedOnDesktopWidth) {
+          filterManager.resetAttributes().hide();
+          isWorkedOnPreDesktopWidth = false;
+          isWorkedOnDesktopWidth = true;
+          return;
+        }
+
+        if (isPreDesktopWidth() && !isWorkedOnPreDesktopWidth) {
+          filterManager.setAttributes().setEventListeners();
+          isWorkedOnPreDesktopWidth = true;
+          isWorkedOnDesktopWidth = false;
+        }
+      };
+    })();
+
+    var onWindowBeforeunload = function () {
+      filterManager.destroy();
+      window.removeEventListener('resize', onWindowResize);
+      window.removeEventListener('beforeunload', onWindowBeforeunload);
+    };
+
+    window.addEventListener('resize', onWindowResize);
+    window.addEventListener('beforeunload', onWindowBeforeunload);
+  }
+})();
+
+//
+// filter cleaner
+//
+
+(function () {
+  var filterCleaner = document.querySelector('#filter-cleaner')
+    ? document.querySelector('#filter-cleaner')
+    : null;
+
+  if (!filterCleaner) {
+    return;
+  }
+
+  var filterId = filterCleaner.dataset.for;
+  var filter = document.querySelector(filterId);
+  var checkboxes = filter.querySelectorAll('input[type="checkbox"]');
+  var lowerPriceInput = filter.querySelector('#lower-cost-value');
+  var upperPriceInput = filter.querySelector('#upper-cost-value');
+  var priceLowerValue = lowerPriceInput.value;
+  var priceUpperValue = upperPriceInput.value;
+
+  filterCleaner.addEventListener('click', function () {
+    checkboxes.forEach(function (item) {
+      var hasAttribute = item.getAttribute('data-checked')
+        ? true
+        : false;
+
+      if (hasAttribute) {
+        item.checked = item.dataset.checked;
+      } else {
+        item.checked = false;
+      }
+
+      lowerPriceInput.value = priceLowerValue;
+      upperPriceInput.value = priceUpperValue;
+    });
+  });
 })();
