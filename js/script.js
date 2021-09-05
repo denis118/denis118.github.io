@@ -41,8 +41,14 @@
     return evt.key === 'Tab';
   };
 
+  // attributeSet
+  var attributeSet = {
+    'role': 'dialog',
+    'aria-modal': true
+  };
+
   // setAttributes
-  var setAttributes = function (element, attributeSet) {
+  var setAttributes = function (element) {
     for (var attribute in attributeSet) {
       if (attributeSet.hasOwnProperty(attribute)) {
         element.setAttribute(attribute, attributeSet[attribute]);
@@ -51,7 +57,7 @@
   };
 
   // resetAttributes
-  var resetAttributes = function (element, attributeSet) {
+  var resetAttributes = function (element) {
     for (var attribute in attributeSet) {
       if (attributeSet.hasOwnProperty(attribute)) {
         element.removeAttribute(attribute);
@@ -187,179 +193,179 @@
 
   findHeader();
 
-  if (header) {
-    var manageHeader = function () {
-      var that = {};
-
-      that.activate = function () {
-        this.header = header;
-        this.burger = this.header.querySelector('.header__burger');
-        this.lowerContainer = this.header.querySelector('.header__container--lower');
-        this.body = document.body;
-
-        this.header.classList.add('header--js');
-        this.attributeSet = {
-          'role': 'dialog',
-          'aria-modal': true
-        };
-
-        this.isShown = false;
-        this.toggleMargin();
-        this.burger.addEventListener('click', this.onBurgerClick);
-        return this;
-      };
-
-      that.toggleMargin = function () {
-        var nextSibling = this.header.nextElementSibling
-          ? this.header.nextElementSibling
-          : null;
-
-        var main = document.querySelector('main')
-          ? document.querySelector('main')
-          : null;
-
-        switch (isPreDesktopWidth()) {
-          case true:
-            if (nextSibling && main && Object.is(nextSibling, main)) {
-              var height = this.header.scrollHeight;
-              main.style.marginTop = height + UNITS;
-            }
-
-            break;
-
-          case false:
-            if (nextSibling && main && Object.is(nextSibling, main)) {
-              main.style.marginTop = 0;
-            }
-
-            break;
-
-          default:
-            break;
-        }
-      };
-
-      that.setAttributes = function () {
-        if (isPreDesktopWidth()) {
-          setAttributes(this.header, this.attributeSet);
-          this.lowerContainer.setAttribute('tabindex', '-1');
-        }
-
-        return this;
-      };
-
-      that.resetAttributes = function () {
-        if (!isPreDesktopWidth()) {
-          resetAttributes(this.header, this.attributeSet);
-          this.lowerContainer.removeAttribute('tabindex');
-        }
-      };
-
-      that.show = function () {
-        this.isShown = true;
-        this.previouslyFocused = document.activeElement;
-
-        this.body.classList.add('scroll-stop');
-        this.header.classList.add('menu-open');
-
-        this.setEventListeners();
-        moveFocusIn(this.header);
-      };
-
-      that.hide = function () {
-        if (this.previouslyFocused && this.previouslyFocused.focus) {
-          this.previouslyFocused.focus();
-        }
-
-        this.isShown = false;
-        this.body.classList.remove('scroll-stop');
-        this.header.classList.remove('menu-open');
-
-        this.eraseEventListeners();
-      };
-
-      that.onBurgerClick = function () {
-        if (!that.isShown) {
-          that.show();
-        } else {
-          that.hide();
-        }
-      };
-
-      that.onBodyFocus = function (evt) {
-        onBodyFocus(evt, that.header);
-      };
-
-      that.onDocumentKeyDown = function (evt) {
-        if (isTabEvent(evt)) {
-          trapTabKey(that.header, evt);
-        }
-      };
-
-      that.setEventListeners = function () {
-        document.addEventListener('keydown', this.onDocumentKeyDown);
-        this.body.addEventListener('focus', this.onBodyFocus, true);
-      };
-
-      that.eraseEventListeners = function () {
-        document.removeEventListener('keydown', this.onDocumentKeyDown);
-        this.body.removeEventListener('focus', this.onBodyFocus, true);
-      };
-
-      that.destroy = function () {
-        this.burger.removeEventListener('click', this.onBurgerClick);
-        this.body.removeEventListener('focus', this.onBodyFocus, true);
-        document.removeEventListener('keydown', this.onDocumentKeyDown);
-      };
-
-      return that;
-    };
-
-    var isPreDesktopWidth = window.utility.isPreDesktopWidth;
-    var isTabEvent = window.utility.isTabEvent;
-    var setAttributes = window.utility.setAttributes;
-    var resetAttributes = window.utility.resetAttributes;
-    var moveFocusIn = window.utility.moveFocusIn;
-    var trapTabKey = window.utility.trapTabKey;
-    var onBodyFocus = window.utility.onBodyFocus;
-
-    var headerManager = manageHeader();
-    headerManager
-        .activate()
-        .setAttributes();
-
-    var onWindowResize = (function () {
-      var isWorkedOnPreDesktopWidth = false;
-      var isWorkedOnDesktopWidth = false;
-
-      return function () {
-        if (!isPreDesktopWidth() && !isWorkedOnDesktopWidth) {
-          headerManager.resetAttributes();
-          headerManager.hide();
-          isWorkedOnPreDesktopWidth = false;
-          isWorkedOnDesktopWidth = true;
-          return;
-        }
-
-        if (isPreDesktopWidth() && !isWorkedOnPreDesktopWidth) {
-          headerManager.setAttributes();
-          isWorkedOnPreDesktopWidth = true;
-          isWorkedOnDesktopWidth = false;
-        }
-
-        headerManager.toggleMargin();
-      };
-    })();
-
-    var onWindowBeforeunload = function () {
-      headerManager.destroy();
-      window.removeEventListener('resize', onWindowResize);
-      window.removeEventListener('beforeunload', onWindowBeforeunload);
-    };
-
-    window.addEventListener('resize', onWindowResize);
-    window.addEventListener('beforeunload', onWindowBeforeunload);
+  if (!header) {
+    return;
   }
+
+  var manageHeader = function () {
+    var that = {};
+
+    that.activate = function () {
+      this.header = header;
+      this.burger = this.header.querySelector('.header__burger');
+      this.lowerContainer = this.header.querySelector('.header__container--lower');
+      this.body = document.body;
+
+      this.header.classList.add('header--js');
+      this.isShown = false;
+      this.toggleMargin();
+      this.burger.addEventListener('click', this.onBurgerClick);
+      return this;
+    };
+
+    that.toggleMargin = function () {
+      var nextSibling = this.header.nextElementSibling
+        ? this.header.nextElementSibling
+        : null;
+
+      var main = document.querySelector('main')
+        ? document.querySelector('main')
+        : null;
+
+      switch (isPreDesktopWidth()) {
+        case true:
+          if (nextSibling && main && Object.is(nextSibling, main)) {
+            var height = this.header.scrollHeight;
+            main.style.marginTop = height + UNITS;
+          }
+
+          break;
+
+        case false:
+          if (nextSibling && main && Object.is(nextSibling, main)) {
+            main.style.marginTop = 0;
+          }
+
+          break;
+
+        default:
+          break;
+      }
+    };
+
+    that.setAttributes = function () {
+      if (isPreDesktopWidth()) {
+        setAttributes(this.header);
+        this.lowerContainer.setAttribute('tabindex', '-1');
+      }
+
+      return this;
+    };
+
+    that.resetAttributes = function () {
+      if (!isPreDesktopWidth()) {
+        resetAttributes(this.header);
+        this.lowerContainer.removeAttribute('tabindex');
+      }
+    };
+
+    that.show = function () {
+      this.isShown = true;
+      this.previouslyFocused = document.activeElement;
+
+      this.body.classList.add('scroll-stop');
+      this.header.classList.add('menu-open');
+
+      this.setEventListeners();
+      moveFocusIn(this.header);
+    };
+
+    that.hide = function () {
+      if (this.previouslyFocused && this.previouslyFocused.focus) {
+        this.previouslyFocused.focus();
+      }
+
+      this.isShown = false;
+      this.body.classList.remove('scroll-stop');
+      this.header.classList.remove('menu-open');
+
+      this.eraseEventListeners();
+    };
+
+    that.onBurgerClick = function () {
+      if (!that.isShown) {
+        that.show();
+      } else {
+        that.hide();
+      }
+    };
+
+    that.onBodyFocus = function (evt) {
+      onBodyFocus(evt, that.header);
+    };
+
+    that.onDocumentKeyDown = function (evt) {
+      if (isTabEvent(evt)) {
+        trapTabKey(that.header, evt);
+      }
+    };
+
+    that.setEventListeners = function () {
+      document.addEventListener('keydown', this.onDocumentKeyDown);
+      this.body.addEventListener('focus', this.onBodyFocus, true);
+    };
+
+    that.eraseEventListeners = function () {
+      document.removeEventListener('keydown', this.onDocumentKeyDown);
+      this.body.removeEventListener('focus', this.onBodyFocus, true);
+    };
+
+    that.destroy = function () {
+      this.burger.removeEventListener('click', this.onBurgerClick);
+      this.body.removeEventListener('focus', this.onBodyFocus, true);
+      document.removeEventListener('keydown', this.onDocumentKeyDown);
+    };
+
+    return that;
+  };
+
+  var isPreDesktopWidth = window.utility.isPreDesktopWidth;
+  var isTabEvent = window.utility.isTabEvent;
+  var setAttributes = window.utility.setAttributes;
+  var resetAttributes = window.utility.resetAttributes;
+  var moveFocusIn = window.utility.moveFocusIn;
+  var trapTabKey = window.utility.trapTabKey;
+  var onBodyFocus = window.utility.onBodyFocus;
+
+  var headerManager = manageHeader();
+  headerManager
+      .activate()
+      .setAttributes();
+
+  var onWindowResize = (function () {
+    var isWorkedOnPreDesktopWidth = false;
+    var isWorkedOnDesktopWidth = false;
+
+    return function () {
+      if (!isPreDesktopWidth() && !isWorkedOnDesktopWidth) {
+        headerManager.resetAttributes();
+        headerManager.hide();
+        isWorkedOnPreDesktopWidth = false;
+        isWorkedOnDesktopWidth = true;
+        return;
+      }
+
+      if (isPreDesktopWidth() && !isWorkedOnPreDesktopWidth) {
+        headerManager.setAttributes();
+        isWorkedOnPreDesktopWidth = true;
+        isWorkedOnDesktopWidth = false;
+      }
+
+      headerManager.toggleMargin();
+    };
+  })();
+
+  window.addEventListener('resize', onWindowResize);
+
+  var onWindowBeforeunload = function () {
+    headerManager.destroy();
+    window.removeEventListener('resize', onWindowResize);
+  };
+
+  // export
+  window.headerDestroyer = {
+    onWindowBeforeunload: onWindowBeforeunload
+  };
 })();
 
 //
@@ -751,54 +757,59 @@
 
   findSliders();
 
-  if (sliders && sliders.length) {
-    sliders.forEach(function (it) {
-      var slider = initSlider(it);
-      slider.activate().setEventListeners();
-      window.slider[slider.root.id] = slider;
-    });
-
-    var rebuild = useMethod('slider', 'rebuild');
-    var manageNumbers = useMethod('slider', 'manageNumbers');
-
-    var onWindowResize = (function () {
-      var isWorkedOnPreDesktopWidth = false;
-      var isWorkedOnDesktopWidth = false;
-      var currentMode = '';
-
-      return function () {
-        currentMode = getCurrentMode();
-
-        if (currentMode !== mode && firstLoading) {
-          firstLoading = false;
-        }
-
-        if (isPreDesktopWidth()) {
-          manageNumbers();
-        }
-
-        if (!isPreDesktopWidth() && !isWorkedOnDesktopWidth && !firstLoading) {
-          rebuild();
-          isWorkedOnPreDesktopWidth = false;
-          isWorkedOnDesktopWidth = true;
-          return;
-        }
-
-        if (isPreDesktopWidth() && !isWorkedOnPreDesktopWidth && !firstLoading) {
-          rebuild();
-          isWorkedOnPreDesktopWidth = true;
-          isWorkedOnDesktopWidth = false;
-        }
-      };
-    })();
-
-    var onWindowBeforeunload = useMethod('slider', 'eraseEventListeners');
-
-    window.addEventListener('resize', onWindowResize);
-    window.addEventListener('beforeunload', onWindowBeforeunload);
-
-    firstLoading = true;
+  if (!(sliders && sliders.length)) {
+    return;
   }
+
+  sliders.forEach(function (it) {
+    var slider = initSlider(it);
+    slider.activate().setEventListeners();
+    window.slider[slider.root.id] = slider;
+  });
+
+  var rebuild = useMethod('slider', 'rebuild');
+  var manageNumbers = useMethod('slider', 'manageNumbers');
+
+  var onWindowResize = (function () {
+    var isWorkedOnPreDesktopWidth = false;
+    var isWorkedOnDesktopWidth = false;
+    var currentMode = '';
+
+    return function () {
+      currentMode = getCurrentMode();
+
+      if (currentMode !== mode && firstLoading) {
+        firstLoading = false;
+      }
+
+      if (isPreDesktopWidth()) {
+        manageNumbers();
+      }
+
+      if (!isPreDesktopWidth() && !isWorkedOnDesktopWidth && !firstLoading) {
+        rebuild();
+        isWorkedOnPreDesktopWidth = false;
+        isWorkedOnDesktopWidth = true;
+        return;
+      }
+
+      if (isPreDesktopWidth() && !isWorkedOnPreDesktopWidth && !firstLoading) {
+        rebuild();
+        isWorkedOnPreDesktopWidth = true;
+        isWorkedOnDesktopWidth = false;
+      }
+    };
+  })();
+
+  window.addEventListener('resize', onWindowResize);
+  firstLoading = true;
+
+  var onWindowBeforeunload = useMethod('slider', 'eraseEventListeners');
+
+  // export
+  window.sliderDestroyer = {
+    onWindowBeforeunload: onWindowBeforeunload
+  };
 })();
 
 //
@@ -894,16 +905,22 @@
 
   findAccordeons();
 
-  if (accordeons && accordeons.length) {
-    accordeons.forEach(function (it) {
-      var accordeon = initAccordeon(it);
-      accordeon.activate().setEventListener();
-      window.accordeon[accordeon.root.id] = accordeon;
-    });
-
-    var onWindowBeforeunload = useMethod('accordeon', 'eraseEventListener');
-    window.addEventListener('beforeunload', onWindowBeforeunload);
+  if (!(accordeons && accordeons.length)) {
+    return;
   }
+
+  accordeons.forEach(function (it) {
+    var accordeon = initAccordeon(it);
+    accordeon.activate().setEventListener();
+    window.accordeon[accordeon.root.id] = accordeon;
+  });
+
+  var onWindowBeforeunload = useMethod('accordeon', 'eraseEventListener');
+
+  // export
+  window.accordeonDestroyer = {
+    onWindowBeforeunload: onWindowBeforeunload
+  };
 })();
 
 //
@@ -923,170 +940,171 @@
 
   findFilter();
 
-  if (filter) {
-    var manageFilter = function () {
-      var that = {};
-
-      that.activate = function () {
-        this.filter = filter;
-        this.inner = this.filter.querySelector('.filter__inner');
-        this.formBox = this.filter.querySelector('.filter__form-box');
-        this.starter = this.filter.querySelector('.filter__starter');
-        this.cross = this.filter.querySelector('.filter__cross');
-        this.body = document.body;
-        this.isShown = false;
-        this.attributeSet = {
-          'role': 'dialog',
-          'aria-modal': true
-        };
-
-        this.starter.addEventListener('click', this.onStarterClick);
-        this.cross.addEventListener('click', this.onCrossClick);
-        return this;
-      };
-
-      that.setAttributes = function () {
-        if (isPreDesktopWidth()) {
-          setAttributes(this.filter, this.attributeSet);
-        }
-
-        return this;
-      };
-
-      that.resetAttributes = function () {
-        if (!isPreDesktopWidth()) {
-          resetAttributes(this.filter, this.attributeSet);
-        }
-
-        return this;
-      };
-
-      that.show = function () {
-        this.isShown = true;
-        this.previouslyFocused = document.activeElement;
-
-        this.body.classList.add('scroll-stop');
-        this.inner.classList.add('overlay');
-        this.filter.classList.add('filter--js');
-        this.starter.setAttribute('tabindex', '-1');
-
-        this.setEventListeners();
-        moveFocusIn(this.filter);
-      };
-
-      that.hide = function () {
-        if (this.previouslyFocused && this.previouslyFocused.focus) {
-          this.previouslyFocused.focus();
-        }
-
-        this.isShown = false;
-        this.body.classList.remove('scroll-stop');
-        this.inner.classList.remove('overlay');
-        this.filter.classList.remove('filter--js');
-        this.starter.removeAttribute('tabindex');
-
-        this.eraseEventListeners();
-      };
-
-      that.onStarterClick = function () {
-        if (!that.isShown) {
-          that.show();
-        }
-      };
-
-      that.onCrossClick = function () {
-        if (that.isShown) {
-          that.hide();
-        }
-      };
-
-      that.onInnerClick = function (evt) {
-        if (!Object.is(evt.target, that.inner)) {
-          return;
-        }
-
-        that.hide();
-      };
-
-      that.onBodyFocus = function (evt) {
-        onBodyFocus(evt, that.filter);
-      };
-
-      that.onDocumentKeyDown = function (evt) {
-        if (isTabEvent(evt)) {
-          trapTabKey(that.filter, evt);
-        }
-
-        if (isEscEvent(evt)) {
-          that.hide();
-        }
-      };
-
-      that.setEventListeners = function () {
-        this.inner.addEventListener('click', this.onInnerClick);
-        this.body.addEventListener('focus', this.onBodyFocus, true);
-        document.addEventListener('keydown', this.onDocumentKeyDown);
-      };
-
-      that.eraseEventListeners = function () {
-        this.inner.removeEventListener('click', this.onInnerClick);
-        this.body.removeEventListener('focus', this.onBodyFocus, true);
-        document.removeEventListener('keydown', this.onDocumentKeyDown);
-      };
-
-      that.destroy = function () {
-        this.starter.removeEventListener('click', this.onStarterClick);
-        this.cross.removeEventListener('click', this.onCrossClick);
-        this.eraseEventListeners();
-      };
-
-      return that;
-    };
-
-    var isPreDesktopWidth = window.utility.isPreDesktopWidth;
-    var isTabEvent = window.utility.isTabEvent;
-    var isEscEvent = window.utility.isEscEvent;
-    var setAttributes = window.utility.setAttributes;
-    var resetAttributes = window.utility.resetAttributes;
-    var moveFocusIn = window.utility.moveFocusIn;
-    var trapTabKey = window.utility.trapTabKey;
-    var onBodyFocus = window.utility.onBodyFocus;
-
-    var filterManager = manageFilter();
-    filterManager
-        .activate()
-        .setAttributes()
-        .setEventListeners();
-
-    var onWindowResize = (function () {
-      var isWorkedOnPreDesktopWidth = false;
-      var isWorkedOnDesktopWidth = false;
-
-      return function () {
-        if (!isPreDesktopWidth() && !isWorkedOnDesktopWidth) {
-          filterManager.resetAttributes().hide();
-          isWorkedOnPreDesktopWidth = false;
-          isWorkedOnDesktopWidth = true;
-          return;
-        }
-
-        if (isPreDesktopWidth() && !isWorkedOnPreDesktopWidth) {
-          filterManager.setAttributes().setEventListeners();
-          isWorkedOnPreDesktopWidth = true;
-          isWorkedOnDesktopWidth = false;
-        }
-      };
-    })();
-
-    var onWindowBeforeunload = function () {
-      filterManager.destroy();
-      window.removeEventListener('resize', onWindowResize);
-      window.removeEventListener('beforeunload', onWindowBeforeunload);
-    };
-
-    window.addEventListener('resize', onWindowResize);
-    window.addEventListener('beforeunload', onWindowBeforeunload);
+  if (!filter) {
+    return;
   }
+
+  var manageFilter = function () {
+    var that = {};
+
+    that.activate = function () {
+      this.filter = filter;
+      this.inner = this.filter.querySelector('.filter__inner');
+      this.formBox = this.filter.querySelector('.filter__form-box');
+      this.starter = this.filter.querySelector('.filter__starter');
+      this.cross = this.filter.querySelector('.filter__cross');
+      this.body = document.body;
+      this.isShown = false;
+
+      this.starter.addEventListener('click', this.onStarterClick);
+      return this;
+    };
+
+    that.setAttributes = function () {
+      if (isPreDesktopWidth()) {
+        setAttributes(this.filter);
+      }
+
+      return this;
+    };
+
+    that.resetAttributes = function () {
+      if (!isPreDesktopWidth()) {
+        resetAttributes(this.filter);
+      }
+
+      return this;
+    };
+
+    that.show = function () {
+      this.isShown = true;
+      this.previouslyFocused = document.activeElement;
+
+      this.body.classList.add('scroll-stop');
+      this.inner.classList.add('overlay');
+      this.filter.classList.add('filter--js');
+      this.starter.setAttribute('tabindex', '-1');
+
+      this.setEventListeners();
+      moveFocusIn(this.filter);
+    };
+
+    that.hide = function () {
+      if (this.previouslyFocused && this.previouslyFocused.focus) {
+        this.previouslyFocused.focus();
+      }
+
+      this.isShown = false;
+      this.body.classList.remove('scroll-stop');
+      this.inner.classList.remove('overlay');
+      this.filter.classList.remove('filter--js');
+      this.starter.removeAttribute('tabindex');
+
+      this.eraseEventListeners();
+    };
+
+    that.onStarterClick = function () {
+      if (!that.isShown) {
+        that.show();
+      }
+    };
+
+    that.onCrossClick = function () {
+      if (that.isShown) {
+        that.hide();
+      }
+    };
+
+    that.onInnerClick = function (evt) {
+      if (!Object.is(evt.target, that.inner)) {
+        return;
+      }
+
+      that.hide();
+    };
+
+    that.onBodyFocus = function (evt) {
+      onBodyFocus(evt, that.filter);
+    };
+
+    that.onDocumentKeyDown = function (evt) {
+      if (isTabEvent(evt)) {
+        trapTabKey(that.filter, evt);
+      }
+
+      if (isEscEvent(evt)) {
+        that.hide();
+      }
+    };
+
+    that.setEventListeners = function () {
+      this.cross.addEventListener('click', this.onCrossClick);
+      this.inner.addEventListener('click', this.onInnerClick);
+      this.body.addEventListener('focus', this.onBodyFocus, true);
+      document.addEventListener('keydown', this.onDocumentKeyDown);
+    };
+
+    that.eraseEventListeners = function () {
+      this.cross.removeEventListener('click', this.onCrossClick);
+      this.inner.removeEventListener('click', this.onInnerClick);
+      this.body.removeEventListener('focus', this.onBodyFocus, true);
+      document.removeEventListener('keydown', this.onDocumentKeyDown);
+    };
+
+    that.destroy = function () {
+      this.starter.removeEventListener('click', this.onStarterClick);
+      this.eraseEventListeners();
+    };
+
+    return that;
+  };
+
+  var isPreDesktopWidth = window.utility.isPreDesktopWidth;
+  var isTabEvent = window.utility.isTabEvent;
+  var isEscEvent = window.utility.isEscEvent;
+  var setAttributes = window.utility.setAttributes;
+  var resetAttributes = window.utility.resetAttributes;
+  var moveFocusIn = window.utility.moveFocusIn;
+  var trapTabKey = window.utility.trapTabKey;
+  var onBodyFocus = window.utility.onBodyFocus;
+
+  var filterManager = manageFilter();
+  filterManager
+      .activate()
+      .setAttributes()
+      .setEventListeners();
+
+  var onWindowResize = (function () {
+    var isWorkedOnPreDesktopWidth = false;
+    var isWorkedOnDesktopWidth = false;
+
+    return function () {
+      if (!isPreDesktopWidth() && !isWorkedOnDesktopWidth) {
+        filterManager.resetAttributes().hide();
+        isWorkedOnPreDesktopWidth = false;
+        isWorkedOnDesktopWidth = true;
+        return;
+      }
+
+      if (isPreDesktopWidth() && !isWorkedOnPreDesktopWidth) {
+        filterManager.setAttributes().setEventListeners();
+        isWorkedOnPreDesktopWidth = true;
+        isWorkedOnDesktopWidth = false;
+      }
+    };
+  })();
+
+  window.addEventListener('resize', onWindowResize);
+
+  var onWindowBeforeunload = function () {
+    filterManager.destroy();
+    window.removeEventListener('resize', onWindowResize);
+  };
+
+  // export
+  window.filterDestroyer = {
+    onWindowBeforeunload: onWindowBeforeunload
+  };
 })();
 
 //
@@ -1105,12 +1123,18 @@
   var filterId = filterCleaner.dataset.for;
   var filter = document.querySelector(filterId);
   var checkboxes = filter.querySelectorAll('input[type="checkbox"]');
-  var lowerPriceInput = filter.querySelector('#lower-cost-value');
-  var upperPriceInput = filter.querySelector('#upper-cost-value');
+
+  var lowerCostSpan = filter.querySelector('#lower-cost-span');
+  var upperCostSpan = filter.querySelector('#upper-cost-span');
+  var lowerCostText = lowerCostSpan.innerText;
+  var upperCostText = upperCostSpan.innerText;
+
+  var lowerPriceInput = filter.querySelector('#lower-cost-input');
+  var upperPriceInput = filter.querySelector('#upper-cost-input');
   var priceLowerValue = lowerPriceInput.value;
   var priceUpperValue = upperPriceInput.value;
 
-  filterCleaner.addEventListener('click', function () {
+  var onFilterCleanerClick = function () {
     checkboxes.forEach(function (item) {
       var hasAttribute = item.getAttribute('data-checked')
         ? true
@@ -1121,9 +1145,207 @@
       } else {
         item.checked = false;
       }
-
-      lowerPriceInput.value = priceLowerValue;
-      upperPriceInput.value = priceUpperValue;
     });
-  });
+
+    lowerCostSpan.innerText = lowerCostText;
+    upperCostSpan.innerText = upperCostText;
+    lowerPriceInput.value = priceLowerValue;
+    upperPriceInput.value = priceUpperValue;
+  };
+
+  filterCleaner.addEventListener('click', onFilterCleanerClick);
+
+  var onWindowBeforeunload = function () {
+    filterCleaner.removeEventListener('click', onFilterCleanerClick);
+    window.removeEventListener('beforeunload', onWindowBeforeunload);
+  };
+
+  // export
+  window.filterCleanerDestroyer = {
+    onWindowBeforeunload: onWindowBeforeunload
+  };
+})();
+
+//
+// login
+//
+
+(function () {
+  var loginLinks = null;
+  var loginModal = null;
+  var Maybe = window.utility.Maybe;
+
+  var findLoginLinks = function () {
+    loginLinks = new Maybe(document.querySelectorAll('.login-link'));
+    loginLinks = loginLinks.operand
+      ? Array.from(loginLinks.operand)
+      : null;
+  };
+
+  findLoginLinks();
+
+  var findLoginModal = function () {
+    loginModal = new Maybe(document.querySelector('#modal-login'));
+    loginModal = loginModal.operand
+      ? loginModal.operand
+      : null;
+  };
+
+  findLoginModal();
+
+  if (!(loginLinks && loginLinks.length && loginModal)) {
+    return;
+  }
+
+  var manageLogin = function () {
+    var that = {};
+
+    that.activate = function () {
+      this.loginLinks = loginLinks;
+      this.loginModal = loginModal;
+      this.cross = this.loginModal.querySelector('.login__cross');
+      this.body = document.body;
+      this.isShown = false;
+
+      this.loginLinks.forEach(function (link) {
+        link.addEventListener('click', that.onLoginLinkClick);
+      });
+      return this;
+    };
+
+    that.setAttributes = function () {
+      setAttributes(this.loginModal);
+      return this;
+    };
+
+    that.resetAttributes = function () {
+      resetAttributes(this.loginModal);
+      return this;
+    };
+
+    that.show = function () {
+      this.isShown = true;
+      this.previouslyFocused = document.activeElement;
+
+      this.body.classList.add('scroll-stop');
+      this.loginModal.classList.remove('hidden-entity');
+
+      this.setEventListeners();
+      moveFocusIn(this.loginModal);
+    };
+
+    that.hide = function () {
+      if (this.previouslyFocused && this.previouslyFocused.focus) {
+        this.previouslyFocused.focus();
+      }
+
+      this.isShown = false;
+      this.body.classList.remove('scroll-stop');
+      this.loginModal.classList.add('hidden-entity');
+
+      this.eraseEventListeners();
+    };
+
+    that.onLoginLinkClick = function (evt) {
+      evt.preventDefault();
+      if (!that.isShown) {
+        that.show();
+      }
+    };
+
+    that.onCrossClick = function () {
+      if (that.isShown) {
+        that.hide();
+      }
+    };
+
+    that.onLoginModalClick = function (evt) {
+      if (!Object.is(evt.target, that.loginModal)) {
+        return;
+      }
+
+      that.hide();
+    };
+
+    that.onBodyFocus = function (evt) {
+      onBodyFocus(evt, that.loginModal);
+    };
+
+    that.onDocumentKeyDown = function (evt) {
+      if (isTabEvent(evt)) {
+        trapTabKey(that.loginModal, evt);
+      }
+
+      if (isEscEvent(evt)) {
+        that.hide();
+      }
+    };
+
+    that.setEventListeners = function () {
+      this.loginModal.addEventListener('click', this.onLoginModalClick);
+      this.body.addEventListener('focus', this.onBodyFocus, true);
+      document.addEventListener('keydown', this.onDocumentKeyDown);
+    };
+
+    that.eraseEventListeners = function () {
+      this.loginModal.removeEventListener('click', this.onLoginModalClick);
+      this.body.removeEventListener('focus', this.onBodyFocus, true);
+      document.removeEventListener('keydown', this.onDocumentKeyDown);
+    };
+
+    that.destroy = function () {
+      this.loginLinks.forEach(function (link) {
+        link.removeEventListener('click', that.onLoginLinkClick);
+      });
+      this.eraseEventListeners();
+    };
+
+    return that;
+  };
+
+  var isTabEvent = window.utility.isTabEvent;
+  var isEscEvent = window.utility.isEscEvent;
+  var setAttributes = window.utility.setAttributes;
+  var resetAttributes = window.utility.resetAttributes;
+  var moveFocusIn = window.utility.moveFocusIn;
+  var trapTabKey = window.utility.trapTabKey;
+  var onBodyFocus = window.utility.onBodyFocus;
+
+  var loginManager = manageLogin();
+  loginManager
+      .activate()
+      .setAttributes()
+      .setEventListeners();
+
+  var onWindowBeforeunload = function () {
+    loginManager.destroy();
+  };
+
+  // export
+  window.loginDestroyer = {
+    onWindowBeforeunload: onWindowBeforeunload
+  };
+})();
+
+//
+// beforeunload
+//
+
+(function () {
+  var onWindowBeforeunload = function () {
+    [
+      'headerDestroyer',
+      'sliderDestroyer',
+      'accordeonDestroyer',
+      'filterDestroyer',
+      'filterCleanerDestroyer',
+      'loginDestroyer'
+    ].forEach(function (item) {
+      window[item].onWindowBeforeunload();
+    });
+
+    window.removeEventListener('beforeunload', onWindowBeforeunload);
+  };
+
+  window.addEventListener('beforeunload', onWindowBeforeunload);
 })();
