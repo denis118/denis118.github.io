@@ -8,19 +8,6 @@
   var DESKTOP_WIDTH = 1024;
   var TABLET_WIDTH = 768;
 
-  // monade
-  var Maybe = function (operand) {
-    this.operand = operand;
-  };
-
-  Maybe.prototype.map = function (operator) {
-    if (this.operand && operator) {
-      return new Maybe(operator(this.operand));
-    } else {
-      return new Maybe(null);
-    }
-  };
-
   // isPreDesktopWidth
   var isPreDesktopWidth = function () {
     return document.documentElement.clientWidth < DESKTOP_WIDTH;
@@ -33,12 +20,17 @@
 
   // ESC event
   var isEscEvent = function (evt) {
-    return evt.key === ('Escape' || 'Esc');
+    return evt.key === 'Escape' || evt.key === 'Esc';
   };
 
   // TAB event
   var isTabEvent = function (evt) {
     return evt.key === 'Tab';
+  };
+
+  // Space event
+  var isSpaceEvent = function (evt) {
+    return evt.code === 'Space' || evt.key === ' ';
   };
 
   // attributeSet
@@ -159,11 +151,11 @@
 
   // export
   window.utility = {
-    Maybe: Maybe,
     isPreDesktopWidth: isPreDesktopWidth,
     isPreTabletWidth: isPreTabletWidth,
     isEscEvent: isEscEvent,
     isTabEvent: isTabEvent,
+    isSpaceEvent: isSpaceEvent,
     setAttributes: setAttributes,
     resetAttributes: resetAttributes,
     trapTabKey: trapTabKey,
@@ -181,29 +173,21 @@
 (function () {
   var UNITS = 'px';
 
-  var header = null;
+  var header = document.querySelector('.header');
 
-  var findHeader = function () {
-    var Maybe = window.utility.Maybe;
-    header = new Maybe(document.querySelector('.header'));
-    header = header.operand
-      ? header.operand
-      : null;
-  };
-
-  findHeader();
-
-  var isPreDesktopWidth = window.utility.isPreDesktopWidth;
-  if (!header || !isPreDesktopWidth()) {
+  if (!header) {
     return;
   }
 
   var isTabEvent = window.utility.isTabEvent;
+  var isPreDesktopWidth = window.utility.isPreDesktopWidth;
   var setAttributes = window.utility.setAttributes;
   var resetAttributes = window.utility.resetAttributes;
   var moveFocusIn = window.utility.moveFocusIn;
   var trapTabKey = window.utility.trapTabKey;
   var onBodyFocus = window.utility.onBodyFocus;
+
+  var getCurrentMode = window.utility.getCurrentMode;
 
   var manageHeader = function () {
     var that = {};
@@ -217,39 +201,24 @@
       _.body = document.body;
 
       _.header.classList.add('header--js');
-      _.isShown = false;
-      _.toggleMargin();
+      _.isHidden = true;
+      _.toggleMargin(getCurrentMode());
       _.burger.addEventListener('click', _.onBurgerClick);
       return that;
     };
 
-    that.toggleMargin = function () {
-      var nextSibling = that.header.nextElementSibling
-        ? that.header.nextElementSibling
-        : null;
+    that.toggleMargin = function (currentMode) {
+      var nextElementSibling = that.header.nextElementSibling;
 
-      var main = document.querySelector('main')
-        ? document.querySelector('main')
-        : null;
+      if (!nextElementSibling) {
+        return;
+      }
 
-      switch (isPreDesktopWidth()) {
-        case true:
-          if (nextSibling && main && Object.is(nextSibling, main)) {
-            var height = that.header.scrollHeight;
-            main.style.marginTop = height + UNITS;
-          }
-
-          break;
-
-        case false:
-          if (nextSibling && main && Object.is(nextSibling, main)) {
-            main.style.marginTop = 0;
-          }
-
-          break;
-
-        default:
-          break;
+      if (currentMode === 'desktop') {
+        nextElementSibling.style.marginTop = 0;
+      } else {
+        var height = that.header.scrollHeight;
+        nextElementSibling.style.marginTop = height + UNITS;
       }
     };
 
@@ -274,7 +243,7 @@
     that.show = function () {
       var _ = that;
 
-      _.isShown = true;
+      _.isHidden = false;
       _.previouslyFocused = document.activeElement;
 
       _.body.classList.add('scroll-stop');
@@ -291,7 +260,7 @@
         _.previouslyFocused.focus();
       }
 
-      _.isShown = false;
+      _.isHidden = true;
       _.body.classList.remove('scroll-stop');
       _.header.classList.remove('menu-open');
 
@@ -299,7 +268,7 @@
     };
 
     that.onBurgerClick = function () {
-      if (!that.isShown) {
+      if (that.isHidden) {
         that.show();
       } else {
         that.hide();
@@ -341,22 +310,29 @@
   var onWindowResize = (function () {
     var isWorkedOnPreDesktopWidth = false;
     var isWorkedOnDesktopWidth = false;
+    var mode = getCurrentMode();
+    var currentMode = '';
 
     return function () {
-      if (!isPreDesktopWidth() && !isWorkedOnDesktopWidth) {
+      currentMode = getCurrentMode();
+
+      if (currentMode !== mode) {
+        mode = currentMode;
+        headerManager.toggleMargin(currentMode);
+      }
+
+      if (currentMode === 'desktop' && !isWorkedOnDesktopWidth) {
         headerManager.resetAttributes().hide();
         isWorkedOnPreDesktopWidth = false;
         isWorkedOnDesktopWidth = true;
         return;
       }
 
-      if (isPreDesktopWidth() && !isWorkedOnPreDesktopWidth) {
+      if (currentMode !== 'desktop' && !isWorkedOnPreDesktopWidth) {
         headerManager.setAttributes();
         isWorkedOnPreDesktopWidth = true;
         isWorkedOnDesktopWidth = false;
       }
-
-      headerManager.toggleMargin();
     };
   })();
 
@@ -383,19 +359,9 @@
   var PREDESKTOP_SLIDES_AMOUNT = 2;
   var IGNORED_SWIPE_DISTANCE = 30;
 
-  var sliders = null;
+  var sliders = Array.from(document.querySelectorAll('#slider-main'));
 
-  var findSliders = function () {
-    var Maybe = window.utility.Maybe;
-    sliders = new Maybe(document.querySelectorAll('#slider-main'));
-    sliders = sliders.operand.length
-      ? Array.from(sliders.operand)
-      : null;
-  };
-
-  findSliders();
-
-  if (!(sliders && sliders.length)) {
+  if (!sliders.length) {
     return;
   }
 
@@ -612,17 +578,10 @@
     };
 
     that.manageNumbers = function () {
-      switch (isPreTabletWidth()) {
-        case true:
-          that.defineCurrentSetNumber();
-          break;
-
-        case false:
-          that.highlightNumber();
-          break;
-
-        default:
-          break;
+      if (isPreTabletWidth()) {
+        that.defineCurrentSetNumber();
+      } else {
+        that.highlightNumber();
       }
     };
 
@@ -634,13 +593,13 @@
       });
 
       if (previous) {
-        _.slideSetIndex = (--_.slideSetIndex) % _.slideSets.length;
+        _.slideSetIndex = (_.slideSetIndex - 1) % _.slideSets.length;
 
         if (_.slideSetIndex < 0) {
           _.slideSetIndex += _.slideSets.length;
         }
       } else {
-        _.slideSetIndex = (++_.slideSetIndex) % _.slideSets.length;
+        _.slideSetIndex = (_.slideSetIndex + 1) % _.slideSets.length;
       }
 
       _.slideSets[_.slideSetIndex].forEach(function (slide) {
@@ -652,19 +611,12 @@
     };
 
     that.onArrowClick = function (evt) {
-      switch (true) {
-        case evt.target.matches('.slider__arrow--previous'):
-        case evt.target.parentNode.matches('.slider__arrow--previous'):
-          that.showNextSlideSet(true);
-          break;
+      if (evt.target.closest('.slider__arrow--previous')) {
+        that.showNextSlideSet(true);
+      }
 
-        case evt.target.matches('.slider__arrow--next'):
-        case evt.target.parentNode.matches('.slider__arrow--next'):
-          that.showNextSlideSet();
-          break;
-
-        default:
-          break;
+      if (evt.target.closest('.slider__arrow--next')) {
+        that.showNextSlideSet();
       }
     };
 
@@ -717,30 +669,18 @@
     };
 
     that.processMouse = function (evt) {
-      switch (true) {
-        case evt.target.matches('.slider__arrow'):
-        case evt.target.parentNode.matches('.slider__arrow'):
-          that.onArrowClick(evt);
-          break;
+      if (evt.target.closest('.slider__arrow')) {
+        that.onArrowClick(evt);
+      }
 
-        case evt.target.matches('.slider__frame-button'):
-          that.onNumbersClick(evt);
-          break;
-
-        default:
-          break;
+      if (evt.target.matches('.slider__frame-button')) {
+        that.onNumbersClick(evt);
       }
     };
 
     that.onSliderPointerup = function (evt) {
-      switch (evt.pointerType) {
-        case 'mouse':
-        case 'touch':
-          that.processMouse(evt);
-          break;
-
-        default:
-          break;
+      if (evt.pointerType === 'mouse' || evt.pointerType === 'touch') {
+        that.processMouse(evt);
       }
     };
 
@@ -780,18 +720,18 @@
         firstLoading = false;
       }
 
-      if (isPreDesktopWidth()) {
+      if (currentMode !== 'desktop') {
         manageNumbers();
       }
 
-      if (!isPreDesktopWidth() && !isWorkedOnDesktopWidth && !firstLoading) {
+      if (currentMode === 'desktop' && !isWorkedOnDesktopWidth && !firstLoading) {
         rebuild();
         isWorkedOnPreDesktopWidth = false;
         isWorkedOnDesktopWidth = true;
         return;
       }
 
-      if (isPreDesktopWidth() && !isWorkedOnPreDesktopWidth && !firstLoading) {
+      if (currentMode !== 'desktop' && !isWorkedOnPreDesktopWidth && !firstLoading) {
         rebuild();
         isWorkedOnPreDesktopWidth = true;
         isWorkedOnDesktopWidth = false;
@@ -815,23 +755,15 @@
 //
 
 (function () {
-  var accordeons = null;
-  var useMethod = window.utility.useMethod;
-  window.accordeon = {};
+  var accordeons = Array.from(document.querySelectorAll('.accordeon'));
 
-  var findAccordeons = function () {
-    var Maybe = window.utility.Maybe;
-    accordeons = new Maybe(document.querySelectorAll('.accordeon'));
-    accordeons = accordeons.operand.length
-      ? Array.from(accordeons.operand)
-      : null;
-  };
-
-  findAccordeons();
-
-  if (!(accordeons && accordeons.length)) {
+  if (!accordeons.length) {
     return;
   }
+
+  // var isSpaceEvent = window.utility.isSpaceEvent;
+  var useMethod = window.utility.useMethod;
+  window.accordeon = {};
 
   var initAccordeon = function (rootElement) {
     var that = {};
@@ -870,21 +802,39 @@
     };
 
     that.onAccordeonClick = function (evt) {
-      if (!evt.target.closest('.accordeon__button')) {
-        return;
+      if (evt.target.closest('.accordeon__button')) {
+        evt.target
+            .closest('.accordeon__button')
+            .classList.toggle('accordeon__button--active');
       }
-
-      evt.target
-          .closest('.accordeon__button')
-          .classList.toggle('accordeon__button--active');
     };
 
-    that.setEventListener = function () {
+    // that.onAccordeonClick = function (evt) {
+    //   if (evt.target.closest('.accordeon__item')) {
+    //     evt.target
+    //         .closest('.accordeon__item')
+    //         .querySelector('.accordeon__button')
+    //         .classList.toggle('accordeon__button--active');
+    //   }
+    // };
+
+    // that.onDocumentKeyDown = function (evt) {
+    //   if (isSpaceEvent(evt) && document.activeElement.matches('.accordeon__item')) {
+    //     evt.preventDefault();
+    //     document.activeElement
+    //         .querySelector('.accordeon__button')
+    //         .classList.toggle('accordeon__button--active');
+    //   }
+    // };
+
+    that.setEventListeners = function () {
       that.root.addEventListener('click', that.onAccordeonClick);
+      // document.addEventListener('keydown', that.onDocumentKeyDown);
     };
 
-    that.eraseEventListener = function () {
+    that.eraseEventListeners = function () {
       that.root.removeEventListener('click', that.onAccordeonClick);
+      // document.removeEventListener('keydown', that.onDocumentKeyDown);
     };
 
     return that;
@@ -892,11 +842,11 @@
 
   accordeons.forEach(function (it) {
     var accordeon = initAccordeon(it);
-    accordeon.activate().setEventListener();
+    accordeon.activate().setEventListeners();
     window.accordeon[accordeon.root.id] = accordeon;
   });
 
-  var onWindowBeforeunload = useMethod('accordeon', 'eraseEventListener');
+  var onWindowBeforeunload = useMethod('accordeon', 'eraseEventListeners');
 
   // export
   window.accordeonDestroyer = {
@@ -909,23 +859,13 @@
 //
 
 (function () {
-  var filter = null;
+  var filter = document.querySelector('.filter');
 
-  var findFilter = function () {
-    var Maybe = window.utility.Maybe;
-    filter = new Maybe(document.querySelector('.filter'));
-    filter = filter.operand
-      ? filter.operand
-      : null;
-  };
-
-  findFilter();
-
-  var isPreDesktopWidth = window.utility.isPreDesktopWidth;
-  if (!filter || !isPreDesktopWidth()) {
+  if (!filter) {
     return;
   }
 
+  var isPreDesktopWidth = window.utility.isPreDesktopWidth;
   var isTabEvent = window.utility.isTabEvent;
   var isEscEvent = window.utility.isEscEvent;
   var setAttributes = window.utility.setAttributes;
@@ -1012,7 +952,7 @@
     };
 
     that.onInnerClick = function (evt) {
-      if (!Object.is(evt.target, that.inner)) {
+      if (evt.target !== that.inner) {
         return;
       }
 
@@ -1120,11 +1060,7 @@
 
   var onFilterCleanerClick = function () {
     checkboxes.forEach(function (item) {
-      var hasAttribute = item.getAttribute('data-checked')
-        ? true
-        : false;
-
-      if (hasAttribute) {
+      if (item.hasAttribute('data-checked')) {
         item.checked = item.dataset.checked;
       } else {
         item.checked = false;
@@ -1155,29 +1091,10 @@
 //
 
 (function () {
-  var loginLinks = null;
-  var loginModal = null;
-  var Maybe = window.utility.Maybe;
+  var loginLinks = Array.from(document.querySelectorAll('.login-link'));
+  var loginModal = document.querySelector('#modal-login');
 
-  var findLoginLinks = function () {
-    loginLinks = new Maybe(document.querySelectorAll('.login-link'));
-    loginLinks = loginLinks.operand
-      ? Array.from(loginLinks.operand)
-      : null;
-  };
-
-  findLoginLinks();
-
-  var findLoginModal = function () {
-    loginModal = new Maybe(document.querySelector('#modal-login'));
-    loginModal = loginModal.operand
-      ? loginModal.operand
-      : null;
-  };
-
-  findLoginModal();
-
-  if (!(loginLinks && loginLinks.length && loginModal)) {
+  if (!loginLinks.length || !loginModal) {
     return;
   }
 
@@ -1272,7 +1189,7 @@
     };
 
     that.onLoginModalClick = function (evt) {
-      if (!Object.is(evt.target, that.loginModal)) {
+      if (evt.target !== that.loginModal) {
         return;
       }
 
