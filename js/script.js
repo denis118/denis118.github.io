@@ -770,30 +770,39 @@
 
     that.activate = function () {
       that.root = rootElement;
-      that.buttons = Array.from(that.root.querySelectorAll('.accordeon__button'));
-      that.contents = Array.from(that.root.querySelectorAll('.accordeon__content'));
+      that.items = Array.from(that.root.querySelectorAll('.accordeon__item'));
+      that.id = that.root.id;
 
       that.addContentJsStyles();
       return that;
     };
 
     that.addContentJsStyles = function () {
-      that.contents.forEach(function (item) {
+      that.items.forEach(function (item) {
         that.hideContent(item);
       });
     };
 
     that.hideContent = function (item) {
-      item.classList.add('accordeon__content--js');
+      var jsClass = null;
+      var isMaterialItem = item.matches('.accordeon__item--material');
+      var isProductItem = item.matches('.accordeon__item--product');
+      var isPriceItem = item.matches('.accordeon__item--price');
+
+      if (that.id === 'accordeon-main') {
+        jsClass = 'accordeon__item--opened';
+      }
+
+      if (that.id === 'accordeon-catalog') {
+        jsClass = 'accordeon__item--disclosed';
+      }
+
+      item.classList.remove(jsClass);
 
       switch (true) {
-        case item.matches('.faq__first-answer'):
-        case item.matches('.accordeon__content--products'):
-        case item.matches('.accordeon__content--price'):
-          item
-              .previousElementSibling
-              .classList
-              .add('accordeon__button--active');
+        case that.id === 'accordeon-main' && isMaterialItem:
+        case that.id === 'accordeon-catalog' && (isProductItem || isPriceItem):
+          item.classList.add(jsClass);
           break;
 
         default:
@@ -802,30 +811,22 @@
     };
 
     that.onAccordeonClick = function (evt) {
-      if (evt.target.closest('.accordeon__button')) {
+      if (!evt.target.closest('.accordeon__button')) {
+        return;
+      }
+
+      if (that.id === 'accordeon-main') {
         evt.target
-            .closest('.accordeon__button')
-            .classList.toggle('accordeon__button--active');
+            .closest('.accordeon__item')
+            .classList.toggle('accordeon__item--opened');
+      }
+
+      if (that.id === 'accordeon-catalog') {
+        evt.target
+            .closest('.accordeon__item')
+            .classList.toggle('accordeon__item--disclosed');
       }
     };
-
-    // that.onAccordeonClick = function (evt) {
-    //   if (evt.target.closest('.accordeon__item')) {
-    //     evt.target
-    //         .closest('.accordeon__item')
-    //         .querySelector('.accordeon__button')
-    //         .classList.toggle('accordeon__button--active');
-    //   }
-    // };
-
-    // that.onDocumentKeyDown = function (evt) {
-    //   if (isSpaceEvent(evt) && document.activeElement.matches('.accordeon__item')) {
-    //     evt.preventDefault();
-    //     document.activeElement
-    //         .querySelector('.accordeon__button')
-    //         .classList.toggle('accordeon__button--active');
-    //   }
-    // };
 
     that.setEventListeners = function () {
       that.root.addEventListener('click', that.onAccordeonClick);
