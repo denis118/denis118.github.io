@@ -4,9 +4,51 @@
 // utility
 //
 
-(function () {
+(function (elementPrototype) {
   var DESKTOP_WIDTH = 1024;
   var TABLET_WIDTH = 768;
+
+  // var isMatched = function (element, selector) {
+  //   return element === document.querySelector(selector);
+  // };
+
+  // polyfill for 'matches' method
+  (function (element) {
+    var matches = element.matches
+      || element.matchesSelector
+      || element.webkitMatchesSelector
+      || element.mozMatchesSelector
+      || element.msMatchesSelector
+      || element.oMatchesSelector;
+
+    if (!matches) {
+      element.matches = element.matchesSelector = function (selector) {
+        var allMatches = document.querySelectorAll(selector);
+        var self = this;
+        return Array.prototype.some.call(allMatches, function (e) {
+          return e === self;
+        });
+      };
+    } else {
+      element.matches = element.matchesSelector = matches;
+    }
+  })(elementPrototype);
+
+  // polyfill for 'closest' method
+  (function (element) {
+    element.closest = element.closest || function (selector) {
+      var node = this;
+
+      while (node) {
+        if (node.matches(selector)) {
+          return node;
+        } else {
+          node = node.parentElement;
+        }
+      }
+      return null;
+    };
+  })(elementPrototype);
 
   var isPreDesktopWidth = function () {
     return document.documentElement.clientWidth < DESKTOP_WIDTH;
@@ -133,10 +175,6 @@
     };
   };
 
-  var isMatched = function (element, selector) {
-    return element === document.querySelector(selector);
-  };
-
   // export
   window.utility = {
     isPreDesktopWidth: isPreDesktopWidth,
@@ -151,9 +189,30 @@
     getCurrentMode: getCurrentMode,
     useMethod: useMethod,
     makeArray: makeArray,
-    isMatched: isMatched,
+    // isMatched: isMatched,
   };
-})();
+})(Element.prototype);
+
+//
+// polyfill for 'closest' method
+//
+
+// (function (element) {
+//   var isMatched = window.utility.isMatched;
+
+//   element.closest = element.closest || function (selector) {
+//     var node = this;
+
+//     while (node) {
+//       if (isMatched(node, selector)) {
+//         return node;
+//       } else {
+//         node = node.parentElement;
+//       }
+//     }
+//     return null;
+//   };
+// })(Element.prototype);
 
 //
 // header
@@ -641,7 +700,7 @@
   }
 
   var useMethod = window.utility.useMethod;
-  var isMatched = window.utility.isMatched;
+  // var isMatched = window.utility.isMatched;
   window.accordeon = {};
 
   var initAccordeon = function (rootElement) {
@@ -664,13 +723,12 @@
 
     that.hideContent = function (item) {
       var jsClass = null;
-      // var isMaterialItem = item.matches('.accordeon__item--material');
-      // var isProductItem = item.matches('.accordeon__item--product');
-      // var isPriceItem = item.matches('.accordeon__item--price');
-
-      var isMaterialItem = isMatched(item, '.accordeon__item--material');
-      var isProductItem = isMatched(item, '.accordeon__item--product');
-      var isPriceItem = isMatched(item, '.accordeon__item--price');
+      // var isMaterialItem = isMatched(item, '.accordeon__item--material');
+      // var isProductItem = isMatched(item, '.accordeon__item--product');
+      // var isPriceItem = isMatched(item, '.accordeon__item--price');
+      var isMaterialItem = item.matches('.accordeon__item--material');
+      var isProductItem = item.matches('.accordeon__item--product');
+      var isPriceItem = item.matches('.accordeon__item--price');
 
       if (that.id === 'accordeon-main') {
         jsClass = 'accordeon__item--opened';
