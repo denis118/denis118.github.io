@@ -1,17 +1,10 @@
 'use strict';
 
 //
-// utility
+// polyfills
 //
 
 (function (elementPrototype) {
-  var DESKTOP_WIDTH = 1024;
-  var TABLET_WIDTH = 768;
-
-  // var isMatched = function (element, selector) {
-  //   return element === document.querySelector(selector);
-  // };
-
   // polyfill for 'matches' method
   (function (element) {
     var matches = element.matches
@@ -25,8 +18,8 @@
       element.matches = element.matchesSelector = function (selector) {
         var allMatches = document.querySelectorAll(selector);
         var self = this;
-        return Array.prototype.some.call(allMatches, function (e) {
-          return e === self;
+        return Array.prototype.some.call(allMatches, function (searchedElement) {
+          return searchedElement === self;
         });
       };
     } else {
@@ -49,6 +42,17 @@
       return null;
     };
   })(elementPrototype);
+
+  console.log(elementPrototype);
+})(Element.prototype);
+
+//
+// utility
+//
+
+(function () {
+  var DESKTOP_WIDTH = 1024;
+  var TABLET_WIDTH = 768;
 
   var isPreDesktopWidth = function () {
     return document.documentElement.clientWidth < DESKTOP_WIDTH;
@@ -189,30 +193,8 @@
     getCurrentMode: getCurrentMode,
     useMethod: useMethod,
     makeArray: makeArray,
-    // isMatched: isMatched,
   };
-})(Element.prototype);
-
-//
-// polyfill for 'closest' method
-//
-
-// (function (element) {
-//   var isMatched = window.utility.isMatched;
-
-//   element.closest = element.closest || function (selector) {
-//     var node = this;
-
-//     while (node) {
-//       if (isMatched(node, selector)) {
-//         return node;
-//       } else {
-//         node = node.parentElement;
-//       }
-//     }
-//     return null;
-//   };
-// })(Element.prototype);
+})();
 
 //
 // header
