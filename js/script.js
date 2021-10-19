@@ -39,9 +39,66 @@
           node = node.parentElement;
         }
       }
+
       return null;
     };
   })(elementPrototype);
+
+  // polyfill for 'Object.assign' method
+  (function () {
+    if (!Object.assign) {
+      Object.defineProperty(Object, 'assign', {
+        enumerable: false,
+        configurable: true,
+        writable: true,
+        value: function (target) {
+          if (typeof target === 'undefined' || target === null) {
+            throw new TypeError('Cannot convert first argument to object');
+          }
+
+          var to = Object(target);
+          for (var i = 1; i < arguments.length; i++) {
+            var nextSource = arguments[i];
+            if (typeof nextSource === 'undefined' || nextSource === null) {
+              continue;
+            }
+
+            var keysArray = Object.keys(Object(nextSource));
+            for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
+              var nextKey = keysArray[nextIndex];
+              var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
+              if (typeof desc !== 'undefined' && desc.enumerable) {
+                to[nextKey] = nextSource[nextKey];
+              }
+            }
+          }
+
+          return to;
+        }
+      });
+    }
+  })();
+
+  // polyfill for 'CustomEvent'
+  (function () {
+    if (typeof window.CustomEvent === 'function') {
+      return;
+    }
+
+    var CustomEvent = function (event, params) {
+      params = params || {
+        bubbles: false,
+        cancelable: false,
+        detail: null
+      };
+
+      var evt = document.createEvent('CustomEvent');
+      evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+      return evt;
+    };
+
+    window.CustomEvent = CustomEvent;
+  })();
 })(Element.prototype);
 
 //
@@ -407,7 +464,7 @@
   var PERCENT_SIGN = '%';
   var DOUBLE_SLIDE_AMOUNT = 2;
   var QUADRUPLE_SLIDE_AMOUNT = 4;
-  var IGNORED_SWIPE_DISTANCE = 30;
+  var IGNORED_SWIPE_DISTANCE = 40;
 
   var makeArray = window.utility.makeArray;
   var sliders = makeArray(document.querySelectorAll('.slider'));
@@ -532,30 +589,6 @@
     };
 
     that.verifyArrows = function () {
-      // if (_.setAmount === 0) {
-      //   return 'canceled';
-      // }
-
-      // if (_.setAmount < 0) {
-      //   return -1;
-      // }
-
-      // if (_.setAmount === 1) {
-      //   [
-      //     _.buttonPrevious,
-      //     _.buttonNext
-      //   ].forEach(function (item) {
-      //     item.setAttribute('disabled', 'true');
-      //   });
-      // } else {
-      //   [
-      //     _.buttonPrevious,
-      //     _.buttonNext
-      //   ].forEach(function (item) {
-      //     item.removeAttribute('disabled');
-      //   });
-      // }
-
       if (_.setAmount > 1) {
         [
           _.buttonPrevious,
@@ -571,8 +604,6 @@
           item.setAttribute('disabled', 'true');
         });
       }
-
-      // return 'done';
     };
 
     that.manageNumbers = function () {
