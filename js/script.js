@@ -39,66 +39,9 @@
           node = node.parentElement;
         }
       }
-
       return null;
     };
   })(elementPrototype);
-
-  // polyfill for 'Object.assign' method
-  (function () {
-    if (!Object.assign) {
-      Object.defineProperty(Object, 'assign', {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function (target) {
-          if (typeof target === 'undefined' || target === null) {
-            throw new TypeError('Cannot convert first argument to object');
-          }
-
-          var to = Object(target);
-          for (var i = 1; i < arguments.length; i++) {
-            var nextSource = arguments[i];
-            if (typeof nextSource === 'undefined' || nextSource === null) {
-              continue;
-            }
-
-            var keysArray = Object.keys(Object(nextSource));
-            for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
-              var nextKey = keysArray[nextIndex];
-              var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
-              if (typeof desc !== 'undefined' && desc.enumerable) {
-                to[nextKey] = nextSource[nextKey];
-              }
-            }
-          }
-
-          return to;
-        }
-      });
-    }
-  })();
-
-  // polyfill for 'CustomEvent'
-  (function () {
-    if (typeof window.CustomEvent === 'function') {
-      return;
-    }
-
-    var CustomEvent = function (event, params) {
-      params = params || {
-        bubbles: false,
-        cancelable: false,
-        detail: null
-      };
-
-      var evt = document.createEvent('CustomEvent');
-      evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
-      return evt;
-    };
-
-    window.CustomEvent = CustomEvent;
-  })();
 })(Element.prototype);
 
 //
@@ -109,42 +52,31 @@
   var DESKTOP_WIDTH = 1024;
   var TABLET_WIDTH = 768;
 
-  // isPreDesktopWidth
   var isPreDesktopWidth = function () {
     return document.documentElement.clientWidth < DESKTOP_WIDTH;
   };
 
-  // isPreTabletWidth
   var isPreTabletWidth = function () {
     return document.documentElement.clientWidth < TABLET_WIDTH;
   };
 
-  // ESC event
   var isEscEvent = function (evt) {
     return evt.key === 'Escape' || evt.key === 'Esc';
   };
 
-  // TAB event
   var isTabEvent = function (evt) {
     return evt.key === 'Tab';
-  };
-
-  // Space event
-  var isSpaceEvent = function (evt) {
-    return evt.code === 'Space' || evt.key === ' ';
   };
 
   var makeArray = function (object) {
     return Array.prototype.slice.call(object);
   };
 
-  // attributeSet
   var attributeSet = {
     'role': 'dialog',
     'aria-modal': true
   };
 
-  // setAttributes
   var setAttributes = function (element) {
     for (var attribute in attributeSet) {
       if (attributeSet.hasOwnProperty(attribute)) {
@@ -153,7 +85,6 @@
     }
   };
 
-  // resetAttributes
   var resetAttributes = function (element) {
     for (var attribute in attributeSet) {
       if (attributeSet.hasOwnProperty(attribute)) {
@@ -162,7 +93,6 @@
     }
   };
 
-  // focusable elements' selectors
   var focusableSelectors = [
     'a[href]:not([tabindex^="-"])',
     'area[href]:not([tabindex^="-"])',
@@ -178,7 +108,6 @@
     '[tabindex]:not([tabindex^="-"])',
   ];
 
-  // isVisible
   var isVisible = function (element) {
     return element.offsetWidth
       || element.offsetHeight
@@ -187,7 +116,6 @@
       : false;
   };
 
-  // getFocusableChildren
   var getFocusableChildren = function (element) {
     return makeArray(
         element
@@ -195,7 +123,6 @@
     ).filter(isVisible);
   };
 
-  // moveFocusIn
   var moveFocusIn = function (element) {
     var target = element.querySelector('[autofocus]')
       || getFocusableChildren(element)[0];
@@ -205,7 +132,6 @@
     }
   };
 
-  // trapTabKey
   var trapTabKey = function (evt, element) {
     var focusableChildren = getFocusableChildren(element);
     var focusedItemIndex = focusableChildren.indexOf(document.activeElement);
@@ -221,7 +147,6 @@
     }
   };
 
-  // onBodyFocus
   var onBodyFocus = function (evt, element) {
     var isInDialog = evt.target.closest('[aria-modal="true"]');
 
@@ -230,7 +155,6 @@
     }
   };
 
-  // getCurrentMode
   var getCurrentMode = function () {
     var width = document.documentElement.clientWidth;
 
@@ -245,7 +169,6 @@
     return 'mobile';
   };
 
-  // useMethod
   var useMethod = function (objectName, method) {
     return function () {
       Object.keys(window[objectName]).forEach(function (key) {
@@ -260,7 +183,6 @@
     isPreTabletWidth: isPreTabletWidth,
     isEscEvent: isEscEvent,
     isTabEvent: isTabEvent,
-    isSpaceEvent: isSpaceEvent,
     setAttributes: setAttributes,
     resetAttributes: resetAttributes,
     trapTabKey: trapTabKey,
@@ -268,7 +190,7 @@
     onBodyFocus: onBodyFocus,
     getCurrentMode: getCurrentMode,
     useMethod: useMethod,
-    makeArray: makeArray
+    makeArray: makeArray,
   };
 })();
 
@@ -292,7 +214,6 @@
   var moveFocusIn = window.utility.moveFocusIn;
   var trapTabKey = window.utility.trapTabKey;
   var onBodyFocus = window.utility.onBodyFocus;
-
   var getCurrentMode = window.utility.getCurrentMode;
 
   var manageHeader = function () {
@@ -460,712 +381,263 @@
 //
 
 (function () {
-  var START_INDEX = 0;
-  var PERCENT_SIGN = '%';
-  var DOUBLE_SLIDE_AMOUNT = 2;
-  var QUADRUPLE_SLIDE_AMOUNT = 4;
-  var IGNORED_SWIPE_DISTANCE = 40;
+  var sliderMain = document.querySelector('#slider-main');
+  var sliderCatalog = document.querySelector('#slider-catalog');
 
-  var makeArray = window.utility.makeArray;
-  var sliders = makeArray(document.querySelectorAll('.slider'));
-
-  if (!sliders.length) {
+  if ((!sliderMain && !sliderCatalog) || !window.Swiper) {
     return;
   }
 
   var getCurrentMode = window.utility.getCurrentMode;
-  var useMethod = window.utility.useMethod;
-  var mode = getCurrentMode();
-  var firstLoading = false;
-  window.slider = {};
+  var makeArray = window.utility.makeArray;
 
-  var initSlider = function (rootElement) {
+  var manageSlider = function (rootElement) {
     var that = {};
-    var _ = that;
-
-    _.root = rootElement;
-    _.sliderTrack = _.root.querySelector('.slider__track');
-    _.slides = makeArray(_.root.querySelectorAll('.slider__item'));
-    _.frames = makeArray(_.root.querySelectorAll('.slider__frame'));
-    _.buttonPrevious = _.root.querySelector('[type="button"][data-id="previous"]');
-    _.buttonNext = _.root.querySelector('[type="button"][data-id="next"]');
-    _.frameButtonList = _.root.querySelector('.slider__frame-button-list');
-    _.currentSetNumber = _.root.querySelector('.slider__current-set-number');
-    _.slideSetQuantity = _.root.querySelector('.slider__slideset-quantity');
 
     that.activate = function () {
-      _.slideSetIndex = START_INDEX;
-      _.activeSetIndex = null;
-      _.cursorPosition = {};
-      _.setAmount = null;
-      _.numbers = [];
+      var _ = that;
 
-      _.defineSetQuantity();
-      _.defineCurrentSetNumber();
-      _.specifyActiveSetIndex();
-      _.insertNumbers();
-      _.verifyArrows();
+      _.root = rootElement;
+      _.inner = _.root.querySelector('.slider__inner');
+      _.swiper = _.root.querySelector('.slider__swiper');
+      _.pagination = _.root.querySelector('.swiper-pagination');
+      _.numbersElement = _.root.querySelector('.slider__numbers');
+      _.slides = makeArray(_.root.querySelectorAll('.slider__item'));
+      _.frameButtonList = _.root.querySelector('.slider__frame-button-list');
 
-      return that;
+      return _;
     };
 
-    that.defineSetQuantity = function () {
-      if (_.root.id === 'slider-main') {
-        if (getCurrentMode() === 'desktop') {
-          _.setAmount = Math.ceil(_.slides.length / QUADRUPLE_SLIDE_AMOUNT);
-        } else {
-          _.setAmount = Math.ceil(_.slides.length / DOUBLE_SLIDE_AMOUNT);
+    that.saveDivider = function () {
+      var _ = that;
+
+      if (_.numbersElement) {
+        _.divider = _.numbersElement
+            .querySelector('.slider__divider').textContent;
+      }
+
+      return _;
+    };
+
+    that.normalizeClasses = function () {
+      var _ = that;
+
+      _.root.classList.remove('no-js');
+      _.swiper.classList.add('swiper');
+      _.inner.classList.add('swiper-wrapper');
+      _.pagination.classList.remove('hidden-entity');
+      _.slides.forEach(function (slide) {
+        slide.setAttribute('class', 'swiper-slide');
+      });
+
+      [
+        _.frameButtonList,
+        _.numbersElement
+      ].forEach(function (element) {
+        if (!element) {
+          return;
         }
+
+        element.classList.add('hidden-entity');
+      });
+
+      return _;
+    };
+
+    that.renderBullet = function (index, className) {
+      return '<button class="' + className + ' button" type="button">' + (index + 1) + '</button>';
+    };
+
+    that.getPropertySet = function (flag) {
+      var mainPropertySet = {
+        common: {
+          spaceBetween: 30,
+          loop: true,
+          loopFillGroupWithBlank: true,
+          navigation: {
+            nextEl: '.slider__arrow--next',
+            prevEl: '.slider__arrow--previous',
+          },
+        },
+
+        desktop: {
+          slidesPerView: 4,
+          slidesPerGroup: 4,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: 'true',
+            type: 'bullets',
+            renderBullet: that.renderBullet,
+          },
+        },
+
+        tablet: {
+          slidesPerView: 2,
+          slidesPerGroup: 2,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: 'true',
+            type: 'bullets',
+            renderBullet: that.renderBullet,
+          },
+        },
+
+        mobile: {
+          slidesPerView: 2,
+          slidesPerGroup: 2,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: 'true',
+            type: 'fraction',
+          },
+        },
+      };
+
+      var catalogPropertySet = {
+        common: {
+          loop: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: 'true',
+            type: 'bullets',
+            renderBullet: that.renderBullet,
+          },
+          navigation: {
+            nextEl: '.slider__arrow--forward',
+            prevEl: '.slider__arrow--backward',
+          },
+        },
+
+        desktop: {},
+        tablet: {},
+        mobile: {},
+      };
+
+      return (flag === 'catalog' && catalogPropertySet)
+        || (flag === 'main' && mainPropertySet)
+        || {};
+    };
+
+    that.makeSwiperSettings = function (flag) {
+      var isEmpty = true;
+      var mode = getCurrentMode();
+      var propertySet = that.getPropertySet(flag);
+
+      for (var property in propertySet) {
+        if (propertySet.hasOwnProperty(property)) {
+          isEmpty = false;
+        }
+      }
+
+      if (isEmpty) {
+        throw Error('ID mismatch');
+      }
+
+      if (mode === 'desktop') {
+        return Object.assign({}, propertySet.common, propertySet.desktop);
+      }
+
+      if (mode === 'tablet') {
+        return Object.assign({}, propertySet.common, propertySet.tablet);
+      }
+
+      if (mode === 'mobile') {
+        return Object.assign({}, propertySet.common, propertySet.mobile);
+      }
+
+      throw Error('Mode mismatch');
+    };
+
+    that.correctMainPaginaton = function () {
+      var _ = that;
+      var regex = /^ \/ $/;
+
+      if (getCurrentMode() !== 'mobile') {
+        return;
+      }
+
+      if (_.pagination.hasChildNodes()) {
+        _.pagination.querySelector('.swiper-pagination-current')
+            .classList.add('slider__current-set-number');
+
+        _.pagination.querySelector('.swiper-pagination-total')
+            .classList.add('slider__slideset-quantity');
+
+        _.pagination.childNodes.forEach(function (child) {
+          if (child.nodeType !== 3) {
+            return;
+          }
+
+          if (regex.test(child.textContent)) {
+            child.textContent = _.divider;
+          }
+        });
+      }
+    };
+
+    that.buildSwiper = function () {
+      var _ = that;
+      var flag = null;
+      var callback = null;
+      var propertySet = null;
+
+      if (_.root.id === 'slider-main') {
+        flag = 'main';
+        callback = _.correctMainPaginaton;
       }
 
       if (_.root.id === 'slider-catalog') {
-        _.setAmount = _.frames.length;
+        flag = 'catalog';
       }
 
-      if (!_.slideSetQuantity) {
-        return that;
+      try {
+        propertySet = _.makeSwiperSettings(flag);
+      } catch (error) {
+        return error.message;
       }
 
-      _.slideSetQuantity.innerText = _.setAmount;
+      _.swiperInstance = new window.Swiper(_.swiper, propertySet);
+
+      if (callback) {
+        callback();
+      }
 
       return that;
-    };
-
-    that.defineCurrentSetNumber = function () {
-      if (!_.currentSetNumber) {
-        delete _.currentSetNumber;
-        return that;
-      }
-
-      _.currentSetNumber.innerText = _.slideSetIndex + 1;
-      return that;
-    };
-
-    that.specifyActiveSetIndex = function () {
-      that.activeSetIndex = that.slideSetIndex;
-    };
-
-    that.highlightNumber = function () {
-      that.numbers.forEach(function (number, index) {
-        number.setAttribute('class', 'slider__frame-button button');
-
-        if (index === that.slideSetIndex) {
-          number.setAttribute('class', 'slider__frame-button button active');
-        }
-      });
-    };
-
-    that.insertNumbers = function () {
-      var listItem = _.frameButtonList
-          .querySelector('.slider__frame-button-item')
-          .cloneNode(true);
-
-      while (_.frameButtonList.firstChild) {
-        _.frameButtonList.removeChild(_.frameButtonList.firstChild);
-      }
-
-      var number = null;
-      var fragment = document.createDocumentFragment();
-      var button = listItem.querySelector('button');
-      var buttonAttributeSet = {
-        'class': 'slider__frame-button button',
-        'type': 'button'
-      };
-
-      Object.keys(buttonAttributeSet).forEach(function (key) {
-        button.setAttribute(key, buttonAttributeSet[key]);
-      });
-
-      for (var i = 0; i < _.setAmount; i++) {
-        number = i + 1;
-        button.setAttribute('aria-label', 'Button to enable the ' + number + ' of ' + _.setAmount + ' slides');
-        button.innerText = number;
-        fragment.appendChild(listItem.cloneNode(true));
-      }
-
-      _.frameButtonList.appendChild(fragment);
-      _.numbers = makeArray(_.root.querySelectorAll('.slider__frame-button'));
-      _.highlightNumber();
-    };
-
-    that.verifyArrows = function () {
-      if (_.setAmount > 1) {
-        [
-          _.buttonPrevious,
-          _.buttonNext
-        ].forEach(function (item) {
-          item.removeAttribute('disabled');
-        });
-      } else {
-        [
-          _.buttonPrevious,
-          _.buttonNext
-        ].forEach(function (item) {
-          item.setAttribute('disabled', 'true');
-        });
-      }
-    };
-
-    that.manageNumbers = function () {
-      if (getCurrentMode() === 'mobile') {
-        that.defineCurrentSetNumber();
-      } else {
-        that.highlightNumber();
-      }
-    };
-
-    that.scrollSlides = function () {
-      var offset = -(that.slideSetIndex) * 100 + PERCENT_SIGN;
-      that.sliderTrack.setAttribute('style', 'transform: translateX(' + offset + ');');
-    };
-
-    that.switchSlideSet = function (previous) {
-      if (previous) {
-        _.slideSetIndex = (_.slideSetIndex - 1) % _.setAmount;
-
-        if (_.slideSetIndex < 0) {
-          _.slideSetIndex += _.setAmount;
-        }
-      } else {
-        _.slideSetIndex = (_.slideSetIndex + 1) % _.setAmount;
-      }
-
-      _.scrollSlides();
-      _.specifyActiveSetIndex();
-      _.manageNumbers();
-    };
-
-    that.onSwitcherClick = function (evt) {
-      if (evt.target.closest('[type="button"][data-id="previous"]')) {
-        that.switchSlideSet(true);
-      }
-
-      if (evt.target.closest('[type="button"][data-id="next"]')) {
-        that.switchSlideSet();
-      }
-    };
-
-    that.onSliderTouchstart = function (evt) {
-      evt.preventDefault();
-      that.cursorPosition.clientX1 = evt.touches[0].clientX;
-    };
-
-    that.onSliderTouchend = function (evt) {
-      evt.preventDefault();
-      _.cursorPosition.clientX2 = evt.changedTouches[0].clientX;
-
-      var clientX1 = _.cursorPosition.clientX1;
-      var clientX2 = _.cursorPosition.clientX2;
-
-      var isIgnored = clientX1 - clientX2 < IGNORED_SWIPE_DISTANCE
-        && clientX1 - clientX2 > -IGNORED_SWIPE_DISTANCE
-        ? true
-        : false;
-
-      if (clientX1 - clientX2 === 0 || isIgnored) {
-        return;
-      }
-
-      if (clientX1 - clientX2 < 0) {
-        _.switchSlideSet(true);
-      }
-
-      if (clientX1 - clientX2 > 0) {
-        _.switchSlideSet();
-      }
-    };
-
-    that.onNumbersClick = function (evt) {
-      if (!evt.target.matches('.slider__frame-button')) {
-        return;
-      }
-
-      _.slideSetIndex = _.numbers.indexOf(evt.target);
-
-      _.scrollSlides();
-      _.specifyActiveSetIndex();
-      _.manageNumbers();
-    };
-
-    that.processMouse = function (evt) {
-      if (evt.target.closest('.slider__switcher')) {
-        that.onSwitcherClick(evt);
-      }
-
-      if (evt.target.matches('.slider__frame-button')) {
-        that.onNumbersClick(evt);
-      }
-    };
-
-    that.onSliderPointerup = function (evt) {
-      if (evt.pointerType === 'mouse' || evt.pointerType === 'touch') {
-        that.processMouse(evt);
-      }
-    };
-
-    that.setEventListeners = function () {
-      that.root.addEventListener('pointerup', that.onSliderPointerup);
-      that.root.addEventListener('touchstart', that.onSliderTouchstart);
-      that.root.addEventListener('touchend', that.onSliderTouchend);
-    };
-
-    that.eraseEventListeners = function () {
-      that.root.removeEventListener('pointerup', that.onSliderPointerup);
-      that.root.removeEventListener('touchstart', that.onSliderTouchstart);
-      that.root.removeEventListener('touchend', that.onSliderTouchend);
     };
 
     return that;
   };
 
-  sliders.forEach(function (it) {
-    var slider = initSlider(it);
-    slider.activate().setEventListeners();
-    window.slider[slider.root.id] = slider;
-  });
-
-  var activate = useMethod('slider', 'activate');
-  var manageNumbers = useMethod('slider', 'manageNumbers');
+  var sliderManager = manageSlider(sliderMain || sliderCatalog);
+  sliderManager
+      .activate()
+      .saveDivider()
+      .normalizeClasses()
+      .buildSwiper();
 
   var onWindowResize = (function () {
-    var isWorkedOnPreDesktopWidth = false;
-    var isWorkedOnDesktopWidth = false;
-    var currentMode = '';
+    var mode = getCurrentMode();
 
     return function () {
-      currentMode = getCurrentMode();
-
-      if (currentMode !== mode && firstLoading) {
-        firstLoading = false;
-      }
-
-      if (currentMode !== 'desktop') {
-        manageNumbers();
-      }
-
-      if (currentMode === 'desktop' && !isWorkedOnDesktopWidth && !firstLoading) {
-        activate();
-        isWorkedOnPreDesktopWidth = false;
-        isWorkedOnDesktopWidth = true;
-        return;
-      }
-
-      if (currentMode !== 'desktop' && !isWorkedOnPreDesktopWidth && !firstLoading) {
-        activate();
-        isWorkedOnPreDesktopWidth = true;
-        isWorkedOnDesktopWidth = false;
+      if (mode !== getCurrentMode()) {
+        sliderManager.swiperInstance.destroy();
+        sliderManager.buildSwiper();
+        mode = getCurrentMode();
       }
     };
   })();
 
   window.addEventListener('resize', onWindowResize);
-  firstLoading = true;
 
-  var onWindowBeforeunload = useMethod('slider', 'eraseEventListeners');
+  var onWindowBeforeunload = function () {
+    window.removeEventListener('resize', onWindowResize);
+  };
 
   // export
   window.sliderDestroyer = {
     onWindowBeforeunload: onWindowBeforeunload
   };
 })();
-
-// (function () {
-//   var START_INDEX = 0;
-//   var DESKTOP_SLIDES_AMOUNT = 4;
-//   var PREDESKTOP_SLIDES_AMOUNT = 2;
-//   var IGNORED_SWIPE_DISTANCE = 30;
-
-//   var makeArray = window.utility.makeArray;
-//   var sliders = makeArray(document.querySelectorAll('#slider-main'));
-
-//   if (!sliders.length) {
-//     return;
-//   }
-
-//   var firstLoading = false;
-//   var isPreDesktopWidth = window.utility.isPreDesktopWidth;
-//   var isPreTabletWidth = window.utility.isPreTabletWidth;
-//   var getCurrentMode = window.utility.getCurrentMode;
-//   var useMethod = window.utility.useMethod;
-//   var mode = getCurrentMode();
-//   window.slider = {};
-
-//   var initSlider = function (rootElement) {
-//     var that = {};
-
-//     that.activate = function () {
-//       var _ = that;
-
-//       _.root = rootElement;
-//       _.sliderList = _.root.querySelector('.slider__list');
-//       _.slides = makeArray(_.root.querySelectorAll('.slider__item'));
-//       _.buttonPrevious = _.root.querySelector('.slider__arrow--previous');
-//       _.buttonNext = _.root.querySelector('.slider__arrow--next');
-//       _.currentSetNumber = _.root.querySelector('.slider__current-set-number');
-//       _.slidesetQuantity = _.root.querySelector('.slider__slideset-quantity');
-
-//       _.slideSetIndex = START_INDEX;
-//       _.activeSetIndex = null;
-//       _.cursorPosition = {};
-//       _.slideSets = [];
-//       _.numbers = null;
-
-//       _.normalizeClass();
-//       _.buildSlideSets();
-//       _.defineSetsQuantity();
-//       _.defineCurrentSetNumber();
-//       _.specifyActiveSetIndex();
-//       _.insertNumbers();
-//       _.verifyArrows();
-
-//       return that;
-//     };
-
-//     that.rebuild = function () {
-//       var _ = that;
-
-//       _.slideSets = [];
-//       _.slideSetIndex = START_INDEX;
-//       _.activeSetIndex = START_INDEX;
-
-//       _.normalizeClass();
-//       _.buildSlideSets();
-
-//       _.slideSets[_.slideSetIndex].forEach(function (slide) {
-//         slide.classList.add('hidden-entity');
-//       });
-
-//       _.slideSets[_.activeSetIndex].forEach(function (slide) {
-//         slide.classList.remove('hidden-entity');
-//       });
-
-//       _.slideSetIndex = _.activeSetIndex;
-
-//       _.defineSetsQuantity();
-//       _.defineCurrentSetNumber();
-//       _.insertNumbers();
-//       _.verifyArrows();
-//     };
-
-//     that.normalizeClass = function () {
-//       that.slides.forEach(function (slide, index) {
-//         slide.setAttribute('class', 'slider__item');
-
-//         var hiddenIndex = isPreDesktopWidth()
-//           ? PREDESKTOP_SLIDES_AMOUNT
-//           : DESKTOP_SLIDES_AMOUNT;
-
-//         if (index >= hiddenIndex) {
-//           slide.classList.add('hidden-entity');
-//         }
-//       });
-//     };
-
-//     that.buildSlideSets = function () {
-//       var takenSlides = null;
-//       var copiedSlides = that.slides.slice();
-
-//       var slidesAmount = isPreDesktopWidth()
-//         ? PREDESKTOP_SLIDES_AMOUNT
-//         : DESKTOP_SLIDES_AMOUNT;
-
-//       while (copiedSlides.length) {
-//         if (copiedSlides.length < 0) {
-//           return -1;
-//         }
-
-//         if (copiedSlides.length < slidesAmount) {
-//           slidesAmount = copiedSlides.length;
-//         }
-
-//         takenSlides = copiedSlides.splice(0, slidesAmount);
-
-//         if (isPreDesktopWidth()) {
-//           takenSlides[0].classList.add('first-slide');
-//         }
-
-//         if (!isPreDesktopWidth()) {
-//           takenSlides[takenSlides.length - 1].classList.add('last-slide');
-//         }
-
-//         that.slideSets.push(takenSlides);
-//       }
-
-//       return 'done';
-//     };
-
-//     that.defineSetsQuantity = function () {
-//       that.slidesetQuantity.innerText = that.slideSets.length;
-//     };
-
-//     that.defineCurrentSetNumber = function () {
-//       that.currentSetNumber.innerText = that.slideSetIndex + 1;
-//     };
-
-//     that.specifyActiveSetIndex = function () {
-//       that.activeSetIndex = that.slideSetIndex;
-//     };
-
-//     that.highlightNumber = function () {
-//       that.numbers.forEach(function (number, index) {
-//         number.setAttribute('class', 'slider__frame-button button');
-
-//         if (index === that.slideSetIndex) {
-//           number.setAttribute('class', 'slider__frame-button button active');
-//         }
-//       });
-//     };
-
-//     that.insertNumbers = function () {
-//       var _ = that;
-
-//       var list = _.root.querySelector('.slider__frame-button-list');
-//       var listItem = list
-//           .querySelector('.slider__frame-button-item')
-//           .cloneNode(true);
-
-//       while (list.firstChild) {
-//         list.removeChild(list.firstChild);
-//       }
-
-//       var number = null;
-//       var fragment = document.createDocumentFragment();
-//       var button = listItem.querySelector('button');
-//       var buttonAttributeSet = {
-//         'class': 'slider__frame-button button',
-//         'type': 'button'
-//       };
-
-//       Object.keys(buttonAttributeSet).forEach(function (key) {
-//         button.setAttribute(key, buttonAttributeSet[key]);
-//       });
-
-//       for (var i = 0; i < _.slideSets.length; i++) {
-//         number = i + 1;
-//         button.setAttribute('aria-label', 'Button to enable the ' + number + ' set of products');
-//         button.innerText = number;
-//         fragment.appendChild(listItem.cloneNode(true));
-//       }
-
-//       list.appendChild(fragment);
-//       _.numbers = makeArray(_.root.querySelectorAll('.slider__frame-button'));
-//       _.highlightNumber();
-//     };
-
-//     that.verifyArrows = function () {
-//       var _ = that;
-
-//       if (_.slideSets.length === 0) {
-//         return 'canceled';
-//       }
-
-//       if (_.slideSets.length < 0) {
-//         return -1;
-//       }
-
-//       if (_.slideSets.length === 1) {
-//         [
-//           _.buttonPrevious,
-//           _.buttonNext
-//         ].forEach(function (item) {
-//           item.disabled = true;
-//         });
-//       } else {
-//         [
-//           _.buttonPrevious,
-//           _.buttonNext
-//         ].forEach(function (item) {
-//           item.removeAttribute('disabled');
-//         });
-//       }
-
-//       return 'done';
-//     };
-
-//     that.hideSlides = function (array) {
-//       array.forEach(function (element) {
-//         element.classList.add('hidden-entity');
-//       });
-//     };
-
-//     that.showSlides = function (array) {
-//       array.forEach(function (element) {
-//         element.classList.remove('hidden-entity');
-//       });
-//     };
-
-//     that.manageNumbers = function () {
-//       if (isPreTabletWidth()) {
-//         that.defineCurrentSetNumber();
-//       } else {
-//         that.highlightNumber();
-//       }
-//     };
-
-//     that.showNextSlideSet = function (previous) {
-//       var _ = that;
-
-//       _.slideSets[_.slideSetIndex].forEach(function (slide) {
-//         slide.classList.add('hidden-entity');
-//       });
-
-//       if (previous) {
-//         _.slideSetIndex = (_.slideSetIndex - 1) % _.slideSets.length;
-
-//         if (_.slideSetIndex < 0) {
-//           _.slideSetIndex += _.slideSets.length;
-//         }
-//       } else {
-//         _.slideSetIndex = (_.slideSetIndex + 1) % _.slideSets.length;
-//       }
-
-//       _.slideSets[_.slideSetIndex].forEach(function (slide) {
-//         slide.classList.remove('hidden-entity');
-//       });
-
-//       _.specifyActiveSetIndex();
-//       _.manageNumbers();
-//     };
-
-//     that.onArrowClick = function (evt) {
-//       if (evt.target.closest('.slider__arrow--previous')) {
-//         that.showNextSlideSet(true);
-//       }
-
-//       if (evt.target.closest('.slider__arrow--next')) {
-//         that.showNextSlideSet();
-//       }
-//     };
-
-//     that.onSliderTouchstart = function (evt) {
-//       evt.preventDefault();
-//       that.cursorPosition.clientX1 = evt.touches[0].clientX;
-//     };
-
-//     that.onSliderTouchend = function (evt) {
-//       var _ = that;
-
-//       evt.preventDefault();
-//       _.cursorPosition.clientX2 = evt.changedTouches[0].clientX;
-
-//       var clientX1 = _.cursorPosition.clientX1;
-//       var clientX2 = _.cursorPosition.clientX2;
-
-//       var isIgnored = clientX1 - clientX2 < IGNORED_SWIPE_DISTANCE
-//         && clientX1 - clientX2 > -IGNORED_SWIPE_DISTANCE
-//         ? true
-//         : false;
-
-//       if (clientX1 - clientX2 === 0 || isIgnored) {
-//         return;
-//       }
-
-//       if (clientX1 - clientX2 < 0) {
-//         _.showNextSlideSet(true);
-//       }
-
-//       if (clientX1 - clientX2 > 0) {
-//         _.showNextSlideSet();
-//       }
-//     };
-
-//     that.onNumbersClick = function (evt) {
-//       if (!evt.target.matches('.slider__frame-button')) {
-//         return;
-//       }
-
-//       var _ = that;
-
-//       _.slideSetIndex = _.numbers.indexOf(evt.target);
-
-//       _.hideSlides(_.slideSets[_.activeSetIndex]);
-//       _.showSlides(_.slideSets[_.slideSetIndex]);
-
-//       _.specifyActiveSetIndex();
-//       _.manageNumbers();
-//     };
-
-//     that.processMouse = function (evt) {
-//       if (evt.target.closest('.slider__arrow')) {
-//         that.onArrowClick(evt);
-//       }
-
-//       if (evt.target.matches('.slider__frame-button')) {
-//         that.onNumbersClick(evt);
-//       }
-//     };
-
-//     that.onSliderPointerup = function (evt) {
-//       if (evt.pointerType === 'mouse' || evt.pointerType === 'touch') {
-//         that.processMouse(evt);
-//       }
-//     };
-
-//     that.setEventListeners = function () {
-//       that.root.addEventListener('pointerup', that.onSliderPointerup);
-//       that.root.addEventListener('touchstart', that.onSliderTouchstart);
-//       that.root.addEventListener('touchend', that.onSliderTouchend);
-//     };
-
-//     that.eraseEventListeners = function () {
-//       that.root.removeEventListener('pointerup', that.onSliderPointerup);
-//       that.root.removeEventListener('touchstart', that.onSliderTouchstart);
-//       that.root.removeEventListener('touchend', that.onSliderTouchend);
-//     };
-
-//     return that;
-//   };
-
-//   sliders.forEach(function (it) {
-//     var slider = initSlider(it);
-//     slider.activate().setEventListeners();
-//     window.slider[slider.root.id] = slider;
-//   });
-
-//   var rebuild = useMethod('slider', 'rebuild');
-//   var manageNumbers = useMethod('slider', 'manageNumbers');
-
-//   var onWindowResize = (function () {
-//     var isWorkedOnPreDesktopWidth = false;
-//     var isWorkedOnDesktopWidth = false;
-//     var currentMode = '';
-
-//     return function () {
-//       currentMode = getCurrentMode();
-
-//       if (currentMode !== mode && firstLoading) {
-//         firstLoading = false;
-//       }
-
-//       if (currentMode !== 'desktop') {
-//         manageNumbers();
-//       }
-
-//       if (currentMode === 'desktop' && !isWorkedOnDesktopWidth && !firstLoading) {
-//         rebuild();
-//         isWorkedOnPreDesktopWidth = false;
-//         isWorkedOnDesktopWidth = true;
-//         return;
-//       }
-
-//       if (currentMode !== 'desktop' && !isWorkedOnPreDesktopWidth && !firstLoading) {
-//         rebuild();
-//         isWorkedOnPreDesktopWidth = true;
-//         isWorkedOnDesktopWidth = false;
-//       }
-//     };
-//   })();
-
-//   window.addEventListener('resize', onWindowResize);
-//   firstLoading = true;
-
-//   var onWindowBeforeunload = useMethod('slider', 'eraseEventListeners');
-
-//   // export
-//   window.sliderDestroyer = {
-//     onWindowBeforeunload: onWindowBeforeunload
-//   };
-// })();
 
 //
 // accordeon
@@ -1460,9 +932,11 @@
     return;
   }
 
+  var makeArray = window.utility.makeArray;
+
   var filterId = filterCleaner.dataset.for;
   var filter = document.querySelector(filterId);
-  var checkboxes = filter.querySelectorAll('input[type="checkbox"]');
+  var checkboxes = makeArray(filter.querySelectorAll('input[type="checkbox"]'));
 
   var lowerCostSpan = filter.querySelector('#lower-cost-span');
   var upperCostSpan = filter.querySelector('#upper-cost-span');
@@ -1514,6 +988,8 @@
   if (!loginLinks.length || !loginModal) {
     return;
   }
+
+  var getCurrentMode = window.utility.getCurrentMode;
 
   if (window.localStorage) {
     var email = loginModal.querySelector('.login__input--email')
@@ -1586,7 +1062,11 @@
       }
 
       _.isShown = false;
-      _.body.classList.remove('scroll-stop');
+
+      if (getCurrentMode() === 'desktop') {
+        _.body.classList.remove('scroll-stop');
+      }
+
       _.loginModal.classList.add('hidden-entity');
 
       _.eraseEventListeners();
