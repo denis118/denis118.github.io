@@ -5,6 +5,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="jewelry, ornaments">
+  <link rel="apple-touch-icon" sizes="180x180" href="./favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="./favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="./favicon/favicon-16x16.png">
+  <link rel="manifest" href="./favicon/site.webmanifest">
+  <link rel="mask-icon" href="./favicon/safari-pinned-tab.svg" color="#5bbad5">
+  <link rel="shortcut icon" href="./favicon/favicon.ico">
+  <meta name="msapplication-TileColor" content="#b91d47">
+  <meta name="msapplication-config" content="./favicon/browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
   <link rel="preload" href="./fonts/poppins-regular-webfont.woff2" as="font" type="font/woff2" crossorigin="">
   <link rel="preload" href="./fonts/cormorantgaramond-semibold-webfont.woff2" as="font" type="font/woff2" crossorigin="">
   <link rel="preload" href="./fonts/cormorantgaramond-bold-webfont.woff2" as="font" type="font/woff2" crossorigin="">
@@ -139,27 +148,12 @@
 
         <a class="new-goods__link main-page__link main-page__link--altered link" href="#">Shop Now</a>
 
-        <!-- .no-js -->
-        <div class="new-goods__slider slider no-js" id="slider-main" role="region" aria-label="Slider">
-          <button class="slider__arrow slider__arrow--previous button hidden-on-mobile" type="button" data-id="previous" aria-label="Previous slide button">
-            <svg class="slider__arrow-svg slider__arrow-svg--previous" width="29" height="9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <use xlink:href="./img/outer-sprite.svg#icon-arrow"></use>
-            </svg>
-          </button>
+        <div class="new-goods__slider slider" id="slider-main" role="region" aria-label="Slider">
+          <div class="slider__inner">
+            <ul class="slider__list list">
 
-          <button class="slider__arrow slider__arrow--next button hidden-on-mobile" type="button" data-id="next" aria-label="Next slide button">
-            <svg class="slider__arrow-svg slider__arrow-svg--next" width="29" height="9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <use xlink:href="./img/outer-sprite.svg#icon-arrow"></use>
-            </svg>
-          </button>
-
-          <!-- .swiper -->
-          <div class="slider__swiper">
-            <!-- .swiper-wrapper -->
-            <div class="slider__inner slider__inner--main">
               <!-- .first-slide -->
-              <!-- .swiper-slide -->
-              <div class="slider__item first-slide">
+              <li class="slider__item first-slide">
                 <figure>
                   <div class="slider__padded-box">
                     <picture>
@@ -200,10 +194,9 @@
                     <span class="slider__product-cost">$ 145</span>
                   </figcaption>
                 </figure>
-              </div>
+              </li>
 
-              <!-- .swiper-slide -->
-              <div class="slider__item">
+              <li class="slider__item">
                 <figure>
                   <div class="slider__padded-box">
                     <picture>
@@ -244,11 +237,10 @@
                     <span class="slider__product-cost">$ 115</span>
                   </figcaption>
                 </figure>
-              </div>
+              </li>
 
-              <!-- .hidden-before-desktop -->
-              <!-- .swiper-slide -->
-              <div class="slider__item hidden-before-desktop">
+              <!-- the third slide should contain the "hidden-before-desktop" class -->
+              <li class="slider__item hidden-before-desktop">
                 <figure>
                   <div class="slider__padded-box">
                     <picture>
@@ -269,12 +261,11 @@
                     <span class="slider__product-cost">$ 215</span>
                   </figcaption>
                 </figure>
-              </div>
+              </li>
 
+              <!-- the fourth slide should contain the "hidden-before-desktop" class -->
               <!-- .last-slide -->
-              <!-- .hidden-before-desktop -->
-              <!-- .swiper-slide -->
-              <div class="slider__item last-slide hidden-before-desktop">
+              <li class="slider__item last-slide hidden-before-desktop">
                 <figure>
                   <div class="slider__padded-box">
                     <picture>
@@ -295,11 +286,10 @@
                     <span class="slider__product-cost">$ 95</span>
                   </figcaption>
                 </figure>
-              </div>
+              </li>
 
-              <!-- .hidden-entity -->
-              <!-- .swiper-slide -->
-              <div class="slider__item hidden-entity">
+              <!-- the fifth slide and the following should contain the "hidden-entity" class -->
+              <li class="slider__item hidden-entity">
                 <figure>
                   <div class="slider__padded-box">
                     <picture>
@@ -340,11 +330,9 @@
                     <span class="slider__product-cost">$ 145</span>
                   </figcaption>
                 </figure>
-              </div>
+              </li>
 
-              <!-- .hidden-entity -->
-              <!-- .swiper-slide -->
-              <div class="slider__item hidden-entity">
+              <li class="slider__item hidden-entity">
                 <figure>
                   <div class="slider__padded-box">
                     <picture>
@@ -385,11 +373,9 @@
                     <span class="slider__product-cost">$ 145</span>
                   </figcaption>
                 </figure>
-              </div>
+              </li>
 
-              <!-- .hidden-entity -->
-              <!-- .swiper-slide -->
-              <div class="slider__item hidden-entity">
+              <li class="slider__item hidden-entity">
                 <figure>
                   <div class="slider__padded-box">
                     <picture>
@@ -430,11 +416,9 @@
                     <span class="slider__product-cost">$ 145</span>
                   </figcaption>
                 </figure>
-              </div>
+              </li>
 
-              <!-- .hidden-entity -->
-              <!-- .swiper-slide -->
-              <div class="slider__item hidden-entity">
+              <li class="slider__item hidden-entity">
                 <figure>
                   <div class="slider__padded-box">
                     <picture>
@@ -475,11 +459,9 @@
                     <span class="slider__product-cost">$ 145</span>
                   </figcaption>
                 </figure>
-              </div>
+              </li>
 
-              <!-- .hidden-entity -->
-              <!-- .swiper-slide -->
-              <div class="slider__item hidden-entity">
+              <li class="slider__item hidden-entity">
                 <figure>
                   <div class="slider__padded-box">
                     <picture>
@@ -520,11 +502,9 @@
                     <span class="slider__product-cost">$ 115</span>
                   </figcaption>
                 </figure>
-              </div>
+              </li>
 
-              <!-- .hidden-entity -->
-              <!-- .swiper-slide -->
-              <div class="slider__item hidden-entity">
+              <li class="slider__item hidden-entity">
                 <figure>
                   <div class="slider__padded-box">
                     <picture>
@@ -565,11 +545,9 @@
                     <span class="slider__product-cost">$ 115</span>
                   </figcaption>
                 </figure>
-              </div>
+              </li>
 
-              <!-- .hidden-entity -->
-              <!-- .swiper-slide -->
-              <div class="slider__item hidden-entity">
+              <li class="slider__item hidden-entity">
                 <figure>
                   <div class="slider__padded-box">
                     <picture>
@@ -610,11 +588,9 @@
                     <span class="slider__product-cost">$ 115</span>
                   </figcaption>
                 </figure>
-              </div>
+              </li>
 
-              <!-- .hidden-entity -->
-              <!-- .swiper-slide -->
-              <div class="slider__item hidden-entity">
+              <li class="slider__item hidden-entity">
                 <figure>
                   <div class="slider__padded-box">
                     <picture>
@@ -655,46 +631,53 @@
                     <span class="slider__product-cost">$ 115</span>
                   </figcaption>
                 </figure>
-              </div>
-            </div>
-
-            <!-- .hidden-entity -->
-            <div class="swiper-pagination hidden-entity"></div>
-
-            <!-- .hidden-entity -->
-            <ol class="slider__frame-button-list list hidden-on-mobile">
-              <li class="slider__frame-button-item">
-                <button class="slider__frame-button button active" type="button" aria-label="Button to enable the first set of products">1</button>
               </li>
+            </ul>
+          </div>
 
-              <li class="slider__frame-button-item">
-                <button class="slider__frame-button button" type="button" aria-label="Button to enable the second set of products">2</button>
-              </li>
+          <button class="slider__arrow slider__arrow--previous button hidden-on-mobile" type="button" data-id="previous" aria-label="Previous slide button">
+            <svg class="slider__arrow-svg slider__arrow-svg--previous" width="29" height="9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <use xlink:href="./img/outer-sprite.svg#icon-arrow"></use>
+            </svg>
+          </button>
 
-              <li class="slider__frame-button-item">
-                <button class="slider__frame-button button" type="button" aria-label="Button to enable the third set of products">3</button>
-              </li>
+          <button class="slider__arrow slider__arrow--next button hidden-on-mobile" type="button" data-id="next" aria-label="Next slide button">
+            <svg class="slider__arrow-svg slider__arrow-svg--next" width="29" height="9" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <use xlink:href="./img/outer-sprite.svg#icon-arrow"></use>
+            </svg>
+          </button>
 
-              <!-- the fourth <li> and the following should contain the "hidden-on-desktop" class -->
-              <li class="slider__frame-button-item hidden-on-desktop">
-                <button class="slider__frame-button button" type="button" aria-label="Button to enable the fourth set of products">4</button>
-              </li>
+          <ol class="slider__frame-button-list list hidden-on-mobile">
+            <li class="slider__frame-button-item">
+              <button class="slider__frame-button button active" type="button" aria-label="Button to enable the first set of products">1</button>
+            </li>
 
-              <li class="slider__frame-button-item hidden-on-desktop">
-                <button class="slider__frame-button button" type="button" aria-label="Button to enable the fifth set of products">5</button>
-              </li>
+            <li class="slider__frame-button-item">
+              <button class="slider__frame-button button" type="button" aria-label="Button to enable the second set of products">2</button>
+            </li>
 
-              <li class="slider__frame-button-item hidden-on-desktop">
-                <button class="slider__frame-button button" type="button" aria-label="Button to enable the sixth set of products">6</button>
-              </li>
-            </ol>
+            <li class="slider__frame-button-item">
+              <button class="slider__frame-button button" type="button" aria-label="Button to enable the third set of products">3</button>
+            </li>
 
-            <!-- .hidden-entity -->
-            <div class="slider__numbers hidden-after-mobile">
-              <span class="slider__current-set-number">1</span>
-              <span class="slider__divider">of</span>
-              <span class="slider__slideset-quantity">6</span>
-            </div>
+            <!-- the fourth <li> and the following should contain the "hidden-on-desktop" class -->
+            <li class="slider__frame-button-item hidden-on-desktop">
+              <button class="slider__frame-button button" type="button" aria-label="Button to enable the fourth set of products">4</button>
+            </li>
+
+            <li class="slider__frame-button-item hidden-on-desktop">
+              <button class="slider__frame-button button" type="button" aria-label="Button to enable the fifth set of products">5</button>
+            </li>
+
+            <li class="slider__frame-button-item hidden-on-desktop">
+              <button class="slider__frame-button button" type="button" aria-label="Button to enable the sixth set of products">6</button>
+            </li>
+          </ol>
+
+          <div class="slider__numbers hidden-after-mobile">
+            <span class="slider__current-set-number">1</span>
+            <span class="slider__divider">of</span>
+            <span class="slider__slideset-quantity">6</span>
           </div>
         </div>
       </div>
@@ -1277,7 +1260,6 @@
     </section>
   </div>
 
-  <script src="./js/vendor.js" defer=""></script>
   <script src="./js/script.js" defer=""></script>
 
 </body>
